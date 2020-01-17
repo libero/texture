@@ -97,7 +97,8 @@ function _populateContribs(doc, jats, importer, contribsPath, contribEls, groupI
         equalContrib: contribEl.getAttribute('equal-contrib') === 'yes',
         corresp: contribEl.getAttribute('corresp') === 'yes',
         deceased: contribEl.getAttribute('deceased') === 'yes',
-        group: groupId
+        group: groupId,
+        contributorIds: _getContributorIds(contribEl, importer)
       });
       documentHelpers.append(doc, contribsPath, contrib.id);
     }
@@ -134,6 +135,13 @@ function _getAffiliationIds(el, isGroup) {
   }
   let affs = xrefs.map(xref => xref.attr('rid'));
   return affs;
+}
+
+function _getContributorIds(el, importer) {
+  let elements = el.findAll('contrib-id');
+  // NOTE: for groups we need to extract only affiliations of group, without members
+  let contributorIds = elements.map(element => importer.convertElement(element).id);
+  return contributorIds;
 }
 
 function _getAwardIds(el) {
