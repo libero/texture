@@ -1,4 +1,4 @@
-import { DocumentNode, STRING, ONE, MANY, CHILDREN, BOOLEAN } from 'substance';
+import { DocumentNode, STRING, ONE, MANY, CONTAINER, CHILDREN, BOOLEAN } from 'substance';
 import { extractInitials } from './modelHelpers';
 
 export default class Person extends DocumentNode {
@@ -39,5 +39,5 @@ Person.schema = {
   equalContrib: BOOLEAN,
   corresp: BOOLEAN,
   deceased: BOOLEAN,
-  contributorIds: MANY('contributor-identifier')
+  contributorIds: CONTAINER('contributor-identifier')
 };

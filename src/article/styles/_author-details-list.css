@@ -1,0 +1,11 @@
+.se-author-details {
+  margin-top: var(--t-default-spacing);
+}
+
+.se-author-details:first-child {
+  margin-top: var(--t-half-spacing);
+}
+
+.se-author-details-fullname {
+  font-weight: var(--t-bold-font-weight);
+}

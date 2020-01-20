@@ -27,18 +27,20 @@ export default function jats2internal(jats, doc, jatsImporter) {
 }
 
 function _populateAffiliations(doc, jats) {
-  const affEls = jats.findAll('article > front > article-meta > aff');
+  // FIXME: At the moment we are ONLY getting affiliations for Authors, so we are missing editors, etc. I think that
+  //        to properly support them all we need to re-model the metadata model.
+  const affEls = jats.findAll('article > front > article-meta > contrib-group[content-type=author] > aff');
   let orgIds = affEls.map(el => {
     let org = {
       id: el.id,
       type: 'affiliation',
-      institution: getText(el, 'institution[content-type=orgname]'),
-      division1: getText(el, 'institution[content-type=orgdiv1]'),
+      institution: getText(el, 'institution[content-type=orgname]') || getText(el, 'institution:not([content-type])'),
+      division1: getText(el, 'institution[content-type=orgdiv1]') || getText(el, 'institution[content-type=dept'),
       division2: getText(el, 'institution[content-type=orgdiv2]'),
       division3: getText(el, 'institution[content-type=orgdiv3]'),
       street: getText(el, 'addr-line[content-type=street-address]'),
       addressComplements: getText(el, 'addr-line[content-type=complements]'),
-      city: getText(el, 'city'),
+      city: getText(el, 'city') || getText(el, 'addr-line > city'),
       state: getText(el, 'state'),
       postalCode: getText(el, 'postal-code'),
       country: getText(el, 'country'),
@@ -139,7 +141,6 @@ function _getAffiliationIds(el, isGroup) {
 
 function _getContributorIds(el, importer) {
   let elements = el.findAll('contrib-id');
-  // NOTE: for groups we need to extract only affiliations of group, without members
   let contributorIds = elements.map(element => importer.convertElement(element).id);
   return contributorIds;
 }
