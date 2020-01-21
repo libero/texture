@@ -81,7 +81,7 @@ class AuthorDetailsDisplay extends NodeComponent {
         const contributorIdElement = doc.get(contributorId);
         if (contributorIdElement && contributorIdElement.contribIdType === 'orcid') {
           if (contributorIdElement.authenticated) {
-            orcidIdElement.append($$(FontAwesomeIcon, { icon: 'fa-check-circle' }).addClass('se-icon'));
+            orcidIdElement.append($$(FontAwesomeIcon, { icon: 'fa-circle' }).addClass('se-icon'));
           }
           // FIXME: Not 100% happy with the below solution, there is likely a better way to do this.
           const match = /0000-000(1-[5-9]|2-[0-9]|3-[0-4])\d{3}-\d{3}[\dX]/.exec(contributorIdElement.content);
@@ -111,6 +111,11 @@ class AuthorDetailsDisplay extends NodeComponent {
       });
     }
 
+    el.append(
+      $$('p')
+        .addClass('se-author-details-footnotes')
+        .append('No competing interests declared')
+    );
     return el;
   }
 }
