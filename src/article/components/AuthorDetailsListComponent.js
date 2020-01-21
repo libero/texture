@@ -1,5 +1,7 @@
 import { CustomSurface, FontAwesomeIcon } from 'substance';
 import { NodeComponent } from '../../kit';
+import FootnoteComponent from './FootnoteComponent';
+import { CONTENT_MODE } from '../ArticleConstants';
 
 export default class AuthorDetailsListComponent extends CustomSurface {
   getInitialState() {
@@ -111,11 +113,15 @@ class AuthorDetailsDisplay extends NodeComponent {
       });
     }
 
-    el.append(
-      $$('p')
-        .addClass('se-author-details-footnotes')
-        .append('No competing interests declared')
-    );
+    if (author.competingInterests.length > 0) {
+      author.competingInterests.map(id => {
+        const element = doc.get(id);
+        if (element) {
+          el.append($$(FootnoteComponent, { node: element, mode: CONTENT_MODE }));
+        }
+      });
+    }
+
     return el;
   }
 }

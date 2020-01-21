@@ -5,6 +5,7 @@ import { RelatedArticle } from '../../nodes';
 
 export default function jats2internal(jats, doc, jatsImporter) {
   // metadata
+  _populateAuthorNotes(doc, jats, jatsImporter);
   _populateAffiliations(doc, jats);
   _populateAuthors(doc, jats, jatsImporter);
   _populateEditors(doc, jats, jatsImporter);
@@ -100,18 +101,37 @@ function _populateContribs(doc, jats, importer, contribsPath, contribEls, groupI
         corresp: contribEl.getAttribute('corresp') === 'yes',
         deceased: contribEl.getAttribute('deceased') === 'yes',
         group: groupId,
-        contributorIds: _getContributorIds(contribEl, importer)
+        contributorIds: _getContributorIds(contribEl, importer),
+        competingInterests: _getAuthorCompetingInterests(contribEl, importer)
       });
       documentHelpers.append(doc, contribsPath, contrib.id);
     }
   }
 }
 
+function _populateAuthorNotes(doc, jats, jatsImporter) {
+  let $$ = jats.createElement.bind(jats);
+  let fnEls = jats.findAll('article > front > article-meta > author-notes > fn');
+  let article = doc.get('article');
+  article.authorNotes = fnEls.map(fnEl => {
+    // there must be at least one paragraph
+    if (!fnEl.find('p')) {
+      fnEl.append($$('p'));
+    }
+    return jatsImporter.convertElement(fnEl).id;
+  });
+}
+
+function _getAuthorCompetingInterests(el, importer) {
+  let xrefs = el.findAll('xref[ref-type=fn]');
+  let ids = xrefs.map(xref => xref.attr('rid'));
+  return ids;
+}
+
 // ATTENTION: bio is not a specific node anymore, just a collection of paragraphs
 function _getBioContent(el, importer) {
   let $$ = el.createElement.bind(el.getOwnerDocument());
   let bioEl = findChild(el, 'bio');
-
   // If there is no bio element we should provide it
   if (!bioEl) {
     bioEl = $$('bio');

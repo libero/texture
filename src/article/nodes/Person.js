@@ -39,5 +39,6 @@ Person.schema = {
   equalContrib: BOOLEAN,
   corresp: BOOLEAN,
   deceased: BOOLEAN,
-  contributorIds: CONTAINER('contributor-identifier')
+  contributorIds: CONTAINER('contributor-identifier'),
+  competingInterests: CONTAINER('footnote')
 };
