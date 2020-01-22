@@ -30,7 +30,6 @@ export default class Affiliation extends DocumentNode {
         result.push(', ', country);
       }
     }
-
     return result;
   }
 }

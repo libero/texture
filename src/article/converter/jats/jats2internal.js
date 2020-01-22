@@ -26,7 +26,6 @@ export default function jats2internal(jats, doc, jatsImporter) {
 
   return doc;
 }
-
 function _populateAffiliations(doc, jats) {
   // FIXME: At the moment we are ONLY getting affiliations for Authors, so we are missing editors, etc. I think that
   //        to properly support them all we need to re-model the metadata model.
