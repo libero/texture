@@ -28,6 +28,8 @@ export default class AffiliationsListComponent extends CustomSurface {
   _renderAffiliations($$) {
     const sel = this.context.editorState.selection;
     const affiliations = this._getAffiliations();
+    const Button = this.getComponent('button');
+
     let els = [];
     affiliations.forEach((affiliation, index) => {
       const affiliationEl = $$(AffiliationDisplay, { node: affiliation }).ref(affiliation.id);
@@ -36,6 +38,15 @@ export default class AffiliationsListComponent extends CustomSurface {
       }
       els.push(affiliationEl);
     });
+
+    els.push(
+      $$(Button, {
+        icon: 'insert',
+        label: this.getLabel('add-affiliation')
+      })
+        .addClass('se-add-affiliation')
+        .on('click', this._addAffiliation)
+    );
     return els;
   }
 
@@ -46,6 +57,8 @@ export default class AffiliationsListComponent extends CustomSurface {
   _getAffiliations() {
     return this.props.model.getItems();
   }
+
+  _addAffiliation() {}
 }
 
 class AffiliationDisplay extends NodeComponent {

@@ -18,3 +18,12 @@
 
 .sc-affiliations-list > .sc-affiliation > .se-icon {
 }
+
+.sc-affiliations-list > .se-add-affiliation {
+  margin-top: var(--t-half-spacing);
+  color: var(--t-action-color);
+}
+
+.sc-affiliations-list > .se-add-affiliation > .se-label {
+  margin-left: var(--t-button-padding);
+}

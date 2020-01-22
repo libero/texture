@@ -100,7 +100,7 @@ export default {
     config.addLabel('acknowledgement-label', 'Acknowledgements');
     config.addLabel('acknowledgement-placeholder', 'Write any acknowledgements here');
     config.addLabel('affiliations-label', 'Affiliations');
-    config.addLabel('affiliations-placeholder', 'Add affiliation');
+    config.addLabel('add-affiliation', 'Add affiliation');
     config.addLabel('attribution-label', 'Attribution');
     config.addLabel('attribution-placeholder', 'Enter attribution');
     config.addLabel('authors-label', 'Authors');
