@@ -1,9 +1,16 @@
 import { CustomSurface } from 'substance';
 import { NodeComponent } from '../../kit';
 import { FontAwesomeIcon } from 'substance';
-import { getLabel } from '../shared/nodeHelpers';
+import { getLabel, sortCitationsByPosition } from '../shared/nodeHelpers';
 
 export default class AffiliationsListComponent extends CustomSurface {
+  getInitialState() {
+    let items = this._getAffiliations();
+    return {
+      hidden: items.length === 0
+    };
+  }
+
   didMount() {
     super.didMount();
 
@@ -26,16 +33,12 @@ export default class AffiliationsListComponent extends CustomSurface {
   }
 
   _renderAffiliations($$) {
-    const sel = this.context.editorState.selection;
     const affiliations = this._getAffiliations();
     const Button = this.getComponent('button');
 
     let els = [];
     affiliations.forEach((affiliation, index) => {
       const affiliationEl = $$(AffiliationDisplay, { node: affiliation }).ref(affiliation.id);
-      if (sel && sel.nodeId === affiliation.id) {
-        affiliationEl.addClass('sm-selected');
-      }
       els.push(affiliationEl);
     });
 
@@ -55,7 +58,7 @@ export default class AffiliationsListComponent extends CustomSurface {
   }
 
   _getAffiliations() {
-    return this.props.model.getItems();
+    return this.props.model.getItems().sort(sortCitationsByPosition);
   }
 
   _addAffiliation() {}

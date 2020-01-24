@@ -21,6 +21,7 @@
 
 .sc-affiliations-list > .se-add-affiliation {
   margin-top: var(--t-half-spacing);
+  padding: 2px 0px;
   color: var(--t-action-color);
 }
 
