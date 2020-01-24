@@ -66,11 +66,12 @@ export default class AffiliationsListComponent extends CustomSurface {
 
 class AffiliationDisplay extends NodeComponent {
   render($$) {
+    let label = this._getAffiliationLabel();
     let el = $$('div').addClass('sc-affiliation');
     el.append(
-      $$('div')
+      $$(label === '?' ? 'div' : 'sup')
         .addClass('se-label')
-        .append(this._getAffiliationLabel()),
+        .append(label),
       $$('div')
         .addClass('se-text')
         .append(this.props.node.toString()),

@@ -107,22 +107,6 @@ export default class AffiliationManager {
     }
   }
 
-  /*
-    Label of bibliographic entries are determined
-    by the order of their citations in the document.
-    I.e. typically you pick all citations (`<xref>`) as they
-    occur in the document, and provide the ids of the entries
-    they refer to. This forms a list of tuples, such as:
-    ```
-      [
-        { id: 'cite1', refs: [AB06, Mac10] },
-        { id: 'cite2', refs: [FW15] },
-        { id: 'cite3', refs: [Mac10, AB06, AB07] }
-      ]
-    ```
-
-    @param {Array<Object>} a list of citation entries.
-  */
   _updateLabels(silent) {
     let authors = this.getAuthors();
     let affiliations = this.getAffiliations();
@@ -142,6 +126,12 @@ export default class AffiliationManager {
         }
       });
       stateUpdates.push([author.id, { label: tmpLabel.join(',') }]);
+    });
+
+    affiliations.forEach(affiliation => {
+      if (!affilationLabels[affiliation.id]) {
+        stateUpdates.push([affiliation.id, { label: '', pos: Number.MAX_VALUE }]);
+      }
     });
 
     // FIXME: here we also made the 'collection' dirty originally

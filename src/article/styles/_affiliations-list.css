@@ -17,6 +17,7 @@
 }
 
 .sc-affiliations-list > .sc-affiliation > .se-icon {
+  align-self: flex-start;
 }
 
 .sc-affiliations-list > .se-add-affiliation {

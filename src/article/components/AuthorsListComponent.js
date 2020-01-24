@@ -61,7 +61,6 @@ export default class AuthorsListComponent extends CustomSurface {
 class AuthorDisplay extends NodeComponent {
   render($$) {
     const person = this.props.node;
-    const doc = person.getDocument();
     let el = $$('span').addClass('se-contrib');
     el.append(this.context.api.renderEntity(person));
     if (person.affiliations.length > 0) {

@@ -41,7 +41,7 @@ function _populateAffiliations(doc, jats) {
       street: getText(el, 'addr-line[content-type=street-address]'),
       addressComplements: getText(el, 'addr-line[content-type=complements]'),
       city: getText(el, 'city') || getText(el, 'addr-line > city'),
-      state: getText(el, 'state'),
+      county: getText(el, 'state'),
       postalCode: getText(el, 'postal-code'),
       country: getText(el, 'country'),
       phone: getText(el, 'phone'),
