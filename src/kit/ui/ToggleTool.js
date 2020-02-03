@@ -1,4 +1,4 @@
-import Tool from './Tool'
+import Tool from './Tool';
 
 /**
  * @param {string} props.style
@@ -7,7 +7,7 @@ import Tool from './Tool'
  * @param {object} props.commandState
  */
 export default class ToggleTool extends Tool {
-  getClassNames () {
-    return `sc-toggle-tool sc-tool sm-${this.props.item.name}`
+  getClassNames() {
+    return `sc-toggle-tool sc-tool sm-${this.props.item.name}`;
   }
 }

@@ -1,32 +1,32 @@
-import { Component } from 'substance'
+import { Component } from 'substance';
 
 export default class ValueComponent extends Component {
-  didMount () {
-    const appState = this.context.editorState
-    const path = this._getPath()
+  didMount() {
+    const appState = this.context.editorState;
+    const path = this._getPath();
     appState.addObserver(['document'], this._rerenderOnModelChange, this, {
       stage: 'render',
-      document: { path }
-    })
+      document: { path },
+    });
   }
 
-  dispose () {
-    const appState = this.context.editorState
-    appState.removeObserver(this)
+  dispose() {
+    const appState = this.context.editorState;
+    appState.removeObserver(this);
   }
 
   // EXPERIMENTAL:
   // trying to avoid unnecessary rerenderings
-  shouldRerender (newProps) {
-    return newProps.model !== this.props.model
+  shouldRerender(newProps) {
+    return newProps.model !== this.props.model;
   }
 
-  _rerenderOnModelChange () {
+  _rerenderOnModelChange() {
     // console.log('Rerendering ValueComponent after model update:', this._getPath())
-    this.rerender()
+    this.rerender();
   }
 
-  _getPath () {
-    return this.props.model._path
+  _getPath() {
+    return this.props.model._path;
   }
 }

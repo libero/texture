@@ -1,18 +1,18 @@
-import { InsertInlineNodeCommand as SubstanceInsertInlineNodeCommand } from 'substance'
+import { InsertInlineNodeCommand as SubstanceInsertInlineNodeCommand } from 'substance';
 
 export default class InsertInlineNodeCommand extends SubstanceInsertInlineNodeCommand {
-  getType () {
-    throw new Error('This method is abstract')
+  getType() {
+    throw new Error('This method is abstract');
   }
 
   /**
     Insert new inline node at the current selection
   */
-  execute (params, context) {
-    throw new Error('This method is abstract')
+  execute(params, context) {
+    throw new Error('This method is abstract');
   }
 
-  isDisabled (params, context) {
-    return !context.api.canInsertInlineNode(this.getType(), true)
+  isDisabled(params, context) {
+    return !context.api.canInsertInlineNode(this.getType(), true);
   }
 }

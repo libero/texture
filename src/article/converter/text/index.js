@@ -1,1 +1,1 @@
-export { default as ArticlePlainTextExporter } from './ArticlePlainTextExporter'
+export { default as ArticlePlainTextExporter } from './ArticlePlainTextExporter';

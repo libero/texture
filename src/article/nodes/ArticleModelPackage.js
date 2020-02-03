@@ -134,10 +134,10 @@ export default {
       ThesisRef,
       Underline,
       WebpageRef,
-      Xref
+      Xref,
     ].forEach(node => config.addNode(node));
     // additionally register nodes that are used to wrap unsupported XML elements
     config.addNode(UnsupportedNode);
     config.addNode(UnsupportedInlineNode);
-  }
+  },
 };

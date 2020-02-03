@@ -1,15 +1,15 @@
-import { DocumentNode, STRING, CONTAINER, BOOLEAN } from 'substance'
+import { DocumentNode, STRING, CONTAINER, BOOLEAN } from 'substance';
 
 export default class SupplementaryFile extends DocumentNode {
-  static getTemplate () {
+  static getTemplate() {
     return {
       type: 'supplementary-file',
-      legend: [{ type: 'paragraph' }]
-    }
+      legend: [{ type: 'paragraph' }],
+    };
   }
 
-  static get refType () {
-    return 'file'
+  static get refType() {
+    return 'file';
   }
 }
 
@@ -19,5 +19,5 @@ SupplementaryFile.schema = {
   mimetype: STRING,
   href: STRING,
   remote: BOOLEAN,
-  legend: CONTAINER('paragraph')
-}
+  legend: CONTAINER('paragraph'),
+};

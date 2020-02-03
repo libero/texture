@@ -1,14 +1,14 @@
-import { DocumentNode, STRING } from 'substance'
+import { DocumentNode, STRING } from 'substance';
 
 export default class MetadataField extends DocumentNode {
-  static getTemplate () {
+  static getTemplate() {
     return {
-      type: 'metadata-field'
-    }
+      type: 'metadata-field',
+    };
   }
 
-  isEmpty () {
-    return this.length === 0
+  isEmpty() {
+    return this.length === 0;
   }
 }
 MetadataField.schema = {
@@ -17,5 +17,5 @@ MetadataField.schema = {
   // ATTENTION: for now a field consist only of one plain-text value
   // user may use ',' to separate values
   // later on we might opt for a structural approach
-  value: STRING
-}
+  value: STRING,
+};

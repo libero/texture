@@ -1,40 +1,39 @@
-import { Component } from 'substance'
+import { Component } from 'substance';
 
 export default class PreviewComponent extends Component {
-  getChildContext () {
+  getChildContext() {
     return {
-      editable: false
-    }
+      editable: false,
+    };
   }
 
-  render ($$) {
-    let id = this.props.id
+  render($$) {
+    let id = this.props.id;
     let el = $$('div')
       .addClass('sc-preview')
-      .attr({ 'data-id': id })
+      .attr({ 'data-id': id });
 
     if (this.props.thumbnail) {
       el.append(
-        $$('div').addClass('se-thumbnail').append(
-          this.props.thumbnail
-        )
-      )
+        $$('div')
+          .addClass('se-thumbnail')
+          .append(this.props.thumbnail),
+      );
     }
 
-    if (this.props.label)
-    {
+    if (this.props.label) {
       el.append(
-        $$('div').addClass('se-label').append(
-          this.props.label
-        )
+        $$('div')
+          .addClass('se-label')
+          .append(this.props.label),
       );
     }
     el.append(
       // NOTE: description is passed in as HTML string
-      $$('div').addClass('se-description').append(
-        this.props.description
-      )
-    )
-    return el
+      $$('div')
+        .addClass('se-description')
+        .append(this.props.description),
+    );
+    return el;
   }
 }

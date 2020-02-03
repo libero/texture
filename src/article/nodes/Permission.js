@@ -1,9 +1,9 @@
-import { DocumentNode, STRING, TEXT } from 'substance'
-import { RICH_TEXT_ANNOS, LINKS_AND_XREFS } from './modelConstants'
+import { DocumentNode, STRING, TEXT } from 'substance';
+import { RICH_TEXT_ANNOS, LINKS_AND_XREFS } from './modelConstants';
 
 export default class Permission extends DocumentNode {
-  isEmpty () {
-    return !(this.copyrightStatement || this.copyrightYear || this.copyrightHolder || this.license || this.licenseText)
+  isEmpty() {
+    return !(this.copyrightStatement || this.copyrightYear || this.copyrightHolder || this.license || this.licenseText);
   }
 }
 Permission.schema = {
@@ -14,5 +14,5 @@ Permission.schema = {
   // URL to license description  used as a unique license identifier
   // FIXME: bad naming. Use url, or licenseUrl?
   license: STRING,
-  licenseText: TEXT(...RICH_TEXT_ANNOS, ...LINKS_AND_XREFS)
-}
+  licenseText: TEXT(...RICH_TEXT_ANNOS, ...LINKS_AND_XREFS),
+};

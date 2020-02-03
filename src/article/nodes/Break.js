@@ -1,6 +1,6 @@
-import { InlineNode } from 'substance'
+import { InlineNode } from 'substance';
 
 export default class Break extends InlineNode {}
 Break.schema = {
-  type: 'break'
-}
+  type: 'break',
+};

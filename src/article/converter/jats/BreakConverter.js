@@ -1,5 +1,9 @@
 export default class BreakConverter {
-  get type () { return 'break' }
+  get type() {
+    return 'break';
+  }
 
-  get tagName () { return 'break' }
+  get tagName() {
+    return 'break';
+  }
 }

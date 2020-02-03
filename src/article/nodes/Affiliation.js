@@ -50,5 +50,5 @@ Affiliation.schema = {
   phone: STRING,
   fax: STRING,
   email: STRING,
-  uri: STRING
+  uri: STRING,
 };

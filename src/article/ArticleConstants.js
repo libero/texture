@@ -38,7 +38,7 @@ export const JATS_BIBR_TYPES_TO_INTERNAL = {
   webpage: WEBPAGE_REF,
   /* eLife specifc mappings */
   'pre-print': PREPRINT_REF,
-  periodical: PERIODICAL_REF
+  periodical: PERIODICAL_REF,
 };
 
 export const INTERNAL_BIBR_TYPES_TO_JATS = Object.keys(JATS_BIBR_TYPES_TO_INTERNAL).reduce((map, jatsType) => {
@@ -54,12 +54,12 @@ export const INTERNAL_BIBR_TYPES = Object.keys(INTERNAL_BIBR_TYPES_TO_JATS);
 export const LICENSES = [
   {
     id: 'http://creativecommons.org/licenses/by/4.0/',
-    name: 'CC BY 4.0'
+    name: 'CC BY 4.0',
   },
   {
     id: 'https://creativecommons.org/licenses/by-sa/2.0/',
-    name: 'CC BY-SA 2.0'
-  }
+    name: 'CC BY-SA 2.0',
+  },
 ];
 
 export const CARD_MINIMUM_FIELDS = 3;
@@ -93,7 +93,7 @@ export const ROMAN_NUMBERS = [
   'XXIII',
   'XXIV',
   'XXV',
-  'XXVI'
+  'XXVI',
 ];
 export const ARABIC_NUMBERS = [
   1,
@@ -121,7 +121,7 @@ export const ARABIC_NUMBERS = [
   23,
   24,
   25,
-  26
+  26,
 ];
 export const SYMBOLS = ((symbols, times) => {
   let res = [];
@@ -136,12 +136,12 @@ export const SYMBOLS = ((symbols, times) => {
 export const ABSTRACT_TYPES = [
   {
     id: 'executive-summary',
-    name: 'Executive Summary'
+    name: 'Executive Summary',
   },
   {
     id: 'web-summary',
-    name: 'Web Summary'
-  }
+    name: 'Web Summary',
+  },
 ];
 
 export const JATS_GREEN_1_DTD = 'JATS-archivearticle1.dtd';

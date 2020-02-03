@@ -6,24 +6,24 @@
   for this transformation.
 */
 export default class NormalizeContribGroup {
-  import (dom) {
-    let contribGroups = dom.findAll('article-meta > contrib-group')
+  import(dom) {
+    let contribGroups = dom.findAll('article-meta > contrib-group');
     if (contribGroups[0]) {
-      _normalizeContribGroup(contribGroups[0], 'author')
+      _normalizeContribGroup(contribGroups[0], 'author');
     }
     if (contribGroups[1]) {
-      _normalizeContribGroup(contribGroups[1], 'editor')
+      _normalizeContribGroup(contribGroups[1], 'editor');
     }
     if (contribGroups.length > 2) {
-      console.warn(`Only the first 2 found contrib-groups (authors, editors) will be editable.`)
+      console.warn(`Only the first 2 found contrib-groups (authors, editors) will be editable.`);
     }
   }
 
-  export () {
+  export() {
     // nothing
   }
 }
 
-function _normalizeContribGroup (contribGroup, targetType) {
-  contribGroup.attr('content-type', targetType)
+function _normalizeContribGroup(contribGroup, targetType) {
+  contribGroup.attr('content-type', targetType);
 }

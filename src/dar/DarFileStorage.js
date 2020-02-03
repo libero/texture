@@ -1,16 +1,16 @@
-import { platform } from 'substance'
-import FSStorage from './FSStorage'
-import listDir from './_listDir'
-import _require from './_require'
+import { platform } from 'substance';
+import FSStorage from './FSStorage';
+import listDir from './_listDir';
+import _require from './_require';
 
 // FIXME: this file should only get bundled in commonjs version
-let fs, fsExtra, path, yazl, yauzl
+let fs, fsExtra, path, yazl, yauzl;
 if (platform.inNodeJS || platform.inElectron) {
-  fs = _require('fs')
-  fsExtra = _require('fs-extra')
-  path = _require('path')
-  yazl = _require('yazl')
-  yauzl = _require('yauzl')
+  fs = _require('fs');
+  fsExtra = _require('fs-extra');
+  path = _require('path');
+  yazl = _require('yazl');
+  yauzl = _require('yauzl');
 }
 
 /*
@@ -37,124 +37,128 @@ if (platform.inNodeJS || platform.inElectron) {
   Status: Phase I
 */
 export default class DarFileStorage {
-  constructor (rootDir, baseUrl) {
-    this.rootDir = rootDir
-    this.baseUrl = baseUrl
+  constructor(rootDir, baseUrl) {
+    this.rootDir = rootDir;
+    this.baseUrl = baseUrl;
 
-    this._internalStorage = new FSStorage()
+    this._internalStorage = new FSStorage();
   }
 
-  read (darpath, cb) {
+  read(darpath, cb) {
     // console.log('DarFileStorage::read', darpath)
     /*
       - unpack `dar` file as it is into the corresponding folder replacing an existing one
       - only bare-metal fs
     */
-    let id = this._path2Id(darpath)
-    let wcDir = this._getWorkingCopyPath(id)
-    fsExtra.removeSync(wcDir)
-    fsExtra.mkdirpSync(wcDir)
+    let id = this._path2Id(darpath);
+    let wcDir = this._getWorkingCopyPath(id);
+    fsExtra.removeSync(wcDir);
+    fsExtra.mkdirpSync(wcDir);
     this._unpack(darpath, wcDir, err => {
-      if (err) return cb(err)
-      this._internalStorage.read(wcDir, cb)
-    })
+      if (err) return cb(err);
+      this._internalStorage.read(wcDir, cb);
+    });
   }
 
-  write (darpath, rawArchive, cb) { // eslint-disble-line
-    let id = this._path2Id(darpath)
-    let wcDir = this._getWorkingCopyPath(id)
+  write(darpath, rawArchive, cb) {
+    // eslint-disble-line
+    let id = this._path2Id(darpath);
+    let wcDir = this._getWorkingCopyPath(id);
     this._internalStorage.write(wcDir, rawArchive, err => {
-      if (err) return cb(err)
-      this._pack(wcDir, darpath, cb)
-    })
+      if (err) return cb(err);
+      this._pack(wcDir, darpath, cb);
+    });
   }
 
-  clone (darpath, newDarpath, cb) { // eslint-disble-line
-    let id = this._path2Id(darpath)
-    let wcDir = this._getWorkingCopyPath(id)
-    let newId = this._path2Id(newDarpath)
-    let newWcDir = this._getWorkingCopyPath(newId)
+  clone(darpath, newDarpath, cb) {
+    // eslint-disble-line
+    let id = this._path2Id(darpath);
+    let wcDir = this._getWorkingCopyPath(id);
+    let newId = this._path2Id(newDarpath);
+    let newWcDir = this._getWorkingCopyPath(newId);
     this._internalStorage.clone(wcDir, newWcDir, err => {
-      if (err) return cb(err)
-      this._pack(newWcDir, newDarpath, cb)
-    })
+      if (err) return cb(err);
+      this._pack(newWcDir, newDarpath, cb);
+    });
   }
 
-  _path2Id (darpath) {
-    darpath = String(darpath)
-    darpath = path.normalize(darpath)
+  _path2Id(darpath) {
+    darpath = String(darpath);
+    darpath = path.normalize(darpath);
     // convert: '\\' to '/'
-    darpath = darpath.replace(/\\+/g, '/')
+    darpath = darpath.replace(/\\+/g, '/');
     // split path into fragments: dir, name, extension
-    let { dir, name } = path.parse(darpath)
+    let { dir, name } = path.parse(darpath);
     // ATTENTION: it is probably possible to create collisions here if somebody uses '@' in a bad way.
     // For now, this is acceptable because it is not realistic.
     // Adding an extra slash that got dropped by path.parse().
-    dir += '/'
+    dir += '/';
     // replace '/' with '@slash@'
-    dir = dir.replace(/\//g, '@slash@')
+    dir = dir.replace(/\//g, '@slash@');
     // replace ':' with '@colon@'
-    dir = dir.replace(/:/g, '@colon@')
-    return dir + name
+    dir = dir.replace(/:/g, '@colon@');
+    return dir + name;
   }
 
-  _getWorkingCopyPath (id) {
-    return path.join(this.rootDir, id)
+  _getWorkingCopyPath(id) {
+    return path.join(this.rootDir, id);
   }
 
-  _unpack (darpath, wcDir, cb) {
+  _unpack(darpath, wcDir, cb) {
     // console.log('DarFileStorage::_unpack', darpath, wcDir)
     yauzl.open(darpath, { lazyEntries: true }, (err, zipfile) => {
-      if (err) cb(err)
-      zipfile.readEntry()
-      zipfile.on('entry', (entry) => {
+      if (err) cb(err);
+      zipfile.readEntry();
+      zipfile.on('entry', entry => {
         // dir entry
         if (/\/$/.test(entry.fileName)) {
-          zipfile.readEntry()
-        // file entry
+          zipfile.readEntry();
+          // file entry
         } else {
           // console.log('... unpacking', entry.fileName)
           zipfile.openReadStream(entry, (err, readStream) => {
-            if (err) throw err
+            if (err) throw err;
             readStream.on('end', () => {
-              zipfile.readEntry()
-            })
-            let absPath = path.join(wcDir, entry.fileName)
-            fsExtra.ensureDirSync(path.dirname(absPath))
-            readStream.pipe(fs.createWriteStream(absPath))
-          })
+              zipfile.readEntry();
+            });
+            let absPath = path.join(wcDir, entry.fileName);
+            fsExtra.ensureDirSync(path.dirname(absPath));
+            readStream.pipe(fs.createWriteStream(absPath));
+          });
         }
-      })
+      });
       zipfile.on('error', err => {
-        cb(err)
-      })
+        cb(err);
+      });
       zipfile.once('end', () => {
-        cb()
-      })
-    })
+        cb();
+      });
+    });
   }
 
-  _pack (wcDir, darpath, cb) {
+  _pack(wcDir, darpath, cb) {
     // console.log('DarFileStorage::_pack')
-    let zipfile = new yazl.ZipFile()
-    listDir(wcDir).then(entries => {
-      for (let entry of entries) {
-        let relPath = path.relative(wcDir, entry.path)
-        // console.log('... adding "%s" as %s', entry.path, relPath)
-        zipfile.addFile(entry.path, relPath)
-      }
-      zipfile.outputStream.pipe(fs.createWriteStream(darpath)).on('close', () => {
-        cb()
+    let zipfile = new yazl.ZipFile();
+    listDir(wcDir)
+      .then(entries => {
+        for (let entry of entries) {
+          let relPath = path.relative(wcDir, entry.path);
+          // console.log('... adding "%s" as %s', entry.path, relPath)
+          zipfile.addFile(entry.path, relPath);
+        }
+        zipfile.outputStream.pipe(fs.createWriteStream(darpath)).on('close', () => {
+          cb();
+        });
+        // call end() after all the files have been added
+        zipfile.end();
       })
-      // call end() after all the files have been added
-      zipfile.end()
-    }).catch(cb)
+      .catch(cb);
   }
 
   // used by tests
-  _getRawArchive (darpath, cb) {
-    let id = this._path2Id(darpath)
-    let wcDir = this._getWorkingCopyPath(id)
-    this._internalStorage.read(wcDir, cb)
+  _getRawArchive(darpath, cb) {
+    let id = this._path2Id(darpath);
+    let wcDir = this._getWorkingCopyPath(id);
+    this._internalStorage.read(wcDir, cb);
   }
 }

@@ -1,8 +1,6 @@
-export default class CitationLabelGenerator
-{
-  constructor (config = {})
-  {
-    this.invalid = config.invalid || '???'
+export default class CitationLabelGenerator {
+  constructor(config = {}) {
+    this.invalid = config.invalid || '???';
   }
 
   /**
@@ -14,37 +12,29 @@ export default class CitationLabelGenerator
    * @returns {string} the generated label
    * @memberof CitationLabelGenerator
    */
-  getLabel (node)
-  {
+  getLabel(node) {
     let label = this.invalid;
-    if (node && node.type === 'xref' && node.refTargets.length > 0)
-    {
+    if (node && node.type === 'xref' && node.refTargets.length > 0) {
       let count = 0;
       label = '';
-      for (let targetId of node.refTargets)
-      {
+      for (let targetId of node.refTargets) {
         let target = node.document.get(targetId);
-        if (target)
-        {
-          if (count > 0)
-          {
+        if (target) {
+          if (count > 0) {
             label += '; ';
           }
 
           // FIXME: Reference Nodes should be refactored to have a method for getting the principal person-group.
-          let people = (target.type === 'patent-ref') ? target.inventors : target.authors;
-          if (people && people.length > 0)
-          {
-            label += `${target.document.get(people[0]).name}`
+          let people = target.type === 'patent-ref' ? target.inventors : target.authors;
+          if (people && people.length > 0) {
+            label += `${target.document.get(people[0]).name}`;
           }
 
-          if (people.length > 1)
-          {
+          if (people.length > 1) {
             label += ' et al.';
           }
 
-          if (target.year)
-          {
+          if (target.year) {
             label += `, ${target.year}`;
           }
           count += 1;

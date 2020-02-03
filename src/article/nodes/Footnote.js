@@ -1,17 +1,15 @@
-import { DocumentNode, CONTAINER, PLAIN_TEXT } from 'substance'
+import { DocumentNode, CONTAINER, PLAIN_TEXT } from 'substance';
 
 export default class Footnote extends DocumentNode {
-  static getTemplate () {
+  static getTemplate() {
     return {
       type: 'footnote',
-      content: [
-        { type: 'paragraph' }
-      ]
-    }
+      content: [{ type: 'paragraph' }],
+    };
   }
 }
 Footnote.schema = {
   type: 'footnote',
   label: PLAIN_TEXT,
-  content: CONTAINER('paragraph')
-}
+  content: CONTAINER('paragraph'),
+};

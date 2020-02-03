@@ -7,7 +7,7 @@ export default class AffiliationsListComponent extends CustomSurface {
   getInitialState() {
     let items = this._getAffiliations();
     return {
-      hidden: items.length === 0
+      hidden: items.length === 0,
     };
   }
 
@@ -45,10 +45,10 @@ export default class AffiliationsListComponent extends CustomSurface {
     els.push(
       $$(Button, {
         icon: 'insert',
-        label: this.getLabel('add-affiliation')
+        label: this.getLabel('add-affiliation'),
       })
         .addClass('se-add-affiliation')
-        .on('click', this._addAffiliation)
+        .on('click', this._addAffiliation),
     );
     return els;
   }
@@ -75,7 +75,7 @@ class AffiliationDisplay extends NodeComponent {
       $$('div')
         .addClass('se-text')
         .append(this.props.node.toString()),
-      $$(FontAwesomeIcon, { icon: 'fa-edit' }).addClass('se-icon')
+      $$(FontAwesomeIcon, { icon: 'fa-edit' }).addClass('se-icon'),
     ).attr('data-id', this.props.node.id);
 
     el.on('mousedown', this._onMousedown).on('click', this._onClick);

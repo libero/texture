@@ -1,7 +1,7 @@
-import { CHILDREN, TEXT, STRING, CHILD } from 'substance'
-import Reference from './Reference'
-import { RICH_TEXT_ANNOS } from './modelConstants'
-import StringDate from './StringDate'
+import { CHILDREN, TEXT, STRING, CHILD } from 'substance';
+import Reference from './Reference';
+import { RICH_TEXT_ANNOS } from './modelConstants';
+import StringDate from './StringDate';
 
 /*
   <element-citation publication-type="periodical">
@@ -34,4 +34,4 @@ PeriodicalRef.schema = {
   fpage: STRING, // <fpage>
   lpage: STRING, // <lpage>
   uri: STRING, // <ext-link ext-link-type="uri">
-}
+};

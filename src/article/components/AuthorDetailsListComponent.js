@@ -8,7 +8,7 @@ export default class AuthorDetailsListComponent extends CustomSurface {
     let items = this._getAuthors();
     return {
       hidden: items.length === 0,
-      edit: false
+      edit: false,
     };
   }
 
@@ -46,7 +46,7 @@ class AuthorDetailsDisplay extends NodeComponent {
     el.append(
       $$('p')
         .addClass('se-author-details-fullname')
-        .append(`${author.givenNames} ${author.surname}`)
+        .append(`${author.givenNames} ${author.surname}`),
     );
 
     // Only display an email fir corresponding authors
@@ -58,8 +58,8 @@ class AuthorDetailsDisplay extends NodeComponent {
           .append(
             $$('a')
               .attr('href', `mailto:${author.email}`)
-              .append(author.email)
-          )
+              .append(author.email),
+          ),
       );
     }
 
@@ -71,7 +71,7 @@ class AuthorDetailsDisplay extends NodeComponent {
           el.append(
             $$('p')
               .addClass('se-author-details-affilations')
-              .append(affiliationElement.toString())
+              .append(affiliationElement.toString()),
           );
         }
       });
@@ -94,8 +94,8 @@ class AuthorDetailsDisplay extends NodeComponent {
                 .append(
                   $$('a')
                     .attr('href', match.input)
-                    .append(match[0])
-                )
+                    .append(match[0]),
+                ),
             );
           } else {
             orcidIdElement.append(
@@ -104,8 +104,8 @@ class AuthorDetailsDisplay extends NodeComponent {
                 .append(
                   $$('a')
                     .attr('href', contributorIdElement.content)
-                    .append(contributorIdElement.content)
-                )
+                    .append(contributorIdElement.content),
+                ),
             );
           }
         }

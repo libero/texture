@@ -7,7 +7,7 @@ export default class AuthorsListComponent extends CustomSurface {
     let items = this._getAuthors();
     return {
       hidden: items.length === 0,
-      edit: false
+      edit: false,
     };
   }
 
@@ -67,7 +67,7 @@ class AuthorDisplay extends NodeComponent {
       el.append(
         $$('sup')
           .addClass('se-affiliations')
-          .append(getLabel(person))
+          .append(getLabel(person)),
       );
     }
 

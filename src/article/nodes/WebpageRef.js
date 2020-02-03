@@ -1,6 +1,6 @@
-import { CHILDREN, TEXT, STRING } from 'substance'
-import { RICH_TEXT_ANNOS } from './modelConstants'
-import Reference from './Reference'
+import { CHILDREN, TEXT, STRING } from 'substance';
+import { RICH_TEXT_ANNOS } from './modelConstants';
+import Reference from './Reference';
 
 /*
   <element-citation publication-type="webpage">
@@ -39,5 +39,5 @@ WebpageRef.schema = {
 
   // eLife unused
   month: STRING, // <month>
-  day: STRING // <day>
-}
+  day: STRING, // <day>
+};

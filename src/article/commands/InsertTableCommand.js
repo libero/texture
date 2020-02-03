@@ -1,7 +1,7 @@
-import InsertNodeCommand from './InsertNodeCommand'
+import InsertNodeCommand from './InsertNodeCommand';
 
 export default class InsertTableCommand extends InsertNodeCommand {
-  execute (params, context) {
-    context.api.insertTable()
+  execute(params, context) {
+    context.api.insertTable();
   }
 }

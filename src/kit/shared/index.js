@@ -1,1 +1,1 @@
-export { default as throwMethodIsAbstract } from './throwMethodIsAbstract'
+export { default as throwMethodIsAbstract } from './throwMethodIsAbstract';

@@ -1,2 +1,2 @@
-export { default as createEmptyJATS } from './createEmptyJATS'
-export * from './domHelpers'
+export { default as createEmptyJATS } from './createEmptyJATS';
+export * from './domHelpers';

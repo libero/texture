@@ -10,5 +10,5 @@ ContributorIdentifier.schema = {
   contribIdType: STRING,
   id: STRING,
   specificUse: STRING,
-  content: STRING
+  content: STRING,
 };

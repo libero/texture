@@ -1,42 +1,51 @@
-import { createNodePropertyModels, createValueModel } from '../../kit'
-import DefaultNodeComponent from '../components/DefaultNodeComponent'
-import LicenseEditor from '../components/LicenseEditor'
+import { createNodePropertyModels, createValueModel } from '../../kit';
+import DefaultNodeComponent from '../components/DefaultNodeComponent';
+import LicenseEditor from '../components/LicenseEditor';
 
 export default class ArticleMetadataComponent extends DefaultNodeComponent {
-  _getClassNames () {
-    return `sc-article-record`
+  _getClassNames() {
+    return `sc-article-record`;
   }
 
-  _renderHeader () {
+  _renderHeader() {
     // no header
   }
 
-  _getPropertyEditorClass (name, value) {
+  _getPropertyEditorClass(name, value) {
     switch (name) {
       case 'license': {
-        return LicenseEditor
+        return LicenseEditor;
       }
       default:
-        return super._getPropertyEditorClass(name, value)
+        return super._getPropertyEditorClass(name, value);
     }
   }
 
-  _createPropertyModels () {
-    const EXCLUDED_FIELDS = new Set(['authors', 'editors', 'groups', 'affiliations', 'funders', 'keywords', 'subjects', 'articleType'])
-    const api = this.context.api
-    const node = this.props.node
-    const doc = node.getDocument()
-    return createNodePropertyModels(api, this.props.node, (p) => {
+  _createPropertyModels() {
+    const EXCLUDED_FIELDS = new Set([
+      'authors',
+      'editors',
+      'groups',
+      'affiliations',
+      'funders',
+      'keywords',
+      'subjects',
+      'articleType',
+    ]);
+    const api = this.context.api;
+    const node = this.props.node;
+    const doc = node.getDocument();
+    return createNodePropertyModels(api, this.props.node, p => {
       switch (p.name) {
         case 'permission': {
-          let permission = doc.get(node.permission)
-          return createNodePropertyModels(api, permission)
+          let permission = doc.get(node.permission);
+          return createNodePropertyModels(api, permission);
         }
         default:
           if (!EXCLUDED_FIELDS.has(p.name)) {
-            return createValueModel(api, [node.id, p.name], p)
+            return createValueModel(api, [node.id, p.name], p);
           }
       }
-    })
+    });
   }
 }

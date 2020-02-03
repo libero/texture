@@ -1,58 +1,60 @@
 export default class InMemoryDarBuffer {
-  constructor () {
-    this._version = null
-    this._changes = []
-    this._isDirty = {}
-    this._blobs = {}
+  constructor() {
+    this._version = null;
+    this._changes = [];
+    this._isDirty = {};
+    this._blobs = {};
   }
 
-  getVersion () {
-    return this._version
+  getVersion() {
+    return this._version;
   }
 
-  load(archiveId, cb) { // eslint-disable-line
-    cb()
+  load(archiveId, cb) {
+    // eslint-disable-line
+    cb();
   }
 
-  addChange (docId, change) {
+  addChange(docId, change) {
     // HACK: if there are no ops we skip
-    if (change.ops.length === 0) return
+    if (change.ops.length === 0) return;
     // console.log('RECORD CHANGE', docId, change)
-    this._isDirty[docId] = true
+    this._isDirty[docId] = true;
     this._changes.push({
-      docId, change
-    })
+      docId,
+      change,
+    });
   }
 
-  hasPendingChanges () {
-    return this._changes.length > 0
+  hasPendingChanges() {
+    return this._changes.length > 0;
   }
 
-  getChanges () {
-    return this._changes.slice()
+  getChanges() {
+    return this._changes.slice();
   }
 
-  hasResourceChanged (docId) {
-    return this._isDirty[docId]
+  hasResourceChanged(docId) {
+    return this._isDirty[docId];
   }
 
-  hasBlobChanged (assetId) {
-    return Boolean(this._isDirty[assetId])
+  hasBlobChanged(assetId) {
+    return Boolean(this._isDirty[assetId]);
   }
 
-  addBlob (assetId, blob) {
-    this._isDirty[assetId] = true
-    this._blobs[assetId] = blob
+  addBlob(assetId, blob) {
+    this._isDirty[assetId] = true;
+    this._blobs[assetId] = blob;
   }
 
-  getBlob (assetId) {
-    return this._blobs[assetId]
+  getBlob(assetId) {
+    return this._blobs[assetId];
   }
 
-  reset (version) {
-    this._version = version
-    this._changes = []
-    this._blobs = {}
-    this._isDirty = {}
+  reset(version) {
+    this._version = version;
+    this._changes = [];
+    this._blobs = {};
+    this._isDirty = {};
   }
 }

@@ -1,7 +1,7 @@
-import { AnnotationComponent } from '../../kit'
+import { AnnotationComponent } from '../../kit';
 
 export default class SubscriptComponent extends AnnotationComponent {
-  getTagName () {
-    return 'sub'
+  getTagName() {
+    return 'sub';
   }
 }

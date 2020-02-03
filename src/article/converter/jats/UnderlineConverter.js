@@ -1,5 +1,9 @@
 export default class UnderlineConverter {
-  get type () { return 'underline' }
+  get type() {
+    return 'underline';
+  }
 
-  get tagName () { return 'underline' }
+  get tagName() {
+    return 'underline';
+  }
 }

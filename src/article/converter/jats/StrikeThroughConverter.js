@@ -1,5 +1,9 @@
 export default class StrikeThroughConverter {
-  get type () { return 'strike-through' }
+  get type() {
+    return 'strike-through';
+  }
 
-  get tagName () { return 'strike' }
+  get tagName() {
+    return 'strike';
+  }
 }

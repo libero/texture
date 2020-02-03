@@ -1,9 +1,9 @@
-import { DocumentNode, CONTAINER, TEXT } from 'substance'
-import { RICH_TEXT_ANNOS } from './modelConstants'
+import { DocumentNode, CONTAINER, TEXT } from 'substance';
+import { RICH_TEXT_ANNOS } from './modelConstants';
 
 export default class Acknowledgement extends DocumentNode {
-  render (options = {}) {
-    return this.title || ''
+  render(options = {}) {
+    return this.title || '';
   }
 }
 
@@ -12,6 +12,6 @@ Acknowledgement.schema = {
   title: TEXT(RICH_TEXT_ANNOS),
   content: CONTAINER({
     nodeTypes: ['paragraph', 'heading'],
-    defaultTextType: 'paragraph'
+    defaultTextType: 'paragraph',
   }),
-}
+};

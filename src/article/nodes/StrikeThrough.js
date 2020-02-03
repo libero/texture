@@ -1,6 +1,6 @@
-import Annotation from './Annotation'
+import Annotation from './Annotation';
 
 export default class StrikeThrough extends Annotation {}
 StrikeThrough.schema = {
-  type: 'strike-through'
-}
+  type: 'strike-through',
+};

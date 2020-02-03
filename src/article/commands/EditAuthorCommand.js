@@ -1,19 +1,19 @@
-import { Person } from '../nodes'
-import EditEntityCommand from './EditEntityCommand'
+import { Person } from '../nodes';
+import EditEntityCommand from './EditEntityCommand';
 
 export default class EditAuthorCommand extends EditEntityCommand {
-  _getType () {
-    return Person.type
+  _getType() {
+    return Person.type;
   }
-  getCommandState (params, context) {
-    let commandState = super.getCommandState(params, context)
+  getCommandState(params, context) {
+    let commandState = super.getCommandState(params, context);
     if (!commandState.disabled) {
-      let node = commandState.node
-      let xpath = node.getXpath().toArray()
+      let node = commandState.node;
+      let xpath = node.getXpath().toArray();
       if (!xpath.find(x => x.property === 'authors')) {
-        return { disabled: true }
+        return { disabled: true };
       }
     }
-    return commandState
+    return commandState;
   }
 }

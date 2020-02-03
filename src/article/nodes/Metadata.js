@@ -1,5 +1,5 @@
-import { DocumentNode, CHILD, CHILDREN, TEXT, STRING } from 'substance'
-import { RICH_TEXT_ANNOS } from './modelConstants'
+import { DocumentNode, CHILD, CHILDREN, TEXT, STRING } from 'substance';
+import { RICH_TEXT_ANNOS } from './modelConstants';
 
 export default class Metadata extends DocumentNode {}
 Metadata.schema = {
@@ -25,5 +25,5 @@ Metadata.schema = {
   receivedDate: STRING,
   revReceivedDate: STRING,
   revRequestedDate: STRING,
-  permission: CHILD('permission')
-}
+  permission: CHILD('permission'),
+};

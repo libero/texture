@@ -1,41 +1,39 @@
-import {
-  UndoCommand, RedoCommand, SelectAllCommand
-} from 'substance'
+import { UndoCommand, RedoCommand, SelectAllCommand } from 'substance';
 
 export default {
   name: 'EditorBase',
-  configure: function (config) {
-    config.addCommand('undo', UndoCommand, { commandGroup: 'undo-redo' })
-    config.addCommand('redo', RedoCommand, { commandGroup: 'undo-redo' })
-    config.addCommand('select-all', SelectAllCommand, { commandGroup: 'selection' })
+  configure: function(config) {
+    config.addCommand('undo', UndoCommand, { commandGroup: 'undo-redo' });
+    config.addCommand('redo', RedoCommand, { commandGroup: 'undo-redo' });
+    config.addCommand('select-all', SelectAllCommand, { commandGroup: 'selection' });
 
-    config.addIcon('insert', { 'fontawesome': 'fa-plus' })
-    config.addIcon('undo', { 'fontawesome': 'fa-undo' })
-    config.addIcon('redo', { 'fontawesome': 'fa-repeat' })
-    config.addIcon('edit', { 'fontawesome': 'fa-cog' })
-    config.addIcon('delete', { 'fontawesome': 'fa-times' })
-    config.addIcon('expand', { 'fontawesome': 'fa-arrows-h' })
-    config.addIcon('truncate', { 'fontawesome': 'fa-arrows-h' })
+    config.addIcon('insert', { fontawesome: 'fa-plus' });
+    config.addIcon('undo', { fontawesome: 'fa-undo' });
+    config.addIcon('redo', { fontawesome: 'fa-repeat' });
+    config.addIcon('edit', { fontawesome: 'fa-cog' });
+    config.addIcon('delete', { fontawesome: 'fa-times' });
+    config.addIcon('expand', { fontawesome: 'fa-arrows-h' });
+    config.addIcon('truncate', { fontawesome: 'fa-arrows-h' });
 
     config.addLabel('undo', {
       en: 'Undo',
-      de: 'Rückgängig'
-    })
+      de: 'Rückgängig',
+    });
     config.addLabel('redo', {
       en: 'Redo',
-      de: 'Wiederherstellen'
-    })
+      de: 'Wiederherstellen',
+    });
     config.addLabel('select-all', {
       en: 'Select All',
-      de: 'Alles Auswählen'
-    })
+      de: 'Alles Auswählen',
+    });
     config.addLabel('close', {
       en: 'Close',
-      de: 'Schließen'
-    })
+      de: 'Schließen',
+    });
 
-    config.addKeyboardShortcut('CommandOrControl+Z', { command: 'undo' })
-    config.addKeyboardShortcut('CommandOrControl+Shift+Z', { command: 'redo' })
-    config.addKeyboardShortcut('CommandOrControl+A', { command: 'select-all' })
-  }
-}
+    config.addKeyboardShortcut('CommandOrControl+Z', { command: 'undo' });
+    config.addKeyboardShortcut('CommandOrControl+Shift+Z', { command: 'redo' });
+    config.addKeyboardShortcut('CommandOrControl+A', { command: 'select-all' });
+  },
+};

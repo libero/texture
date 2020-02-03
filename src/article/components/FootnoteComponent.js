@@ -25,8 +25,8 @@ export default class FootnoteComponent extends NodeComponent {
           $$('div')
             .addClass('se-label')
             .append(label),
-          this._renderValue($$, 'content', { placeholder: this.getLabel('footnote-placeholder') })
-        )
+          this._renderValue($$, 'content', { placeholder: this.getLabel('footnote-placeholder') }),
+        ),
     );
     return el;
   }
@@ -46,9 +46,9 @@ export default class FootnoteComponent extends NodeComponent {
           // TODO: we should need to pass down 'disabled' manually
           // editable=false should be disabled per-se
           disabled: true,
-          editable: false
-        })
-      })
+          editable: false,
+        }),
+      }),
     );
     return el;
   }

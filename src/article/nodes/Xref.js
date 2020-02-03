@@ -1,4 +1,4 @@
-import { STRING, InlineNode } from 'substance'
+import { STRING, InlineNode } from 'substance';
 
 export default class Xref extends InlineNode {}
 Xref.schema = {
@@ -7,6 +7,6 @@ Xref.schema = {
   refType: STRING,
   refTargets: {
     type: ['array', 'id'],
-    default: []
-  }
-}
+    default: [],
+  },
+};

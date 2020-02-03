@@ -1,18 +1,18 @@
-import { Command } from 'substance'
+import { Command } from 'substance';
 
 export default class SaveCommand extends Command {
-  getCommandState (params, context) {
-    let archive = context.archive
+  getCommandState(params, context) {
+    let archive = context.archive;
     if (!archive || !archive.hasPendingChanges()) {
-      return Command.DISABLED
+      return Command.DISABLED;
     } else {
       return {
-        disabled: false
-      }
+        disabled: false,
+      };
     }
   }
 
-  execute (params, context) {
-    context.editorSession.getRootComponent().send('save')
+  execute(params, context) {
+    context.editorSession.getRootComponent().send('save');
   }
 }

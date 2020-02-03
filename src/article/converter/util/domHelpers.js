@@ -1,111 +1,117 @@
-import { DomUtils } from 'substance'
+import { DomUtils } from 'substance';
 
-export function getText (rootEl, selector) {
-  let el = rootEl.find(selector)
+export function getText(rootEl, selector) {
+  let el = rootEl.find(selector);
   if (el) {
-    return el.textContent
+    return el.textContent;
   } else {
-    return ''
+    return '';
   }
 }
 
-export function getSeparatedText (rootEl, selector) {
-  let el = rootEl.findAll(selector)
+export function getSeparatedText(rootEl, selector) {
+  let el = rootEl.findAll(selector);
   if (el) {
-    return el.map(m => { return m.textContent }).join('; ')
+    return el
+      .map(m => {
+        return m.textContent;
+      })
+      .join('; ');
   } else {
-    return ''
+    return '';
   }
 }
 
-export function getAttr (rootEl, selector, attr) {
-  let el = rootEl.find(selector)
+export function getAttr(rootEl, selector, attr) {
+  let el = rootEl.find(selector);
   if (el) {
-    return el.attr(attr)
+    return el.attr(attr);
   } else {
-    return ''
+    return '';
   }
 }
 
-export function findChild (el, cssSelector) {
-  const children = el.getChildren()
+export function findChild(el, cssSelector) {
+  const children = el.getChildren();
   for (let i = 0; i < children.length; i++) {
-    const child = children[i]
-    if (child.is(cssSelector)) return child
+    const child = children[i];
+    if (child.is(cssSelector)) return child;
   }
 }
 
-export function findAllChildren (el, cssSelector) {
-  const children = el.getChildren()
-  let result = []
+export function findAllChildren(el, cssSelector) {
+  const children = el.getChildren();
+  let result = [];
   for (let i = 0; i < children.length; i++) {
-    const child = children[i]
+    const child = children[i];
     if (child.is(cssSelector)) {
-      result.push(child)
+      result.push(child);
     }
   }
-  return result
+  return result;
 }
 
-export function printElement (el, options = {}) {
-  let maxLevel = options.maxLevel || 1000
-  let res = _printElement(el, 1, maxLevel)
-  return res
+export function printElement(el, options = {}) {
+  let maxLevel = options.maxLevel || 1000;
+  let res = _printElement(el, 1, maxLevel);
+  return res;
 }
 
-export function retainChildren (el, ...allowedTagNames) {
-  allowedTagNames = new Set(allowedTagNames)
-  let childNodes = el.getChildNodes()
+export function retainChildren(el, ...allowedTagNames) {
+  allowedTagNames = new Set(allowedTagNames);
+  let childNodes = el.getChildNodes();
   for (let idx = childNodes.length - 1; idx >= 0; idx--) {
-    let child = childNodes[idx]
+    let child = childNodes[idx];
     if (!allowedTagNames.has(child.tagName)) {
-      el.removeAt(idx)
+      el.removeAt(idx);
     }
   }
-  return el
+  return el;
 }
 
-function _printElement (el, level, maxLevel) {
-  let INDENT = new Array(level - 1)
-  INDENT.fill('  ')
-  INDENT = INDENT.join('')
+function _printElement(el, level, maxLevel) {
+  let INDENT = new Array(level - 1);
+  INDENT.fill('  ');
+  INDENT = INDENT.join('');
 
   if (el.isElementNode()) {
     if (level <= maxLevel) {
-      let res = []
-      res.push(INDENT + _openTag(el))
+      let res = [];
+      res.push(INDENT + _openTag(el));
       res = res.concat(
-        el.childNodes.map((child) => {
-          return _printElement(child, level + 1, maxLevel)
-        }).filter(Boolean)
-      )
-      res.push(INDENT + _closeTag(el))
-      return res.join('\n')
+        el.childNodes
+          .map(child => {
+            return _printElement(child, level + 1, maxLevel);
+          })
+          .filter(Boolean),
+      );
+      res.push(INDENT + _closeTag(el));
+      return res.join('\n');
     } else {
-      return INDENT + _openTag(el) + '...' + _closeTag(el)
+      return INDENT + _openTag(el) + '...' + _closeTag(el);
     }
   } else if (el.isTextNode()) {
-    let textContent = el.textContent
+    let textContent = el.textContent;
     if (/^\s*$/.exec(textContent)) {
-      return ''
+      return '';
     } else {
-      return INDENT + JSON.stringify(el.textContent)
+      return INDENT + JSON.stringify(el.textContent);
     }
   } else {
     // TODO: render other node types and consider maxLevel
-    return INDENT + el.serialize()
+    return INDENT + el.serialize();
   }
 }
 
-function _openTag (el) {
-  let attribStr = DomUtils.formatAttribs(el)
+function _openTag(el) {
+  let attribStr = DomUtils.formatAttribs(el);
   if (attribStr) {
-    return `<${el.tagName} ${attribStr}>`
+    return `<${el.tagName} ${attribStr}>`;
   } else {
-    return `<${el.tagName}>`
+    return `<${el.tagName}>`;
   }
 }
 
-function _closeTag (el) {
-  return `</${el.tagName}>`
+function _closeTag(el) {
+  return `</${el.tagName}>`;
 }

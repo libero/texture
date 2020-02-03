@@ -1,5 +1,5 @@
-import { Component, uuid, domHelpers } from 'substance'
-import { ModalEditorSession, createEditorContext } from '../../kit'
+import { Component, uuid, domHelpers } from 'substance';
+import { ModalEditorSession, createEditorContext } from '../../kit';
 
 /**
  * Experimental: A base class for Workflows that are manipulating an EditorSession.
@@ -12,164 +12,168 @@ import { ModalEditorSession, createEditorContext } from '../../kit'
  * It is not yet clear, how much this can be generalized. Thus is not part of the app kit yet.
  */
 export default class EditorWorkflow extends Component {
-  constructor (...args) {
-    super(...args)
+  constructor(...args) {
+    super(...args);
 
-    this._initialize(this.props)
+    this._initialize(this.props);
   }
 
-  _initialize (props) {
-    let parentEditorSession = this._getParentEditorSession()
+  _initialize(props) {
+    let parentEditorSession = this._getParentEditorSession();
 
-    let config = this._getConfig()
-    this.config = config
+    let config = this._getConfig();
+    this.config = config;
 
-    let editorSession = new ModalEditorSession(this._getWorkflowId(), parentEditorSession, config, this._getInitialEditorState())
-    this.editorSession = editorSession
+    let editorSession = new ModalEditorSession(
+      this._getWorkflowId(),
+      parentEditorSession,
+      config,
+      this._getInitialEditorState(),
+    );
+    this.editorSession = editorSession;
 
-    this.appState = editorSession.editorState
+    this.appState = editorSession.editorState;
 
-    let api = this._createAPI()
-    this.api = api
+    let api = this._createAPI();
+    this.api = api;
 
-    let editor = this
+    let editor = this;
     const context = Object.assign(createEditorContext(config, editorSession, editor), {
       api,
-      editable: true
-    })
-    this.context = context
+      editable: true,
+    });
+    this.context = context;
 
-    editorSession.setContext(context)
-    editorSession.initialize()
+    editorSession.setContext(context);
+    editorSession.initialize();
   }
 
-  _getConfig () {
-    throw new Error('This method is abstract')
+  _getConfig() {
+    throw new Error('This method is abstract');
   }
 
-  _getInitialEditorState () {
+  _getInitialEditorState() {
     // TODO: this might not be generic
-    let parentEditorState = this._getParentEditorState()
+    let parentEditorState = this._getParentEditorState();
     return {
       overlayId: null,
-      settings: parentEditorState.settings
-    }
+      settings: parentEditorState.settings,
+    };
   }
 
-  _getWorkflowId () {
-    return uuid()
+  _getWorkflowId() {
+    return uuid();
   }
 
-  _getParentEditorState () {
-    return this._getParentEditorSession().editorState
+  _getParentEditorState() {
+    return this._getParentEditorSession().editorState;
   }
 
-  _getParentEditorSession () {
-    return this._getParentContext().editorSession
+  _getParentEditorSession() {
+    return this._getParentContext().editorSession;
   }
 
-  _getParentContext () {
-    return this.getParent().context
+  _getParentContext() {
+    return this.getParent().context;
   }
 
-  _createAPI () {
-    throw new Error('This method is method is abstract.')
+  _createAPI() {
+    throw new Error('This method is method is abstract.');
   }
 
-  getActionHandlers () {
+  getActionHandlers() {
     return {
       executeCommand: this._executeCommand,
       toggleOverlay: this._toggleOverlay,
       scrollTo: this._scrollTo,
-      scrollElementIntoView: this._scrollElementIntoView
-    }
+      scrollElementIntoView: this._scrollElementIntoView,
+    };
   }
 
-  dispose () {
-    this.editorSession.dispose()
+  dispose() {
+    this.editorSession.dispose();
   }
 
-  render ($$) {
-    let el = $$('div').addClass(this._getClassNames())
+  render($$) {
+    let el = $$('div').addClass(this._getClassNames());
     // ATTENTION: don't let mousedowns and clicks pass, otherwise the parent will null the selection
-    el.on('mousedown', this._onMousedown)
-      .on('click', this._onClick)
-    el.append(
-      this._renderContent($$)
-    )
-    el.append(this._renderKeyTrap($$))
-    return el
+    el.on('mousedown', this._onMousedown).on('click', this._onClick);
+    el.append(this._renderContent($$));
+    el.append(this._renderKeyTrap($$));
+    return el;
   }
 
-  _renderKeyTrap ($$) {
-    return $$('textarea').addClass('se-keytrap').ref('keytrap')
+  _renderKeyTrap($$) {
+    return $$('textarea')
+      .addClass('se-keytrap')
+      .ref('keytrap')
       .css({ position: 'absolute', width: 0, height: 0, opacity: 0 })
-      .on('keydown', this._onKeydown)
-      // TODO: copy'n'paste support?
-      // .on('copy', this._onCopy)
-      // .on('paste', this._onPaste)
-      // .on('cut', this._onCut)
+      .on('keydown', this._onKeydown);
+    // TODO: copy'n'paste support?
+    // .on('copy', this._onCopy)
+    // .on('paste', this._onPaste)
+    // .on('cut', this._onCut)
   }
 
-  _renderContent ($$) {}
+  _renderContent($$) {}
 
-  _getClassNames () {
-    return 'sc-editor-workflow'
+  _getClassNames() {
+    return 'sc-editor-workflow';
   }
 
-  beforeClose () {
-    this.editorSession.commitChanges()
+  beforeClose() {
+    this.editorSession.commitChanges();
   }
 
-  getComponentRegistry () {
-    return this.config.getComponentRegistry()
+  getComponentRegistry() {
+    return this.config.getComponentRegistry();
   }
 
-  getContentPanel () {
-    return this.refs.contentPanel
+  getContentPanel() {
+    return this.refs.contentPanel;
   }
 
-  _executeCommand (name, params) {
-    this.editorSession.executeCommand(name, params)
+  _executeCommand(name, params) {
+    this.editorSession.executeCommand(name, params);
   }
 
-  _scrollElementIntoView (el, force) {
-    this.refs.editor._scrollElementIntoView(el, force)
+  _scrollElementIntoView(el, force) {
+    this.refs.editor._scrollElementIntoView(el, force);
   }
 
-  _scrollTo (params) {
-    this.refs.editor._scrollTo(params)
+  _scrollTo(params) {
+    this.refs.editor._scrollTo(params);
   }
 
-  _toggleOverlay (overlayId) {
-    const appState = this.appState
+  _toggleOverlay(overlayId) {
+    const appState = this.appState;
     if (appState.overlayId === overlayId) {
-      appState.overlayId = null
+      appState.overlayId = null;
     } else {
-      appState.overlayId = overlayId
+      appState.overlayId = overlayId;
     }
-    appState.propagateUpdates()
+    appState.propagateUpdates();
   }
 
-  _onClick (e) {
-    domHelpers.stopAndPrevent(e)
-    let focusedSurface = this.editorSession.getFocusedSurface()
+  _onClick(e) {
+    domHelpers.stopAndPrevent(e);
+    let focusedSurface = this.editorSession.getFocusedSurface();
     if (focusedSurface) {
-      focusedSurface._blur()
+      focusedSurface._blur();
     }
-    this.editorSession.setSelection(null)
+    this.editorSession.setSelection(null);
   }
 
-  _onKeydown (e) {
-    let handled = this.context.keyboardManager.onKeydown(e, this.context)
+  _onKeydown(e) {
+    let handled = this.context.keyboardManager.onKeydown(e, this.context);
     if (handled) {
-      e.stopPropagation()
-      e.preventDefault()
+      e.stopPropagation();
+      e.preventDefault();
     }
-    return handled
+    return handled;
   }
 
-  _onMousedown (e) {
-    e.stopPropagation()
+  _onMousedown(e) {
+    e.stopPropagation();
   }
 }

@@ -1,7 +1,7 @@
-import AddEntityWorkflow from './AddEntityWorkflow'
+import AddEntityWorkflow from './AddEntityWorkflow';
 
 export default class AddAuthorWorkflow extends AddEntityWorkflow {
-  _createContent () {
-    this.context.api.addAffiliation()
+  _createContent() {
+    this.context.api.addAffiliation();
   }
 }

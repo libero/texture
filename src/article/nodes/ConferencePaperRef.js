@@ -1,6 +1,6 @@
-import { TEXT, CHILDREN, STRING } from 'substance'
-import { RICH_TEXT_ANNOS } from './modelConstants'
-import Reference from './Reference'
+import { TEXT, CHILDREN, STRING } from 'substance';
+import { RICH_TEXT_ANNOS } from './modelConstants';
+import Reference from './Reference';
 
 /*
   <element-citation publication-type="confproc">
@@ -41,5 +41,5 @@ ConferencePaperRef.schema = {
   containerTitle: STRING, // <source>
   month: STRING, // <month>
   day: STRING, // <day>
-  pageRange: STRING // <page-range>
-}
+  pageRange: STRING, // <page-range>
+};

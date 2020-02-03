@@ -231,5 +231,5 @@ export default {
     config.addLabel('relatedArticleHrefPlaceholder', '10.7554/eLife.00000');
     config.addLabel('relatedArticleType', 'Link Type');
     config.addLabel('relatedArticleTypePlaceholder', 'commentary-article');
-  }
+  },
 };

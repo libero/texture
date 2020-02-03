@@ -1,4 +1,4 @@
-import { Editing } from 'substance'
+import { Editing } from 'substance';
 
 /*
   EXPERIMENTAL: an 'Editing' interface that takes the XML schema into account.
@@ -8,57 +8,57 @@ export default class ArticleEditingImpl extends Editing {
   /*
     2.0 API suggestion (pass only id, not data)
   */
-  insertInlineNode (tx, node) {
-    let text = '\uFEFF'
-    this.insertText(tx, text)
-    let sel = tx.selection
-    let endOffset = tx.selection.end.offset
-    let startOffset = endOffset - text.length
+  insertInlineNode(tx, node) {
+    let text = '\uFEFF';
+    this.insertText(tx, text);
+    let sel = tx.selection;
+    let endOffset = tx.selection.end.offset;
+    let startOffset = endOffset - text.length;
     // TODO: introduce a coordinate operation for that
-    tx.set([node.id, 'start', 'path'], sel.path)
-    tx.set([node.id, 'start', 'offset'], startOffset)
-    tx.set([node.id, 'end', 'path'], sel.path)
-    tx.set([node.id, 'end', 'offset'], endOffset)
-    return node
+    tx.set([node.id, 'start', 'path'], sel.path);
+    tx.set([node.id, 'start', 'offset'], startOffset);
+    tx.set([node.id, 'end', 'path'], sel.path);
+    tx.set([node.id, 'end', 'offset'], endOffset);
+    return node;
   }
 
-  createListNode (tx, containerPath, params) {
-    let prop = tx.getProperty(containerPath)
+  createListNode(tx, containerPath, params) {
+    let prop = tx.getProperty(containerPath);
     if (prop.targetTypes.has('list')) {
-      return tx.create({ type: 'list', listType: params.listType })
+      return tx.create({ type: 'list', listType: params.listType });
     } else {
-      throw new Error(`'list' is not a valid child node for ${containerPath}`)
+      throw new Error(`'list' is not a valid child node for ${containerPath}`);
     }
   }
 
-  insertBlockNode (tx, node) {
+  insertBlockNode(tx, node) {
     // HACK: deviating from the current implementation
     // to replace selected node, because it happens quite often
-    let sel = tx.selection
+    let sel = tx.selection;
     if (sel.isNodeSelection() && sel.mode !== 'before') {
-      tx.setSelection(Object.assign(sel.toJSON(), { mode: 'after' }))
+      tx.setSelection(Object.assign(sel.toJSON(), { mode: 'after' }));
     }
-    super.insertBlockNode(tx, node)
+    super.insertBlockNode(tx, node);
   }
 
-  indent (tx) {
-    let sel = tx.selection
+  indent(tx) {
+    let sel = tx.selection;
     if (sel.isPropertySelection()) {
-      let nodeId = sel.start.getNodeId()
-      let node = tx.get(nodeId)
+      let nodeId = sel.start.getNodeId();
+      let node = tx.get(nodeId);
       if (node.canIndent) {
-        node.indent()
+        node.indent();
       }
     }
   }
 
-  dedent (tx) {
-    let sel = tx.selection
+  dedent(tx) {
+    let sel = tx.selection;
     if (sel.isPropertySelection()) {
-      let nodeId = sel.start.getNodeId()
-      let node = tx.get(nodeId)
+      let nodeId = sel.start.getNodeId();
+      let node = tx.get(nodeId);
       if (node.canDedent) {
-        node.dedent()
+        node.dedent();
       }
     }
   }

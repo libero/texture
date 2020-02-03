@@ -1,11 +1,11 @@
-import { TreeIndex } from 'substance'
+import { TreeIndex } from 'substance';
 
-const EMPTY = Object.freeze({})
+const EMPTY = Object.freeze({});
 
 // ATTENTION: this is a prototype implementation and will be redesigned when the requirements clear.
 export default class ExperimentalEditorSettings {
-  constructor () {
-    this._settings = new TreeIndex()
+  constructor() {
+    this._settings = new TreeIndex();
   }
 
   // getConfiguration (xpath) {
@@ -23,30 +23,30 @@ export default class ExperimentalEditorSettings {
   //   return result
   // }
 
-  getSettingsForValue (path) {
-    return this._settings.get(path) || EMPTY
+  getSettingsForValue(path) {
+    return this._settings.get(path) || EMPTY;
   }
 
-  load (settings) {
-    this._settings.clear()
-    this.extend(settings)
+  load(settings) {
+    this._settings.clear();
+    this.extend(settings);
   }
 
-  extend (settings) {
-    let selectors = Object.keys(settings)
+  extend(settings) {
+    let selectors = Object.keys(settings);
     for (let selector of selectors) {
-      this._extendValueSettings(selector, settings[selector])
+      this._extendValueSettings(selector, settings[selector]);
     }
   }
 
-  _extendValueSettings (selector, spec) {
-    if (selector.indexOf('<') !== -1) throw new Error('hierarchical selectors not supported yet')
-    let path = selector.trim().split('.')
-    let valueSettings = this._settings.get(path)
+  _extendValueSettings(selector, spec) {
+    if (selector.indexOf('<') !== -1) throw new Error('hierarchical selectors not supported yet');
+    let path = selector.trim().split('.');
+    let valueSettings = this._settings.get(path);
     if (!valueSettings) {
-      valueSettings = {}
-      this._settings.set(path, valueSettings)
+      valueSettings = {};
+      this._settings.set(path, valueSettings);
     }
-    Object.assign(valueSettings, spec)
+    Object.assign(valueSettings, spec);
   }
 }

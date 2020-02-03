@@ -1,84 +1,84 @@
-import { DefaultDOMElement, platform } from 'substance'
-import AbstractScrollPane from './AbstractScrollPane'
+import { DefaultDOMElement, platform } from 'substance';
+import AbstractScrollPane from './AbstractScrollPane';
 
 export default class BodyScrollPane extends AbstractScrollPane {
   /*
     Expose scrollPane as a child context
   */
-  getChildContext () {
+  getChildContext() {
     return {
-      scrollPane: this
-    }
+      scrollPane: this,
+    };
   }
 
-  getName () {
-    return 'body'
+  getName() {
+    return 'body';
   }
 
-  render ($$) {
-    let el = $$('div')
+  render($$) {
+    let el = $$('div');
     if (this.props.contextMenu === 'custom') {
-      el.on('contextmenu', this._onContextMenu)
+      el.on('contextmenu', this._onContextMenu);
     }
-    el.append(this.props.children)
-    return el
+    el.append(this.props.children);
+    return el;
   }
 
   /**
     Returns the height of scrollPane (inner content overflows)
   */
-  getHeight () {
+  getHeight() {
     if (platform.inBrowser) {
-      return window.innerHeight
+      return window.innerHeight;
     } else {
-      return 0
+      return 0;
     }
   }
 
   /**
     Returns the cumulated height of a panel's content
   */
-  getContentHeight () {
+  getContentHeight() {
     if (platform.inBrowser) {
-      return document.body.scrollHeight
+      return document.body.scrollHeight;
     } else {
-      return 0
+      return 0;
     }
   }
 
-  getContentElement () {
+  getContentElement() {
     if (platform.inBrowser) {
-      return DefaultDOMElement.wrapNativeElement(window.document.body)
+      return DefaultDOMElement.wrapNativeElement(window.document.body);
     } else {
-      return null
+      return null;
     }
   }
 
   // /**
   //   Get the `.se-scrollable` element
   // */
-  getScrollableElement () {
+  getScrollableElement() {
     if (platform.inBrowser) {
-      return document.body
+      return document.body;
     } else {
-      return null
+      return null;
     }
   }
 
   /**
     Get current scroll position (scrollTop) of `.se-scrollable` element
   */
-  getScrollPosition () {
+  getScrollPosition() {
     if (platform.inBrowser) {
-      return document.body.scrollTop
+      return document.body.scrollTop;
     } else {
-      return 0
+      return 0;
     }
   }
 
-  setScrollPosition (scrollPos) {
+  setScrollPosition(scrollPos) {
     if (platform.inBrowser) {
-      document.body.scrollTop = scrollPos
+      document.body.scrollTop = scrollPos;
     }
   }
 
@@ -87,8 +87,9 @@ export default class BodyScrollPane extends AbstractScrollPane {
 
     @param {DOMNode} el DOM node that lives inside the
   */
-  getPanelOffsetForElement(el) { // eslint-disable-line
-    console.warn('TODO: implement')
+  getPanelOffsetForElement(el) {
+    // eslint-disable-line
+    console.warn('TODO: implement');
   }
 
   /**
@@ -96,7 +97,8 @@ export default class BodyScrollPane extends AbstractScrollPane {
 
     @param {String} componentId component id, must be present in data-id attribute
   */
-  scrollTo(componentId, onlyIfNotVisible) { // eslint-disable-line
-    console.warn('TODO: implement')
+  scrollTo(componentId, onlyIfNotVisible) {
+    // eslint-disable-line
+    console.warn('TODO: implement');
   }
 }

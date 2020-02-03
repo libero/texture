@@ -1,1 +1,1 @@
-export { default as JATSTransformer } from './jats/JATSTransformer'
+export { default as JATSTransformer } from './jats/JATSTransformer';

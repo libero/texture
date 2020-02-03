@@ -1,13 +1,13 @@
-import { DocumentNode, STRING, MANY, BOOLEAN } from 'substance'
+import { DocumentNode, STRING, MANY, BOOLEAN } from 'substance';
 
 export default class Group extends DocumentNode {
-  toString () {
-    return this.render().join('')
+  toString() {
+    return this.render().join('');
   }
 
-  render (options = {}) {
-    let { name } = this
-    return [ name ]
+  render(options = {}) {
+    let { name } = this;
+    return [name];
   }
 }
 Group.schema = {
@@ -17,5 +17,5 @@ Group.schema = {
   affiliations: MANY('affiliation'),
   funders: MANY('funder'),
   equalContrib: BOOLEAN,
-  corresp: BOOLEAN
-}
+  corresp: BOOLEAN,
+};

@@ -1,6 +1,6 @@
-import { CHILDREN, TEXT, STRING } from 'substance'
-import Reference from './Reference'
-import { RICH_TEXT_ANNOS } from './modelConstants'
+import { CHILDREN, TEXT, STRING } from 'substance';
+import Reference from './Reference';
+import { RICH_TEXT_ANNOS } from './modelConstants';
 
 /*
   <element-citation publication-type="book">
@@ -48,5 +48,5 @@ BookRef.schema = {
   day: STRING, // <day>
   pageCount: STRING, // <page-count>
   series: STRING, // <series>
-  pmid: STRING // <pub-id pub-id-type="pmid">
-}
+  pmid: STRING, // <pub-id pub-id-type="pmid">
+};

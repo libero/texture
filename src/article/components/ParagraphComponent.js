@@ -1,7 +1,7 @@
-import { TextNodeComponent } from '../../kit'
+import { TextNodeComponent } from '../../kit';
 
 export default class ParagraphComponent extends TextNodeComponent {
-  getClassNames () {
-    return 'sc-paragraph sc-text-node'
+  getClassNames() {
+    return 'sc-paragraph sc-text-node';
   }
 }

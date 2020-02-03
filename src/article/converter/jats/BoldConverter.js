@@ -1,5 +1,9 @@
 export default class BoldConverter {
-  get type () { return 'bold' }
+  get type() {
+    return 'bold';
+  }
 
-  get tagName () { return 'bold' }
+  get tagName() {
+    return 'bold';
+  }
 }

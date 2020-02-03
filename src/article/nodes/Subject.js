@@ -1,4 +1,4 @@
-import { DocumentNode, STRING } from 'substance'
+import { DocumentNode, STRING } from 'substance';
 
 export default class Subject extends DocumentNode {
   // not used
@@ -6,19 +6,19 @@ export default class Subject extends DocumentNode {
   //   return this.render().join('')
   // }
 
-  render (options = {}) {
-    let { category, name } = this
-    let result = [ name ]
+  render(options = {}) {
+    let { category, name } = this;
+    let result = [name];
     if (!options.short) {
       if (category) {
-        result.push(', ', category)
+        result.push(', ', category);
       }
     }
-    return result
+    return result;
   }
 }
 Subject.schema = {
   type: 'subject',
   name: STRING,
-  category: STRING
-}
+  category: STRING,
+};

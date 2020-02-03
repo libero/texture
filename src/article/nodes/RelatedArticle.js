@@ -7,5 +7,5 @@ RelatedArticle.schema = {
   extLinkType: STRING,
   id: STRING,
   relatedArticleType: STRING,
-  href: STRING
+  href: STRING,
 };

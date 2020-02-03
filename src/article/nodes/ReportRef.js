@@ -1,6 +1,6 @@
-import { CHILDREN, TEXT, STRING } from 'substance'
-import { RICH_TEXT_ANNOS } from './modelConstants'
-import Reference from './Reference'
+import { CHILDREN, TEXT, STRING } from 'substance';
+import { RICH_TEXT_ANNOS } from './modelConstants';
+import Reference from './Reference';
 
 /*
   <element-citation publication-type="report">
@@ -43,5 +43,5 @@ ReportRef.schema = {
   sponsors: CHILDREN('ref-contrib'), // <person-group person-group-type="sponsor">
   month: STRING, // <month>
   day: STRING, // <day>
-  series: STRING // <series>
-}
+  series: STRING, // <series>
+};

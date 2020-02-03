@@ -7,7 +7,7 @@ import {
   isArray,
   isString,
   getKeyForPath,
-  isNil
+  isNil,
 } from 'substance';
 import AffiliationManager from '../shared/AffiliationManager';
 import { createValueModel } from '../../kit';
@@ -40,7 +40,7 @@ import {
   Group,
   Funder,
   Keyword,
-  Subject
+  Subject,
 } from '../nodes';
 
 const DISALLOWED_MANIPULATION = 'Manipulation is not allowed.';
@@ -69,7 +69,7 @@ export default class ArticleAPI {
     this._referenceManager = new ReferenceManager(editorSession, config.getValue('reference-label-generator'));
     this._supplementaryManager = new SupplementaryManager(
       editorSession,
-      config.getValue('supplementary-file-label-generator')
+      config.getValue('supplementary-file-label-generator'),
     );
     this._tableManager = new TableManager(editorSession, config.getValue('table-label-generator'));
     this._affiliationManager = new AffiliationManager(editorSession);
@@ -85,7 +85,7 @@ export default class ArticleAPI {
 
   addCustomAbstract() {
     this._addEntity(['article', 'customAbstracts'], CustomAbstract.type, tx =>
-      documentHelpers.createNodeFromJson(tx, CustomAbstract.getTemplate())
+      documentHelpers.createNodeFromJson(tx, CustomAbstract.getTemplate()),
     );
   }
 
@@ -142,7 +142,7 @@ export default class ArticleAPI {
         path: p.getPath(),
         startOffset: 0,
         surfaceId: this._getSurfaceId(node, 'content'),
-        containerPath: [node.id, 'content']
+        containerPath: [node.id, 'content'],
       });
     });
   }
@@ -278,7 +278,7 @@ export default class ArticleAPI {
         tx => {
           tx.deleteSelection(options);
         },
-        { action: 'deleteSelection' }
+        { action: 'deleteSelection' },
       );
     }
   }
@@ -416,7 +416,7 @@ export default class ArticleAPI {
       return tx.create({
         type: InlineGraphic.type,
         mimeType,
-        href
+        href,
       });
     });
   }
@@ -427,7 +427,7 @@ export default class ArticleAPI {
       return tx.create({
         type: InlineFormula.type,
         contentType: 'math/tex',
-        content
+        content,
       });
     });
   }
@@ -570,7 +570,7 @@ export default class ArticleAPI {
         type: 'node',
         nodeId: node.id,
         containerPath,
-        surfaceId
+        surfaceId,
       };
     }
   }
@@ -581,7 +581,7 @@ export default class ArticleAPI {
     return {
       type: 'custom',
       customType: 'entity',
-      nodeId: node.id
+      nodeId: node.id,
     };
   }
 
@@ -592,9 +592,9 @@ export default class ArticleAPI {
       nodeId: path[0],
       data: {
         path,
-        propertyName: path[1]
+        propertyName: path[1],
       },
-      surfaceId: path[0]
+      surfaceId: path[0],
     };
   }
 
@@ -722,7 +722,7 @@ export default class ArticleAPI {
       return {
         selected: includes(selectedTargets, target),
         node: target,
-        id: target.id
+        id: target.id,
       };
     });
     // Determine broken targets (such that don't exist in the document)
@@ -731,7 +731,7 @@ export default class ArticleAPI {
       targets = targets.concat(
         brokenTargets.map(id => {
           return { selected: true, id };
-        })
+        }),
       );
     }
     // Makes the selected targets go to top
@@ -807,7 +807,7 @@ export default class ArticleAPI {
     this._insertInlineNode(tx => {
       return tx.create({
         type: Xref.type,
-        refType
+        refType,
       });
     });
   }
@@ -929,7 +929,7 @@ export default class ArticleAPI {
       type: 'property',
       path: inlineNode.getPath(),
       startOffset: inlineNode.start.offset,
-      endOffset: inlineNode.end.offset
+      endOffset: inlineNode.end.offset,
     };
   }
 

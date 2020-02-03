@@ -1,3 +1,3 @@
-import { HTMLExporter } from 'substance'
+import { HTMLExporter } from 'substance';
 
 export default class ArticleHTMLExporter extends HTMLExporter {}

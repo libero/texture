@@ -1,6 +1,6 @@
-import Reference from './Reference'
-import { RICH_TEXT_ANNOS } from './modelConstants'
-import { STRING, CHILDREN, TEXT } from 'substance'
+import Reference from './Reference';
+import { RICH_TEXT_ANNOS } from './modelConstants';
+import { STRING, CHILDREN, TEXT } from 'substance';
 
 /*
   <element-citation publication-type="chapter">
@@ -50,5 +50,5 @@ ChapterRef.schema = {
   series: STRING, // <series>
   doi: STRING, // <pub-id pub-id-type="doi">
   isbn: STRING, // <pub-id pub-id-type="isbn">
-  pmid: STRING // <pub-id pub-id-type="pmid">
-}
+  pmid: STRING, // <pub-id pub-id-type="pmid">
+};

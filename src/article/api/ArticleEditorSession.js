@@ -1,16 +1,16 @@
-import { EditorSession } from 'substance'
+import { EditorSession } from 'substance';
 
 export default class ArticleEditorSession extends EditorSession {
-  copy () {
-    return this.context.api._customCopy() || super.copy()
+  copy() {
+    return this.context.api._customCopy() || super.copy();
   }
-  cut () {
-    return this.context.api._customCut() || super.cut()
+  cut() {
+    return this.context.api._customCut() || super.cut();
   }
-  paste (content, options) {
-    return this.context.api._customPaste(content, options) || super.paste(content, options)
+  paste(content, options) {
+    return this.context.api._customPaste(content, options) || super.paste(content, options);
   }
-  insertText (text) {
-    return this.context.api._customInsertText(text) || super.insertText(text)
+  insertText(text) {
+    return this.context.api._customInsertText(text) || super.insertText(text);
   }
 }

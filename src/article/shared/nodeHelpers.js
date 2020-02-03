@@ -10,16 +10,13 @@ import { PATENT_REF } from '../ArticleConstants';
  * @param {*} node - The target node.
  * @returns {string|undefined} The target node's label.
  */
-export function getLabel (node)
-{
-  if (node._isModel)
-  {
+export function getLabel(node) {
+  if (node._isModel) {
     node = node._node;
   }
 
-  let label = node.label
-  if (node && node.state)
-  {
+  let label = node.label;
+  if (node && node.state) {
     label = node.state.label || label;
   }
   return label;
@@ -35,17 +32,14 @@ export function getLabel (node)
  *
  * @returns {number} The target nodes position.
  */
-export function getPos (node)
-{
+export function getPos(node) {
   let pos;
-  if (node && node.state)
-  {
+  if (node && node.state) {
     pos = node.state.pos;
   }
 
   // If the node has no position, default to a high number.
-  if (pos === undefined)
-  {
+  if (pos === undefined) {
     pos = Number.MAX_VALUE;
   }
   return pos;
@@ -60,13 +54,10 @@ export function getPos (node)
  *
  * @returns {node|undefined} The requested node, if found.
  */
-export function findParentByType (node, type)
-{
+export function findParentByType(node, type) {
   let parent = node.getParent();
-  while (parent)
-  {
-    if (parent.isInstanceOf(type))
-    {
+  while (parent) {
+    if (parent.isInstanceOf(type)) {
       return parent;
     }
     parent = parent.getParent();
@@ -85,11 +76,9 @@ export function findParentByType (node, type)
  *
  * @returns {Array} An array of people.
  */
-export function getPeopleFromCitation(citation)
-{
+export function getPeopleFromCitation(citation) {
   let people = [];
-  switch(citation.type)
-  {
+  switch (citation.type) {
     case PATENT_REF:
       people = citation.inventors || [];
       break;
@@ -112,8 +101,7 @@ export function getPeopleFromCitation(citation)
  *
  * @returns {number} 0 if citations match, 1 if A should come before B, and -1 if B should come before A.
  */
-export function sortCitationsByPosition(a, b)
-{
+export function sortCitationsByPosition(a, b) {
   return getPos(a) - getPos(b);
 }
 
@@ -129,56 +117,48 @@ export function sortCitationsByPosition(a, b)
  *
  * @returns {number} 0 if citations match, 1 if A should come before B, and -1 if B should come before A.
  */
-export function sortCitationsByNameYear(a, b)
-{
+export function sortCitationsByNameYear(a, b) {
   let authorStringA = getPeopleFromCitation(a).reduce((acc, authorRef) => {
-    return acc += a.document.get(authorRef).name;
-  }, "");
+    return (acc += a.document.get(authorRef).name);
+  }, '');
 
   let authorStringB = getPeopleFromCitation(b).reduce((acc, authorRef) => {
-    return acc += b.document.get(authorRef).name;
-  }, "");
+    return (acc += b.document.get(authorRef).name);
+  }, '');
 
   // 1st: Try and sort by Author name.
-  if (authorStringA < authorStringB)
-  {
+  if (authorStringA < authorStringB) {
     return -1;
-  }
-  else if (authorStringA > authorStringB)
-  {
+  } else if (authorStringA > authorStringB) {
     return 1;
   }
   // 2nd: If no match, then try and sort by year.
-  else if (a.year < b.year)
-  {
+  else if (a.year < b.year) {
     return -1;
-  }
-  else if (a.year > b.year)
-  {
+  } else if (a.year > b.year) {
     return 1;
   }
   // 3rd: Still no match, then sort based on their order in the XML.
-  else
-  {
+  else {
     return 0;
   }
 }
 
-export function ifNodeOrRelatedHasChanged (node, change, cb) {
-  let doc = node.getDocument()
-  let id = node.id
-  let hasChanged = change.hasUpdated(id)
+export function ifNodeOrRelatedHasChanged(node, change, cb) {
+  let doc = node.getDocument();
+  let id = node.id;
+  let hasChanged = change.hasUpdated(id);
   if (!hasChanged) {
-    let relationships = doc.getIndex('relationships')
+    let relationships = doc.getIndex('relationships');
     // TODO: this could probably be improved by only navigating updated nodes
-    let ids = Object.keys(change.updated)
+    let ids = Object.keys(change.updated);
     for (let _id of ids) {
-      let related = relationships.get(_id)
+      let related = relationships.get(_id);
       if (related && related.has(id)) {
-        hasChanged = true
-        break
+        hasChanged = true;
+        break;
       }
     }
   }
-  if (hasChanged) cb()
+  if (hasChanged) cb();
 }

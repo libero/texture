@@ -39,7 +39,7 @@ import {
   GraphicComponent,
   SupplementaryFileComponent,
   DefaultNodeComponent,
-  ModelPreviewComponent
+  ModelPreviewComponent,
 } from '../components';
 
 export default {
@@ -140,5 +140,5 @@ export default {
     // Author details
     config.addLabel('author-details-label', 'Author Information');
     config.addLabel('author-details-correspendance', 'Corresponding author');
-  }
+  },
 };

@@ -1,3 +1,3 @@
-import AnnotationCommand from './AnnotationCommand'
+import AnnotationCommand from './AnnotationCommand';
 
 export default class InsertExtLinkCommand extends AnnotationCommand {}

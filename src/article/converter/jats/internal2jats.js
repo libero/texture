@@ -48,7 +48,7 @@ function _populateArticleMeta(jats, doc, jatsExporter) {
   // contrib-group*
   [
     ['author', ['metadata', 'authors']],
-    ['editor', ['metadata', 'editors']]
+    ['editor', ['metadata', 'editors']],
   ].forEach(([type, collectionPath]) => {
     articleMeta.append(_exportContribGroup(jats, doc, jatsExporter, collectionPath, type));
   });
@@ -88,7 +88,7 @@ function _populateArticleMeta(jats, doc, jatsExporter) {
     articleMeta.append(
       $$('fpage').append(metadata.fpage),
       $$('lpage').append(metadata.lpage),
-      $$('page-range').append(pageRange)
+      $$('page-range').append(pageRange),
     );
   }
 
@@ -166,7 +166,7 @@ function _exportSubjects(jats, doc) {
         return $$('subject')
           .attr({ 'content-type': subject.category })
           .text(subject.name);
-      })
+      }),
     );
     articleCategories.append(groupEl);
   });
@@ -249,31 +249,31 @@ function _exportPerson($$, exporter, node) {
     'contrib-type': 'person',
     'equal-contrib': node.equalContrib ? 'yes' : 'no',
     corresp: node.corresp ? 'yes' : 'no',
-    deceased: node.deceased ? 'yes' : 'no'
+    deceased: node.deceased ? 'yes' : 'no',
   });
   el.append(
     $$('name').append(
       _createTextElement($$, node.surname, 'surname'),
       _createTextElement($$, node.givenNames, 'given-names'),
       _createTextElement($$, node.prefix, 'prefix'),
-      _createTextElement($$, node.suffix, 'suffix')
+      _createTextElement($$, node.suffix, 'suffix'),
     ),
     _createTextElement($$, node.email, 'email'),
     _createTextElement($$, node.alias, 'string-name', { 'content-type': 'alias' }),
-    _createBioElement($$, exporter, node)
+    _createBioElement($$, exporter, node),
   );
   node.affiliations.forEach(affiliationId => {
     el.append(
       $$('xref')
         .attr('ref-type', 'aff')
-        .attr('rid', affiliationId)
+        .attr('rid', affiliationId),
     );
   });
   node.funders.forEach(funderId => {
     el.append(
       $$('xref')
         .attr('ref-type', 'award')
-        .attr('rid', funderId)
+        .attr('rid', funderId),
     );
   });
   return el;
@@ -317,21 +317,21 @@ function _exportGroup($$, exporter, node, groupMembers) {
     id: node.id,
     'contrib-type': 'group',
     'equal-contrib': node.equalContrib ? 'yes' : 'no',
-    corresp: node.corresp ? 'yes' : 'no'
+    corresp: node.corresp ? 'yes' : 'no',
   });
   let collab = $$('collab');
   collab.append(
     $$('named-content')
       .attr('content-type', 'name')
       .append(node.name),
-    $$('email').append(node.email)
+    $$('email').append(node.email),
   );
   // Adds affiliations to group
   node.affiliations.forEach(affiliationId => {
     collab.append(
       $$('xref')
         .attr('ref-type', 'aff')
-        .attr('rid', affiliationId)
+        .attr('rid', affiliationId),
     );
   });
   // Add funders to group
@@ -339,7 +339,7 @@ function _exportGroup($$, exporter, node, groupMembers) {
     collab.append(
       $$('xref')
         .attr('ref-type', 'award')
-        .attr('rid', funderId)
+        .attr('rid', funderId),
     );
   });
   // Add group members
@@ -490,7 +490,7 @@ function _exportKeywords(jats, doc, jatsExporter) {
         return $$('kwd')
           .attr({ 'content-type': keyword.category })
           .append(jatsExporter.annotatedText([keyword.id, 'name']));
-      })
+      }),
     );
     keywordGroups.push(groupEl);
   });
@@ -506,7 +506,7 @@ function _exportFunders(jats, doc) {
       let el = $$('award-group').attr('id', funder.id);
       let institutionWrapEl = $$('institution-wrap');
       institutionWrapEl.append(
-        _createTextElement($$, funder.fundRefId, 'institution-id', { 'institution-id-type': 'FundRef' })
+        _createTextElement($$, funder.fundRefId, 'institution-id', { 'institution-id-type': 'FundRef' }),
       );
       institutionWrapEl.append(_createTextElement($$, funder.institution, 'institution'));
       el.append($$('funding-source').append(institutionWrapEl), _createTextElement($$, funder.awardId, 'award-id'));
@@ -541,8 +541,8 @@ function _populateBack(jats, doc, jatsExporter) {
       $$('fn-group').append(
         footnotes.map(footnote => {
           return jatsExporter.convertNode(footnote);
-        })
-      )
+        }),
+      ),
     );
   }
 
@@ -552,8 +552,8 @@ function _populateBack(jats, doc, jatsExporter) {
       $$('ref-list').append(
         references.map(ref => {
           return jatsExporter.convertNode(ref);
-        })
-      )
+        }),
+      ),
     );
   }
 }

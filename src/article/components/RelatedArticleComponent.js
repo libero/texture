@@ -6,13 +6,13 @@ export default class RelatedArticleListComponent extends CustomSurface {
     let items = this._getRelatedArticles();
     return {
       hidden: items.length === 0,
-      edit: false
+      edit: false,
     };
   }
 
   getActionHandlers() {
     return {
-      removeRelatedArticle: this._removeRelatedArticle
+      removeRelatedArticle: this._removeRelatedArticle,
     };
   }
 
@@ -81,7 +81,7 @@ class RelatedArticleComponent extends NodeComponent {
       .append(
         $$('div')
           .addClass('se-label')
-          .append(this.getLabel('relatedArticle'))
+          .append(this.getLabel('relatedArticle')),
       );
 
     el.append(
@@ -89,11 +89,11 @@ class RelatedArticleComponent extends NodeComponent {
         .addClass('sc-header')
         .append(
           $$(Button, {
-            icon: 'remove'
+            icon: 'remove',
           })
             .addClass('se-button')
-            .on('click', this._onRemove)
-        )
+            .on('click', this._onRemove),
+        ),
     );
 
     el.append(
@@ -105,9 +105,9 @@ class RelatedArticleComponent extends NodeComponent {
             .addClass('sm-related-article')
             .append(
               this._renderValue($$, 'href', {
-                placeholder: this.getLabel('relatedArticleHrefPlaceholder')
-              }).addClass('sm-name')
-            )
+                placeholder: this.getLabel('relatedArticleHrefPlaceholder'),
+              }).addClass('sm-name'),
+            ),
         )
         .append(
           $$(FormRowComponent, { label: this.getLabel('relatedArticleType') })
@@ -115,10 +115,10 @@ class RelatedArticleComponent extends NodeComponent {
             .addClass('sm-related-article')
             .append(
               this._renderValue($$, 'relatedArticleType', {
-                placeholder: this.getLabel('relatedArticleTypePlaceholder')
-              }).addClass('sm-name')
-            )
-        )
+                placeholder: this.getLabel('relatedArticleTypePlaceholder'),
+              }).addClass('sm-name'),
+            ),
+        ),
     );
 
     return el;

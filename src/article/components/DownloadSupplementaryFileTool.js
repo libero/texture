@@ -1,12 +1,13 @@
-import { domHelpers, platform } from 'substance'
-import { Tool } from '../../kit'
+import { domHelpers, platform } from 'substance';
+import { Tool } from '../../kit';
 
 export default class DownloadSupplementaryFileTool extends Tool {
-  render ($$) {
-    let el = super.render($$)
-    let link = $$('a').ref('link')
+  render($$) {
+    let el = super.render($$);
+    let link = $$('a')
+      .ref('link')
       // ATTENTION: stop propagation, otherwise infinite loop
-      .on('click', domHelpers.stop)
+      .on('click', domHelpers.stop);
 
     // Downloading is a bit involved:
     // In electron, everything can be done with one solution,
@@ -18,49 +19,49 @@ export default class DownloadSupplementaryFileTool extends Tool {
     // TODO: if this feature is important, one idea is that the DAR server could
     // provide an end-point to provide download-urls, and act as a proxy to
     // cirvumvent the CORS problem.
-    const isLocal = this._isLocal()
+    const isLocal = this._isLocal();
     if (platform.inElectron || isLocal) {
-      link.attr('download', '')
+      link.attr('download', '');
     } else {
-      link.attr('target', '_blank')
+      link.attr('target', '_blank');
     }
 
-    el.append(link)
-    return el
+    el.append(link);
+    return el;
   }
 
-  getClassNames () {
-    return 'sc-download-supplementary-file-tool sc-tool'
+  getClassNames() {
+    return 'sc-download-supplementary-file-tool sc-tool';
   }
 
-  _onClick (e) {
-    e.stopPropagation()
-    e.preventDefault()
-    this._triggerDownload()
+  _onClick(e) {
+    e.stopPropagation();
+    e.preventDefault();
+    this._triggerDownload();
   }
 
-  _triggerDownload () {
-    const archive = this.context.archive
-    const node = this._getNode()
-    const isLocal = this._isLocal()
-    let url = node.href
+  _triggerDownload() {
+    const archive = this.context.archive;
+    const node = this._getNode();
+    const isLocal = this._isLocal();
+    let url = node.href;
     if (isLocal) {
-      url = archive.getDownloadLink(node.href)
+      url = archive.getDownloadLink(node.href);
     }
     if (url) {
       this.refs.link.el.attr({
-        'href': url
-      })
-      this.refs.link.el.click()
+        href: url,
+      });
+      this.refs.link.el.click();
     }
   }
 
-  _getNode () {
-    return this.props.commandState.node
+  _getNode() {
+    return this.props.commandState.node;
   }
 
-  _isLocal () {
-    let node = this._getNode()
-    return (!node || !node.remote)
+  _isLocal() {
+    let node = this._getNode();
+    return !node || !node.remote;
   }
 }

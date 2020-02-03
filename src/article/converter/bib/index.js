@@ -1,1 +1,1 @@
-export * from './BibConversion'
+export * from './BibConversion';

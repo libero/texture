@@ -1,6 +1,6 @@
-import { CHILDREN, TEXT, STRING } from 'substance'
-import Reference from './Reference'
-import { RICH_TEXT_ANNOS } from './modelConstants'
+import { CHILDREN, TEXT, STRING } from 'substance';
+import Reference from './Reference';
+import { RICH_TEXT_ANNOS } from './modelConstants';
 
 /*
   <element-citation publication-type="pre-print">
@@ -31,5 +31,5 @@ PreprintRef.schema = {
   // eLife optional fields
   elocationId: STRING, // <elocation-id>
   doi: STRING, // <pub-id pub-id-type="doi">
-  uri: STRING // <ext-link ext-link-type="uri">
-}
+  uri: STRING, // <ext-link ext-link-type="uri">
+};

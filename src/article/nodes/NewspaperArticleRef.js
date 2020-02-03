@@ -1,6 +1,6 @@
-import { TEXT, CHILDREN, STRING } from 'substance'
-import { RICH_TEXT_ANNOS } from './modelConstants'
-import Reference from './Reference'
+import { TEXT, CHILDREN, STRING } from 'substance';
+import { RICH_TEXT_ANNOS } from './modelConstants';
+import Reference from './Reference';
 
 /*
   <element-citation publication-type="newspaper">
@@ -35,5 +35,5 @@ NewspaperArticleRef.schema = {
   pageRange: STRING, // <page-range>
   doi: STRING, // <pub-id pub-id-type="doi">
   edition: STRING, // <edition>
-  partTitle: STRING // <part-title>
-}
+  partTitle: STRING, // <part-title>
+};

@@ -1,13 +1,13 @@
-import { ToolPanel } from '../../kit'
+import { ToolPanel } from '../../kit';
 
 export default class TableContextMenu extends ToolPanel {
-  render ($$) {
-    let el = $$('div').addClass('sc-table-context-menu sc-context-menu')
+  render($$) {
+    let el = $$('div').addClass('sc-table-context-menu sc-context-menu');
     el.append(
-      $$('div').append(
-        this._renderItems($$)
-      ).ref('entriesContainer')
-    )
-    return el
+      $$('div')
+        .append(this._renderItems($$))
+        .ref('entriesContainer'),
+    );
+    return el;
   }
 }

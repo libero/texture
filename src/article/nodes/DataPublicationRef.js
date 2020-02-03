@@ -1,6 +1,6 @@
-import Reference from './Reference'
-import { RICH_TEXT_ANNOS } from './modelConstants'
-import { CHILDREN, STRING, TEXT } from 'substance'
+import Reference from './Reference';
+import { RICH_TEXT_ANNOS } from './modelConstants';
+import { CHILDREN, STRING, TEXT } from 'substance';
 
 /*
   <element-citation publication-type="data">
@@ -32,7 +32,7 @@ DataPublicationRef.schema = {
 
   // eLife optional fields
   authority: STRING, // <pub-id assigning-authority>
-  href: STRING,  // <pub-id xlink:href>
+  href: STRING, // <pub-id xlink:href>
   accessionId: STRING, // <pub-id pub-id-type="accession">
   archiveId: STRING, // <pub-id pub-id-type="archive">
   doi: STRING, // <pub-id pub-id-type="doi">
@@ -40,5 +40,5 @@ DataPublicationRef.schema = {
   // eLife unused
   arkId: STRING, // // <pub-id pub-id-type="ark">
   month: STRING, // <month>
-  day: STRING // <day>
-}
+  day: STRING, // <day>
+};

@@ -1,5 +1,5 @@
 // TODO: remove this. I don't want to use generated Models anymore. Nodes are our Models.
-export default function generateModelClass (nodeSchema) {
+export default function generateModelClass(nodeSchema) {
   // class GeneratedModel extends NodeModel { }
   // for (let prop of nodeSchema) {
   //   // skip id and type

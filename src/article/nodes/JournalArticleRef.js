@@ -1,6 +1,6 @@
-import Reference from './Reference'
-import { TEXT, CHILDREN, STRING } from 'substance'
-import { RICH_TEXT_ANNOS } from './modelConstants'
+import Reference from './Reference';
+import { TEXT, CHILDREN, STRING } from 'substance';
+import { RICH_TEXT_ANNOS } from './modelConstants';
 
 /*
   <element-citation publication-type="journal">
@@ -49,5 +49,5 @@ JournalArticleRef.schema = {
   issue: STRING, // <issue>
   pageRange: STRING, // <page-range>
   month: STRING, // <month>
-  day: STRING // <day>
-}
+  day: STRING, // <day>
+};

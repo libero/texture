@@ -1,30 +1,28 @@
-import DropdownEditor from '../shared/DropdownEditor'
+import DropdownEditor from '../shared/DropdownEditor';
 
 export default class SpecificUseEditor extends DropdownEditor {
-  _getLabel ()
-  {
+  _getLabel() {
     return this.getLabel('specificUse');
   }
 
-  _getValues ()
-  {
+  _getValues() {
     return [
       {
         id: 'generated',
-        name: 'Generated'
+        name: 'Generated',
       },
       {
         id: 'supporting',
-        name: 'Supporting'
+        name: 'Supporting',
       },
       {
         id: 'analyzed',
-        name: 'Analyzed'
+        name: 'Analyzed',
       },
       {
         id: 'non-analyzed',
-        name: 'Non-analyzed'
-      }
+        name: 'Non-analyzed',
+      },
     ];
   }
 }

@@ -13,5 +13,5 @@ Article.schema = {
   references: CHILDREN('reference'),
   relatedArticles: CHILDREN('related-article'),
   acknowledgements: CHILDREN('acknowledgement'),
-  footnotes: CHILDREN('footnote')
+  footnotes: CHILDREN('footnote'),
 };

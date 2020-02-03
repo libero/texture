@@ -1,5 +1,9 @@
 export default class MonospaceConverter {
-  get type () { return 'monospace' }
+  get type() {
+    return 'monospace';
+  }
 
-  get tagName () { return 'monospace' }
+  get tagName() {
+    return 'monospace';
+  }
 }

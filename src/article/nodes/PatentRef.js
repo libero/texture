@@ -1,6 +1,6 @@
-import { CHILDREN, STRING, TEXT } from 'substance'
-import { RICH_TEXT_ANNOS } from './modelConstants'
-import Reference from './Reference'
+import { CHILDREN, STRING, TEXT } from 'substance';
+import { RICH_TEXT_ANNOS } from './modelConstants';
+import Reference from './Reference';
 
 /*
   <element-citation publication-type="patent">
@@ -38,5 +38,5 @@ PatentRef.schema = {
   assignee: STRING, // <collab collab-type="assignee"><named-content>
   month: STRING, // <month>
   day: STRING, // <day>
-  doi: STRING // <pub-id pub-id-type="doi">
-}
+  doi: STRING, // <pub-id pub-id-type="doi">
+};

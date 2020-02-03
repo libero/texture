@@ -1,6 +1,6 @@
-import { AnnotationComponent } from 'substance'
-import NodeComponentMixin from './NodeComponentMixin'
-import NodeOverlayMixin from './NodeOverlayEditorMixin'
+import { AnnotationComponent } from 'substance';
+import NodeComponentMixin from './NodeComponentMixin';
+import NodeOverlayMixin from './NodeOverlayEditorMixin';
 
 /**
  * A component that renders an editor in an overlay when the selection is on the annotation.
@@ -12,10 +12,10 @@ import NodeOverlayMixin from './NodeOverlayEditorMixin'
  * Furthermore, our need for more complex editors for such popover was increasing (keywords editor, inline-cell editor, etc.)
  */
 export default class EditableAnnotationComponent extends NodeOverlayMixin(NodeComponentMixin(AnnotationComponent)) {
-  _onSelectionStateChange (selectionState) {
-    let surfaceId = selectionState.selection.surfaceId
-    let isSelected = selectionState.annos.indexOf(this.props.node) !== -1
-    if ((isSelected || (surfaceId && surfaceId.startsWith(this._surfaceId)))) {
+  _onSelectionStateChange(selectionState) {
+    let surfaceId = selectionState.selection.surfaceId;
+    let isSelected = selectionState.annos.indexOf(this.props.node) !== -1;
+    if (isSelected || (surfaceId && surfaceId.startsWith(this._surfaceId))) {
       // omitting the anchor leads to anchoring at the cursor position
       // however, for now I'd like to stick to element related anchoring
       // (as with inline nodes), as this is not thought through 100%.
@@ -26,9 +26,9 @@ export default class EditableAnnotationComponent extends NodeOverlayMixin(NodeCo
       // this._acquireOverlay({ anchor: isSelected ? null : this.el })
 
       // Thus, for now we always position relative to the element.
-      this._acquireOverlay({ anchor: this.el })
+      this._acquireOverlay({ anchor: this.el });
     } else {
-      this._releaseOverlay()
+      this._releaseOverlay();
     }
   }
 }

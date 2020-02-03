@@ -45,5 +45,5 @@ export default {
   'thesis-ref.year': { required: true },
   'webpage-ref.authors': { required: true },
   'webpage-ref.containerTitle': { required: true },
-  'webpage-ref.title': { required: true }
-}
+  'webpage-ref.title': { required: true },
+};

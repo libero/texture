@@ -1,6 +1,6 @@
-import { CHILDREN, TEXT, STRING } from 'substance'
-import { RICH_TEXT_ANNOS } from './modelConstants'
-import Reference from './Reference'
+import { CHILDREN, TEXT, STRING } from 'substance';
+import { RICH_TEXT_ANNOS } from './modelConstants';
+import Reference from './Reference';
 
 /*
   <element-citation publication-type="thesis">
@@ -32,7 +32,7 @@ ThesisRef.schema = {
   doi: STRING, // <pub-id pub-id-type="doi">
   uri: STRING, // <ext-link ext-link-type="uri">
 
- // eLife unused
+  // eLife unused
   month: STRING, // <month>
-  day: STRING // <day>
-}
+  day: STRING, // <day>
+};

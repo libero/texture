@@ -71,5 +71,5 @@ export default [
   new UnderlineConverter(),
   UnsupportedNodeConverter,
   UnsupportedInlineNodeConverter,
-  new XrefConverter()
+  new XrefConverter(),
 ];

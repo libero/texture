@@ -1,38 +1,38 @@
-import { NodeComponent, createValueModel } from '../../kit'
-import { PREVIEW_MODE, METADATA_MODE } from '../ArticleConstants'
-import FigurePanelComponentWithMetadata from './FigurePanelComponentWithMetadata'
-import FigureMetadataComponent from './FigureMetadataComponent'
-import FigurePermissionsComponent from './FigurePermissionsComponent'
-import PreviewComponent from './PreviewComponent'
-import LabelComponent from './LabelComponent'
-import { getLabel } from '../shared/nodeHelpers'
+import { NodeComponent, createValueModel } from '../../kit';
+import { PREVIEW_MODE, METADATA_MODE } from '../ArticleConstants';
+import FigurePanelComponentWithMetadata from './FigurePanelComponentWithMetadata';
+import FigureMetadataComponent from './FigureMetadataComponent';
+import FigurePermissionsComponent from './FigurePermissionsComponent';
+import PreviewComponent from './PreviewComponent';
+import LabelComponent from './LabelComponent';
+import { getLabel } from '../shared/nodeHelpers';
 
 export default class FigurePanelComponent extends NodeComponent {
-  render ($$) {
-    const mode = this._getMode()
+  render($$) {
+    const mode = this._getMode();
     // different rendering when rendered as preview or in metadata view
     if (mode === PREVIEW_MODE) {
-      return this._renderPreviewVersion($$)
+      return this._renderPreviewVersion($$);
     } else if (mode === METADATA_MODE) {
-      return this._renderMetadataVersion($$)
+      return this._renderMetadataVersion($$);
     } else {
-      return this._renderManuscriptVersion($$)
+      return this._renderManuscriptVersion($$);
     }
   }
 
-  _getClassNames () {
-    return `sc-figure-panel`
+  _getClassNames() {
+    return `sc-figure-panel`;
   }
 
-  _renderManuscriptVersion ($$) {
-    const mode = this._getMode()
-    const node = this.props.node
-    const SectionLabel = this.getComponent('section-label')
+  _renderManuscriptVersion($$) {
+    const mode = this._getMode();
+    const node = this.props.node;
+    const SectionLabel = this.getComponent('section-label');
 
     let el = $$('div')
       .addClass(this._getClassNames())
       .attr('data-id', node.id)
-      .addClass(`sm-${mode}`)
+      .addClass(`sm-${mode}`);
 
     el.append(
       $$(SectionLabel, { label: 'label-label' }),
@@ -44,13 +44,13 @@ export default class FigurePanelComponent extends NodeComponent {
       $$(SectionLabel, { label: 'legend-label' }),
       this._renderValue($$, 'legend', { placeholder: this.getLabel('legend-placeholder') }).addClass('se-legend'),
       $$(SectionLabel, { label: 'attribution-label' }),
-      this._renderValue($$, 'attribution', { placeholder: this.getLabel('attribution-placeholder') }).addClass('se-attribution')
-    )
+      this._renderValue($$, 'attribution', { placeholder: this.getLabel('attribution-placeholder') }).addClass(
+        'se-attribution',
+      ),
+    );
 
     // Permissions
-    el.append(
-      $$(FigurePermissionsComponent, { model: createValueModel(this.context.api, [node.id, 'permissions']) })
-    );
+    el.append($$(FigurePermissionsComponent, { model: createValueModel(this.context.api, [node.id, 'permissions']) }));
 
     // TODO: this is problematic as this node does not necessarily rerender if node.metadata has changed
     // the right way is to use a ModelComponent or use an incremental updater
@@ -58,44 +58,49 @@ export default class FigurePanelComponent extends NodeComponent {
     if (node.metadata.length > 0) {
       el.append(
         $$(SectionLabel, { label: 'metadata-label' }),
-        $$(FigureMetadataComponent, { model: createValueModel(this.context.api, [node.id, 'metadata']) })
-      )
+        $$(FigureMetadataComponent, { model: createValueModel(this.context.api, [node.id, 'metadata']) }),
+      );
     }
 
-    return el
+    return el;
   }
 
-  _renderContent ($$) {
-    return this._renderValue($$, 'content').addClass('se-content')
+  _renderContent($$) {
+    return this._renderValue($$, 'content').addClass('se-content');
   }
 
-  _renderPreviewVersion ($$) {
-    const node = this.props.node
+  _renderPreviewVersion($$) {
+    const node = this.props.node;
     // TODO: We could return the PreviewComponent directly.
     // However this yields an error we need to investigate.
-    let thumbnail
-    let content = node.getContent()
+    let thumbnail;
+    let content = node.getContent();
     if (content.type === 'graphic') {
-      let ContentComponent = this.getComponent(content.type)
+      let ContentComponent = this.getComponent(content.type);
       thumbnail = $$(ContentComponent, {
-        node: content
-      })
+        node: content,
+      });
     }
     // TODO: PreviewComponent should work with a model
     // FIXME: there is problem with redirected components
     // and Component as props
-    return $$('div').append($$(PreviewComponent, {
-      id: node.id,
-      thumbnail,
-      label: getLabel(node)
-    })).addClass('sc-figure-panel').attr('data-id', node.id)
+    return $$('div')
+      .append(
+        $$(PreviewComponent, {
+          id: node.id,
+          thumbnail,
+          label: getLabel(node),
+        }),
+      )
+      .addClass('sc-figure-panel')
+      .attr('data-id', node.id);
   }
 
-  _renderMetadataVersion ($$) {
-    return $$(FigurePanelComponentWithMetadata, { node: this.props.node })
+  _renderMetadataVersion($$) {
+    return $$(FigurePanelComponentWithMetadata, { node: this.props.node });
   }
 
-  _getMode () {
-    return this.props.mode || 'manuscript'
+  _getMode() {
+    return this.props.mode || 'manuscript';
   }
 }

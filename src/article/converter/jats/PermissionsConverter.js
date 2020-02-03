@@ -1,69 +1,63 @@
-import { getAttr } from '../util/domHelpers'
+import { getAttr } from '../util/domHelpers';
 
 export default class PermissionsConverter {
-  get type () { return 'permission' }
+  get type() {
+    return 'permission';
+  }
 
-  get tagName () { return 'permissions' }
+  get tagName() {
+    return 'permissions';
+  }
 
-  import (el, node, importer) {
+  import(el, node, importer) {
     // Extract figure permissions
-    let copyrightStatementEl = el.find('copyright-statement')
+    let copyrightStatementEl = el.find('copyright-statement');
     if (copyrightStatementEl) {
-      node.copyrightStatement = copyrightStatementEl.textContent
+      node.copyrightStatement = copyrightStatementEl.textContent;
     }
-    let copyrightYearEl = el.find('copyright-year')
+    let copyrightYearEl = el.find('copyright-year');
     if (copyrightYearEl) {
-      node.copyrightYear = copyrightYearEl.textContent
+      node.copyrightYear = copyrightYearEl.textContent;
     }
-    let copyrightHolderEl = el.find('copyright-holder')
+    let copyrightHolderEl = el.find('copyright-holder');
     if (copyrightHolderEl) {
-      node.copyrightHolder = copyrightHolderEl.textContent
+      node.copyrightHolder = copyrightHolderEl.textContent;
     }
     // TODO: it would be more natural and explicit to do el.find('ali:license-rec')
-    let licenseRefEl = el.find('license_ref')
-    if (licenseRefEl)
-    {
-      node.license = licenseRefEl.textContent
-    }
-    else
-    {
+    let licenseRefEl = el.find('license_ref');
+    if (licenseRefEl) {
+      node.license = licenseRefEl.textContent;
+    } else {
       node.license = getAttr(el, 'license', 'xlink:href');
     }
 
-    let licenseP = el.find('license > license-p')
+    let licenseP = el.find('license > license-p');
     if (licenseP) {
-      node.licenseText = importer.annotatedText(licenseP, [node.id, 'licenseText'])
+      node.licenseText = importer.annotatedText(licenseP, [node.id, 'licenseText']);
     }
   }
 
-  export (node, el, exporter) {
-    let $$ = exporter.$$
+  export(node, el, exporter) {
+    let $$ = exporter.$$;
     if (node.copyrightStatement) {
-      el.append($$('copyright-statement').append(node.copyrightStatement))
+      el.append($$('copyright-statement').append(node.copyrightStatement));
     }
     if (node.copyrightYear) {
-      el.append($$('copyright-year').append(node.copyrightYear))
+      el.append($$('copyright-year').append(node.copyrightYear));
     }
     if (node.copyrightHolder) {
-      el.append($$('copyright-holder').append(node.copyrightHolder))
+      el.append($$('copyright-holder').append(node.copyrightHolder));
     }
-    if (node.license || node.licenseText)
-    {
-      let licenseEl = $$('license')
-      if (node.license)
-      {
+    if (node.license || node.licenseText) {
+      let licenseEl = $$('license');
+      if (node.license) {
         licenseEl.attr('xlink:href', node.license);
         licenseEl.append($$('ali:license_ref').append(node.license));
       }
-      if (node.licenseText)
-      {
-        licenseEl.append(
-          $$('license-p').append(
-            exporter.annotatedText([node.id, 'licenseText'])
-          )
-        )
+      if (node.licenseText) {
+        licenseEl.append($$('license-p').append(exporter.annotatedText([node.id, 'licenseText'])));
       }
-      el.append(licenseEl)
+      el.append(licenseEl);
     }
   }
 }

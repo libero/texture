@@ -1,5 +1,9 @@
 export default class SubscriptConverter {
-  get type () { return 'subscript' }
+  get type() {
+    return 'subscript';
+  }
 
-  get tagName () { return 'sub' }
+  get tagName() {
+    return 'sub';
+  }
 }

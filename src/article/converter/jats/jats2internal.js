@@ -47,7 +47,7 @@ function _populateAffiliations(doc, jats) {
       phone: getText(el, 'phone'),
       fax: getText(el, 'fax'),
       email: getText(el, 'email'),
-      uri: getText(el, 'uri[content-type=link]')
+      uri: getText(el, 'uri[content-type=link]'),
     };
     return doc.create(org).id;
   });
@@ -77,7 +77,7 @@ function _populateContribs(doc, jats, importer, contribsPath, contribEls, groupI
         affiliations: _getAffiliationIds(contribEl, true),
         equalContrib: contribEl.getAttribute('equal-contrib') === 'yes',
         corresp: contribEl.getAttribute('corresp') === 'yes',
-        funders: _getAwardIds(contribEl)
+        funders: _getAwardIds(contribEl),
       };
       documentHelpers.append(doc, ['metadata', 'groups'], doc.create(group).id);
 
@@ -101,7 +101,7 @@ function _populateContribs(doc, jats, importer, contribsPath, contribEls, groupI
         deceased: contribEl.getAttribute('deceased') === 'yes',
         group: groupId,
         contributorIds: _getContributorIds(contribEl, importer),
-        competingInterests: _getAuthorCompetingInterests(contribEl, importer)
+        competingInterests: _getAuthorCompetingInterests(contribEl, importer),
       });
       documentHelpers.append(doc, contribsPath, contrib.id);
     }
@@ -178,7 +178,7 @@ function _populateFunders(doc, jats) {
       type: 'funder',
       institution: getText(el, 'institution'),
       fundRefId: getText(el, 'institution-id'),
-      awardId: getText(el, 'award-id')
+      awardId: getText(el, 'award-id'),
     };
     return doc.create(funder).id;
   });
@@ -197,7 +197,7 @@ function _populateArticleInfo(doc, jats, jatsImporter) {
     lpage: getText(articleMetaEl, 'lpage'),
     issue: getText(articleMetaEl, 'issue'),
     volume: getText(articleMetaEl, 'volume'),
-    pageRange: getText(articleMetaEl, 'page-range')
+    pageRange: getText(articleMetaEl, 'page-range'),
   });
   let issueTitleEl = findChild(articleMetaEl, 'issue-title');
   if (issueTitleEl) {
@@ -230,7 +230,7 @@ const DATE_TYPES_MAP = {
   accepted: 'acceptedDate',
   received: 'receivedDate',
   'rev-recd': 'revReceivedDate',
-  'rev-request': 'revRequestedDate'
+  'rev-request': 'revRequestedDate',
 };
 
 function _extractDate(el) {
@@ -239,7 +239,7 @@ function _extractDate(el) {
   const entityProp = DATE_TYPES_MAP[dateType];
   return {
     value: value,
-    type: entityProp
+    type: entityProp,
   };
 }
 
@@ -249,7 +249,7 @@ function _populateKeywords(doc, jats, jatsImporter) {
     const kwd = doc.create({
       type: 'keyword',
       category: kwdEl.getAttribute('content-type'),
-      language: kwdEl.getParent().getAttribute('xml:lang')
+      language: kwdEl.getParent().getAttribute('xml:lang'),
     });
     kwd.name = jatsImporter.annotatedText(kwdEl, [kwd.id, 'name']);
     return kwd.id;
@@ -265,7 +265,7 @@ function _populateRelatedArticles(doc, jats, jatsImporter) {
       extLinkType: relatedArticleEl.getAttribute('ext-link-type'),
       id: relatedArticleEl.getAttribute('id'),
       relatedArticleType: relatedArticleEl.getAttribute('related-article-type'),
-      href: relatedArticleEl.getAttribute('xlink:href')
+      href: relatedArticleEl.getAttribute('xlink:href'),
     });
     return relatedArticle.id;
   });
@@ -288,7 +288,7 @@ function _populateSubjects(doc, jats) {
         type: 'subject',
         name: subjectEl.textContent,
         category: subjectEl.getAttribute('content-type'),
-        language
+        language,
       });
       documentHelpers.append(doc, ['metadata', 'subjects'], subject.id);
     }
@@ -353,7 +353,7 @@ function _populateAbstract(doc, jats, jatsImporter) {
       let abstract = doc.create({
         type: 'custom-abstract',
         id: abstractEl.id,
-        abstractType: abstractType
+        abstractType: abstractType,
       });
       sectionContainerConverter.import(abstractEl, abstract, jatsImporter);
       if (titleEl) {
@@ -401,7 +401,7 @@ function _populateAcknowledgements(doc, jats, jatsImporter) {
 
     let node = doc.create({
       type: 'acknowledgement',
-      id: acknowledgment.id
+      id: acknowledgment.id,
     });
 
     sectionContainerConverter.import(acknowledgment, node, jatsImporter);

@@ -1,7 +1,11 @@
-import SectionContainerConverter from './SectionContainerConverter'
+import SectionContainerConverter from './SectionContainerConverter';
 
 export default class BodyConverter extends SectionContainerConverter {
-  get type () { return 'body' }
+  get type() {
+    return 'body';
+  }
 
-  get tagName () { return 'body' }
+  get tagName() {
+    return 'body';
+  }
 }

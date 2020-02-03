@@ -1,4 +1,4 @@
-export function getAvailableOptions (api, targetTypes) {
-  console.error('FIXME: getAvailableOptions() needs to be rewritten')
-  return []
+export function getAvailableOptions(api, targetTypes) {
+  console.error('FIXME: getAvailableOptions() needs to be rewritten');
+  return [];
 }

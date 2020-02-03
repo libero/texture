@@ -1,5 +1,5 @@
-import Reference from './Reference'
-import { STRING, CHILDREN } from 'substance'
+import Reference from './Reference';
+import { STRING, CHILDREN } from 'substance';
 
 /*
   <element-citation publication-type="article">
@@ -27,5 +27,5 @@ ArticleRef.schema = {
   day: STRING, // <day>
   elocationId: STRING, // <elocation-id>
   doi: STRING, // <pub-id pub-id-type="doi">
-  pmid: STRING // <pub-id pub-id-type="pmid">
-}
+  pmid: STRING, // <pub-id pub-id-type="pmid">
+};

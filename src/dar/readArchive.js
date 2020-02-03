@@ -1,9 +1,9 @@
-import listDir from './_listDir'
-import isDocumentArchive from './_isDocumentArchive'
-import _require from './_require'
+import listDir from './_listDir';
+import isDocumentArchive from './_isDocumentArchive';
+import _require from './_require';
 
 // these extensions are considered to have text content
-const TEXTISH = ['txt', 'html', 'xml', 'json']
+const TEXTISH = ['txt', 'html', 'xml', 'json'];
 
 /*
   Provides a list of records found in an archive folder.
@@ -13,24 +13,24 @@ const TEXTISH = ['txt', 'html', 'xml', 'json']
     - `ignoreDotFiles`: ignore dot-files
     - versioning: set to true if versioning should be enabled
 */
-export default async function readArchive (archiveDir, opts = {}) {
+export default async function readArchive(archiveDir, opts = {}) {
   // make sure that the given path is a dar
   if (await isDocumentArchive(archiveDir, opts)) {
     // first get a list of stats
-    const entries = await listDir(archiveDir, opts)
+    const entries = await listDir(archiveDir, opts);
     // then get file records as specified TODO:link
-    let resources = {}
+    let resources = {};
     for (var i = 0; i < entries.length; i++) {
-      let entry = entries[i]
-      let record = await _getFileRecord(entry, opts)
-      resources[record.path] = record
+      let entry = entries[i];
+      let record = await _getFileRecord(entry, opts);
+      resources[record.path] = record;
     }
     return {
       resources,
-      version: '0'
-    }
+      version: '0',
+    };
   } else {
-    throw new Error(archiveDir + ' is not a valid document archive.')
+    throw new Error(archiveDir + ' is not a valid document archive.');
   }
 }
 
@@ -52,8 +52,8 @@ export default async function readArchive (archiveDir, opts = {}) {
   }
   ```
 */
-async function _getFileRecord (fileEntry, opts) {
-  let fs = opts.fs || _require('fs')
+async function _getFileRecord(fileEntry, opts) {
+  let fs = opts.fs || _require('fs');
   // for text files load content
   // for binaries use a url
   let record = {
@@ -61,35 +61,35 @@ async function _getFileRecord (fileEntry, opts) {
     encoding: null,
     size: fileEntry.size,
     createdAt: fileEntry.birthtime.getTime(),
-    updatedAt: fileEntry.mtime.getTime()
-  }
+    updatedAt: fileEntry.mtime.getTime(),
+  };
   if (_isTextFile(fileEntry.name)) {
     return new Promise((resolve, reject) => {
       fs.readFile(fileEntry.path, 'utf8', (err, content) => {
-        if (err) return reject(err)
-        record.encoding = 'utf8'
-        record.data = content
-        resolve(record)
-      })
-    })
+        if (err) return reject(err);
+        record.encoding = 'utf8';
+        record.data = content;
+        resolve(record);
+      });
+    });
   } else {
     // used internally only
-    record._binary = true
+    record._binary = true;
     if (opts.noBinaryContent) {
-      return Promise.resolve(record)
+      return Promise.resolve(record);
     } else {
       return new Promise((resolve, reject) => {
         fs.readFile(fileEntry.path, 'hex', (err, content) => {
-          if (err) return reject(err)
-          record.encoding = 'hex'
-          record.data = content
-          resolve(record)
-        })
-      })
+          if (err) return reject(err);
+          record.encoding = 'hex';
+          record.data = content;
+          resolve(record);
+        });
+      });
     }
   }
 }
 
-function _isTextFile (f) {
-  return new RegExp(`\\.(${TEXTISH.join('|')})$`).exec(f)
+function _isTextFile(f) {
+  return new RegExp(`\\.(${TEXTISH.join('|')})$`).exec(f);
 }

@@ -1,3 +1,3 @@
-import { Configurator } from 'substance'
+import { Configurator } from 'substance';
 
 export default class TextureConfigurator extends Configurator {}

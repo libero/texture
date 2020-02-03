@@ -21,12 +21,12 @@ export default class ManuscriptComponent extends Component {
       $$(ManuscriptSection, {
         name: 'title',
         label: this.getLabel('title-label'),
-        model: titleModel
+        model: titleModel,
       }).append(
         renderModel($$, this, titleModel, {
-          placeholder: this.getLabel('title-placeholder')
-        }).addClass('sm-title')
-      )
+          placeholder: this.getLabel('title-placeholder'),
+        }).addClass('sm-title'),
+      ),
     );
     // Sub-title
     let subTitleModel = manuscript.getSubTitle();
@@ -34,12 +34,12 @@ export default class ManuscriptComponent extends Component {
       $$(ManuscriptSection, {
         name: 'subtitle',
         label: this.getLabel('subtitle-label'),
-        model: subTitleModel
+        model: subTitleModel,
       }).append(
         renderModel($$, this, subTitleModel, {
-          placeholder: this.getLabel('subtitle-placeholder')
-        }).addClass('sm-subtitle')
-      )
+          placeholder: this.getLabel('subtitle-placeholder'),
+        }).addClass('sm-subtitle'),
+      ),
     );
     // Authors
     let authorsModel = manuscript.getAuthors();
@@ -48,12 +48,12 @@ export default class ManuscriptComponent extends Component {
         name: 'authors',
         label: this.getLabel('authors-label'),
         model: authorsModel,
-        hideWhenEmpty: true
+        hideWhenEmpty: true,
       }).append(
         $$(AuthorsListComponent, {
-          model: authorsModel
-        }).addClass('sm-authors')
-      )
+          model: authorsModel,
+        }).addClass('sm-authors'),
+      ),
     );
 
     // Affiliations
@@ -62,13 +62,13 @@ export default class ManuscriptComponent extends Component {
       $$(ManuscriptSection, {
         name: 'affiliations',
         label: this.getLabel('affiliations-label'),
-        model: affiliationsModel
+        model: affiliationsModel,
       }).append(
         $$(AffiliationsListComponent, {
           model: affiliationsModel,
-          placeholder: this.getLabel('affiliations-label')
-        }).addClass('sm-affiliations')
-      )
+          placeholder: this.getLabel('affiliations-label'),
+        }).addClass('sm-affiliations'),
+      ),
     );
 
     // Abstract
@@ -77,13 +77,13 @@ export default class ManuscriptComponent extends Component {
       $$(ManuscriptSection, {
         name: 'abstract',
         label: this.getLabel('abstract-label'),
-        model: abstractModel
+        model: abstractModel,
       }).append(
         renderModel($$, this, abstractModel, {
           name: 'abstract',
-          placeholder: this.getLabel('abstract-placeholder')
-        }).addClass('sm-abstract')
-      )
+          placeholder: this.getLabel('abstract-placeholder'),
+        }).addClass('sm-abstract'),
+      ),
     );
     // Body
     let bodyModel = manuscript.getBody();
@@ -91,13 +91,13 @@ export default class ManuscriptComponent extends Component {
       $$(ManuscriptSection, {
         name: 'body',
         label: this.getLabel('body-label'),
-        model: bodyModel
+        model: bodyModel,
       }).append(
         renderModel($$, this, bodyModel, {
           name: 'body',
-          placeholder: this.getLabel('body-placeholder')
-        }).addClass('sm-body')
-      )
+          placeholder: this.getLabel('body-placeholder'),
+        }).addClass('sm-body'),
+      ),
     );
     // Footnotes
     let footnotesModel = manuscript.getFootnotes();
@@ -106,8 +106,8 @@ export default class ManuscriptComponent extends Component {
         name: 'footnotes',
         label: this.getLabel('footnotes-label'),
         model: footnotesModel,
-        hideWhenEmpty: true
-      }).append(renderModel($$, this, footnotesModel).addClass('sm-footnotes'))
+        hideWhenEmpty: true,
+      }).append(renderModel($$, this, footnotesModel).addClass('sm-footnotes')),
     );
 
     // Acknowledgements
@@ -117,13 +117,13 @@ export default class ManuscriptComponent extends Component {
         name: 'acknowledgements',
         label: this.getLabel('acknowledgement-label'),
         model: acknowledgementsModel,
-        hideWhenEmpty: true
+        hideWhenEmpty: true,
       }).append(
         renderModel($$, this, acknowledgementsModel, {
           name: 'acknowledgement',
-          placeholder: this.getLabel('acknowledgement-placeholder')
-        }).addClass('sm-acknowledgement')
-      )
+          placeholder: this.getLabel('acknowledgement-placeholder'),
+        }).addClass('sm-acknowledgement'),
+      ),
     );
 
     // References
@@ -133,12 +133,12 @@ export default class ManuscriptComponent extends Component {
         name: 'references',
         label: this.getLabel('references-label'),
         model: referencesModel,
-        hideWhenEmpty: true
+        hideWhenEmpty: true,
       }).append(
         $$(ReferenceListComponent, {
-          model: referencesModel
-        }).addClass('sm-references')
-      )
+          model: referencesModel,
+        }).addClass('sm-references'),
+      ),
     );
 
     // Author Details
@@ -148,12 +148,12 @@ export default class ManuscriptComponent extends Component {
         name: 'author-details',
         label: this.getLabel('author-details-label'),
         model: authorDetailsModel,
-        hideWhenEmpty: true
+        hideWhenEmpty: true,
       }).append(
         $$(AuthorDetailsListComponent, {
-          model: authorDetailsModel
-        }).addClass('sm-authors')
-      )
+          model: authorDetailsModel,
+        }).addClass('sm-authors'),
+      ),
     );
 
     // Related Articles
@@ -163,12 +163,12 @@ export default class ManuscriptComponent extends Component {
         name: 'related-articles',
         label: 'Related Articles',
         model: relatedArticlesModel,
-        hideWhenEmpty: true
+        hideWhenEmpty: true,
       }).append(
         $$(RelatedArticlesListComponent, {
-          model: relatedArticlesModel
-        }).addClass('sm-related-articles')
-      )
+          model: relatedArticlesModel,
+        }).addClass('sm-related-articles'),
+      ),
     );
 
     return el;

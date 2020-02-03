@@ -1,13 +1,13 @@
-import EditMetadataWorkflow from '../metadata/EditMetadataWorkflow'
+import EditMetadataWorkflow from '../metadata/EditMetadataWorkflow';
 
 export default class AddEntityWorkflow extends EditMetadataWorkflow {
-  didMount () {
-    super.didMount()
+  didMount() {
+    super.didMount();
 
-    this._createContent()
+    this._createContent();
   }
 
-  _createContent () {
-    throw new Error('This method is abstract.')
+  _createContent() {
+    throw new Error('This method is abstract.');
   }
 }

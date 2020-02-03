@@ -1,17 +1,19 @@
-import _RelationshipModel from './_RelationshipModel'
+import _RelationshipModel from './_RelationshipModel';
 
 export default class ManyRelationshipModel extends _RelationshipModel {
-  get type () { return 'many-relationship' }
-
-  getValue () {
-    return super.getValue() || []
+  get type() {
+    return 'many-relationship';
   }
 
-  isEmpty () {
-    return this.getValue().length === 0
+  getValue() {
+    return super.getValue() || [];
   }
 
-  toggleTarget (target) {
-    this._api._toggleRelationship(this._path, target.id)
+  isEmpty() {
+    return this.getValue().length === 0;
+  }
+
+  toggleTarget(target) {
+    this._api._toggleRelationship(this._path, target.id);
   }
 }

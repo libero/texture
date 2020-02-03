@@ -1,4 +1,4 @@
-import { Component } from 'substance'
+import { Component } from 'substance';
 
 /*
   This is a proto component which allows you to render a file uploader
@@ -7,81 +7,91 @@ import { Component } from 'substance'
   handleUploadedFiles method to implement your own file handling strategy.
 */
 export default class FileUploadComponent extends Component {
-  get acceptedFiles () {
-    return false
+  get acceptedFiles() {
+    return false;
   }
 
-  render ($$) {
-    const el = $$('div').addClass('sc-file-upload')
+  render($$) {
+    const el = $$('div').addClass('sc-file-upload');
 
-    const selectInput = $$('input').attr({
-      type: 'file'
-    }).on('click', this._supressClickPropagation)
+    const selectInput = $$('input')
+      .attr({
+        type: 'file',
+      })
+      .on('click', this._supressClickPropagation)
       .on('change', this._selectFile)
-      .ref('input')
+      .ref('input');
 
     if (this.acceptedFiles) {
-      selectInput.attr({ accept: this.acceptedFiles })
+      selectInput.attr({ accept: this.acceptedFiles });
     }
 
     // HACK: to place a link inside label we will use
     // another placeholder with a substring of first one
-    const placeholder = this.getLabel('file-upload-placeholder')
-    const selectPlaceholder = this.getLabel('file-upload-select-placeholder')
-    const placeholderParts = placeholder.split(selectPlaceholder)
+    const placeholder = this.getLabel('file-upload-placeholder');
+    const selectPlaceholder = this.getLabel('file-upload-select-placeholder');
+    const placeholderParts = placeholder.split(selectPlaceholder);
 
-    const dropZone = $$('div').addClass('se-drop-import').append(
-      placeholderParts[0],
-      $$('span').addClass('se-select-trigger')
-        .append(selectPlaceholder)
-        .on('click', this._onClick),
-      placeholderParts[1],
-      selectInput
-    ).on('drop', this._handleDrop)
+    const dropZone = $$('div')
+      .addClass('se-drop-import')
+      .append(
+        placeholderParts[0],
+        $$('span')
+          .addClass('se-select-trigger')
+          .append(selectPlaceholder)
+          .on('click', this._onClick),
+        placeholderParts[1],
+        selectInput,
+      )
+      .on('drop', this._handleDrop)
       .on('dragstart', this._onDrag)
       .on('dragenter', this._onDrag)
-      .on('dragend', this._onDrag)
+      .on('dragend', this._onDrag);
 
-    el.append(dropZone)
+    el.append(dropZone);
 
     if (this.state.error) {
       el.append(
-        $$('div').addClass('se-error-popup').append(this.renderErrorsList($$))
-      )
+        $$('div')
+          .addClass('se-error-popup')
+          .append(this.renderErrorsList($$)),
+      );
     }
 
-    return el
+    return el;
   }
 
-  renderErrorsList ($$) {
-    return $$('ul').addClass('se-error-list').append(this.getLabel('file-upload-error'))
+  renderErrorsList($$) {
+    return $$('ul')
+      .addClass('se-error-list')
+      .append(this.getLabel('file-upload-error'));
   }
 
-  handleUploadedFiles (files) {
-    throw new Error('This method is abstract')
+  handleUploadedFiles(files) {
+    throw new Error('This method is abstract');
   }
 
-  _onClick () {
-    this.refs.input.click()
+  _onClick() {
+    this.refs.input.click();
   }
 
-  _supressClickPropagation (e) {
-    e.stopPropagation()
+  _supressClickPropagation(e) {
+    e.stopPropagation();
   }
 
-  _selectFile (e) {
-    const files = e.currentTarget.files
-    this.handleUploadedFiles(files)
+  _selectFile(e) {
+    const files = e.currentTarget.files;
+    this.handleUploadedFiles(files);
   }
 
-  _handleDrop (e) {
-    const files = e.dataTransfer.files
-    this.handleUploadedFiles(files)
+  _handleDrop(e) {
+    const files = e.dataTransfer.files;
+    this.handleUploadedFiles(files);
   }
 
-  _onDrag (e) {
+  _onDrag(e) {
     // Stop event propagation for the dragstart and dragenter
     // events, to avoid editor drag manager errors
-    e.stopPropagation()
+    e.stopPropagation();
   }
 }

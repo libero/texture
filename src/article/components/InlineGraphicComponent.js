@@ -1,13 +1,15 @@
-import GraphicComponent from './GraphicComponent'
+import GraphicComponent from './GraphicComponent';
 
 export default class InlineGraphicComponent extends GraphicComponent {
-  get tagName () { return 'span' }
-
-  _getClassNames () {
-    return 'sc-inline-graphic'
+  get tagName() {
+    return 'span';
   }
 
-  _renderError ($$, errorEl) {
-    errorEl.attr('title', this.getLabel('graphic-load-error'))
+  _getClassNames() {
+    return 'sc-inline-graphic';
+  }
+
+  _renderError($$, errorEl) {
+    errorEl.attr('title', this.getLabel('graphic-load-error'));
   }
 }
