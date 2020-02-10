@@ -48,7 +48,8 @@ export default class SubjectsListComponent extends CustomSurface {
   }
 
   _getCustomResourceId() {
-    return 'subjects-list';
+    // FIXME: This seems like a hack to me, need to take a deeper look at this.
+    return 'subjects-list-' + (this.props.type || 'default');
   }
 
   _getSubjects(type) {

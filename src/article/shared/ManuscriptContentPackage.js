@@ -145,5 +145,7 @@ export default {
 
     // Article Information
     config.addLabel('article-information-label', 'Article Information');
+    config.addLabel('article-information-subjects-label', 'Subjects');
+    config.addLabel('article-information-type-label', 'Article Type');
   },
 };

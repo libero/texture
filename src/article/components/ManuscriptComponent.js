@@ -162,17 +162,42 @@ export default class ManuscriptComponent extends Component {
     );
 
     // Article Information
-    const subjectsModel = manuscript.getSubjects();
     el.append(
       $$(ManuscriptSection, {
         name: 'article-information',
         label: this.getLabel('article-information-label'),
+        model: [],
+        hideWhenEmpty: false,
+      }),
+    );
+
+    // Subjects
+    const subjectsModel = manuscript.getSubjects();
+    el.append(
+      $$(ManuscriptSection, {
+        name: 'article-information-subjects',
+        label: this.getLabel('article-information-subjects-label'),
         model: subjectsModel,
         hideWhenEmpty: false,
       }).append(
         $$(SubjectsListComponent, {
           model: subjectsModel,
           type: 'subject',
+        }).addClass('sm-subjects-list'),
+      ),
+    );
+
+    // Article Type
+    el.append(
+      $$(ManuscriptSection, {
+        name: 'article-information-type',
+        label: this.getLabel('article-information-type-label'),
+        model: subjectsModel,
+        hideWhenEmpty: false,
+      }).append(
+        $$(SubjectsListComponent, {
+          model: subjectsModel,
+          type: 'heading',
         }).addClass('sm-subjects-list'),
       ),
     );
