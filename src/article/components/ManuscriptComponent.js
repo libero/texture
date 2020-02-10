@@ -187,6 +187,26 @@ export default class ManuscriptComponent extends Component {
       ),
     );
 
+    // Keywords
+    el.append(
+      $$(ManuscriptSection, {
+        name: 'article-information-keywords',
+        label: this.getLabel('article-information-keywords-label'),
+        model: [],
+        hideWhenEmpty: false,
+      }),
+    );
+
+    // Research Organisms
+    el.append(
+      $$(ManuscriptSection, {
+        name: 'article-information-research-organisms',
+        label: this.getLabel('article-information-research-organisms-label'),
+        model: [],
+        hideWhenEmpty: false,
+      }),
+    );
+
     // Article Type
     el.append(
       $$(ManuscriptSection, {
