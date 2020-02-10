@@ -29,6 +29,7 @@ import {
   ReferenceListComponent,
   RelatedArticlesListComponent,
   SectionLabel,
+  SubjectsListComponent,
   SubscriptComponent,
   SuperscriptComponent,
   TableComponent,
@@ -77,6 +78,7 @@ export default {
     config.addComponent('section-label', SectionLabel);
     config.addComponent('small-caps', AnnotationComponent);
     config.addComponent('strike-through', AnnotationComponent);
+    config.addComponent('subjects-list', SubjectsListComponent);
     config.addComponent('subscript', SubscriptComponent);
     config.addComponent('superscript', SuperscriptComponent);
     config.addComponent('table', TableComponent);
@@ -140,5 +142,8 @@ export default {
     // Author details
     config.addLabel('author-details-label', 'Author Information');
     config.addLabel('author-details-correspendance', 'Corresponding author');
+
+    // Article Information
+    config.addLabel('article-information-label', 'Article Information');
   },
 };

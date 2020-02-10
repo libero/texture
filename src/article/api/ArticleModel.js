@@ -57,6 +57,14 @@ export default class ArticleModel extends Model {
     return this._getValueModel('article.title');
   }
 
+  getSubjects() {
+    return this._getValueModel('metadata.subjects');
+  }
+
+  hasSubjects() {
+    return this.getSubjects().length > 0;
+  }
+
   getSubTitle() {
     return this._getValueModel('article.subTitle');
   }

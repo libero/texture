@@ -55,6 +55,7 @@ export { default as ReplaceFigurePanelTool } from './ReplaceFigurePanelTool';
 export { default as ReplaceSupplementaryFileTool } from './ReplaceSupplementaryFileTool';
 export { default as SectionLabel } from './SectionLabel';
 export { default as SpecificUseEditor } from './SpecificUseEditor';
+export { default as SubjectsListComponent } from './SubjectsListComponent';
 export { default as SubscriptComponent } from './SubscriptComponent';
 export { default as SuperscriptComponent } from './SuperscriptComponent';
 export { default as SupplementaryFileComponent } from './SupplementaryFileComponent';

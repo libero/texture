@@ -10,13 +10,14 @@ export default class ManuscriptComponent extends Component {
     const AuthorDetailsListComponent = this.getComponent('author-details-list');
     const ReferenceListComponent = this.getComponent('reference-list');
     const RelatedArticlesListComponent = this.getComponent('related-articles-list');
+    const SubjectsListComponent = this.getComponent('subjects-list');
 
-    let el = $$('div').addClass('sc-manuscript');
+    const el = $$('div').addClass('sc-manuscript');
 
     // TODO: maybe we want to be able to configure if a section should be hidden when empty
 
     // Title
-    let titleModel = manuscript.getTitle();
+    const titleModel = manuscript.getTitle();
     el.append(
       $$(ManuscriptSection, {
         name: 'title',
@@ -28,8 +29,9 @@ export default class ManuscriptComponent extends Component {
         }).addClass('sm-title'),
       ),
     );
+
     // Sub-title
-    let subTitleModel = manuscript.getSubTitle();
+    const subTitleModel = manuscript.getSubTitle();
     el.append(
       $$(ManuscriptSection, {
         name: 'subtitle',
@@ -41,8 +43,9 @@ export default class ManuscriptComponent extends Component {
         }).addClass('sm-subtitle'),
       ),
     );
+
     // Authors
-    let authorsModel = manuscript.getAuthors();
+    const authorsModel = manuscript.getAuthors();
     el.append(
       $$(ManuscriptSection, {
         name: 'authors',
@@ -57,7 +60,7 @@ export default class ManuscriptComponent extends Component {
     );
 
     // Affiliations
-    let affiliationsModel = manuscript.getAffiliations();
+    const affiliationsModel = manuscript.getAffiliations();
     el.append(
       $$(ManuscriptSection, {
         name: 'affiliations',
@@ -72,7 +75,7 @@ export default class ManuscriptComponent extends Component {
     );
 
     // Abstract
-    let abstractModel = manuscript.getAbstract();
+    const abstractModel = manuscript.getAbstract();
     el.append(
       $$(ManuscriptSection, {
         name: 'abstract',
@@ -85,8 +88,9 @@ export default class ManuscriptComponent extends Component {
         }).addClass('sm-abstract'),
       ),
     );
+
     // Body
-    let bodyModel = manuscript.getBody();
+    const bodyModel = manuscript.getBody();
     el.append(
       $$(ManuscriptSection, {
         name: 'body',
@@ -99,8 +103,9 @@ export default class ManuscriptComponent extends Component {
         }).addClass('sm-body'),
       ),
     );
+
     // Footnotes
-    let footnotesModel = manuscript.getFootnotes();
+    const footnotesModel = manuscript.getFootnotes();
     el.append(
       $$(ManuscriptSection, {
         name: 'footnotes',
@@ -111,7 +116,7 @@ export default class ManuscriptComponent extends Component {
     );
 
     // Acknowledgements
-    let acknowledgementsModel = manuscript.getAcknowledgements();
+    const acknowledgementsModel = manuscript.getAcknowledgements();
     el.append(
       $$(ManuscriptSection, {
         name: 'acknowledgements',
@@ -127,7 +132,7 @@ export default class ManuscriptComponent extends Component {
     );
 
     // References
-    let referencesModel = manuscript.getReferences();
+    const referencesModel = manuscript.getReferences();
     el.append(
       $$(ManuscriptSection, {
         name: 'references',
@@ -142,7 +147,7 @@ export default class ManuscriptComponent extends Component {
     );
 
     // Author Details
-    let authorDetailsModel = manuscript.getAuthors();
+    const authorDetailsModel = manuscript.getAuthors();
     el.append(
       $$(ManuscriptSection, {
         name: 'author-details',
@@ -156,8 +161,24 @@ export default class ManuscriptComponent extends Component {
       ),
     );
 
+    // Article Information
+    const subjectsModel = manuscript.getSubjects();
+    el.append(
+      $$(ManuscriptSection, {
+        name: 'article-information',
+        label: this.getLabel('article-information-label'),
+        model: subjectsModel,
+        hideWhenEmpty: false,
+      }).append(
+        $$(SubjectsListComponent, {
+          model: subjectsModel,
+          type: 'subject',
+        }).addClass('sm-subjects-list'),
+      ),
+    );
+
     // Related Articles
-    let relatedArticlesModel = manuscript.getRelatedArticles();
+    const relatedArticlesModel = manuscript.getRelatedArticles();
     el.append(
       $$(ManuscriptSection, {
         name: 'related-articles',
