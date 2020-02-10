@@ -1,10 +1,11 @@
+/* eslint-disable @typescript-eslint/no-use-before-define */
 import { forEach } from 'substance';
 import createEmptyJATS from '../util/createEmptyJATS';
 import SectionContainerConverter from './SectionContainerConverter';
 
 export default function internal2jats(doc, jatsExporter) {
   // eslint-disable-line
-  let jats = createEmptyJATS();
+  const jats = createEmptyJATS();
   jats.$$ = jats.createElement.bind(jats);
 
   // metadata
@@ -19,8 +20,8 @@ function _populateMeta(jats, doc, jatsExporter) {
   // TODO: journal-meta would go here, but is not supported yet
 
   // @article-type
-  let articleEl = jats.find('article');
-  let metadata = doc.get('metadata');
+  const articleEl = jats.find('article');
+  const metadata = doc.get('metadata');
   if (metadata.articleType) {
     articleEl.attr('article-type', metadata.articleType);
   }
@@ -32,9 +33,9 @@ function _populateMeta(jats, doc, jatsExporter) {
 
 function _populateArticleMeta(jats, doc, jatsExporter) {
   const $$ = jats.$$;
-  let articleMeta = jats.createElement('article-meta');
-  let metadata = doc.get('metadata');
-  let permission = doc.get(metadata.permission);
+  const articleMeta = jats.createElement('article-meta');
+  const metadata = doc.get('metadata');
+  const permission = doc.get(metadata.permission);
 
   // article-id*
   // TODO not supported yet
@@ -84,7 +85,7 @@ function _populateArticleMeta(jats, doc, jatsExporter) {
   } else if (metadata.fpage && metadata.lpage) {
     // NOTE: last argument is used to resolve insert position, as we don't have means
     // yet to ask for insert position of multiple elements
-    let pageRange = metadata.pageRange || metadata.fpage + '-' + metadata.lpage;
+    const pageRange = metadata.pageRange || metadata.fpage + '-' + metadata.lpage;
     articleMeta.append(
       $$('fpage').append(metadata.fpage),
       $$('lpage').append(metadata.lpage),
@@ -132,8 +133,8 @@ function _populateArticleMeta(jats, doc, jatsExporter) {
   // custom-meta-group?  // not supported yet
 
   // replace the <article-meta> element
-  let front = jats.find('article > front');
-  let oldArticleMeta = front.find('article-meta');
+  const front = jats.find('article > front');
+  const oldArticleMeta = front.find('article-meta');
   front.replaceChild(oldArticleMeta, articleMeta);
 }
 
@@ -144,23 +145,41 @@ function _exportSubjects(jats, doc) {
   // - subjects are grouped into <subj-groups> using their language property
   // group subjects by language
   // TODO: this should come from the article node
-  let $$ = jats.$$;
-  let subjects = doc.resolve(['metadata', 'subjects']);
-  // TODO: remove or rework translations of subjects
-  let byLang = subjects.reduce((byLang, subject) => {
-    let lang = subject.language;
-    if (!byLang[lang]) {
-      byLang[lang] = [];
+  const $$ = jats.$$;
+  const subjects = doc.resolve(['metadata', 'subjects']);
+
+  // FIXME: This is a diverange form the tool's default behaviour which may or may not be an issue. First I need to
+  //        figure out if this is a problem or not, and if so then there should be a way to configure the behaviour.
+  //        For now, I've left the legacy code block.
+
+  // let byLang = subjects.reduce((byLang, subject) => {
+  //   let lang = subject.language;
+  //   if (!byLang[lang]) {
+  //     byLang[lang] = [];
+  //   }
+  //   byLang[lang].push(subject);
+  //   return byLang;
+  // }, {});
+
+  const byGroupType = subjects.reduce((byGroupType, subject) => {
+    const groupType = subject.groupType;
+    if (!byGroupType[groupType]) {
+      byGroupType[groupType] = [];
     }
-    byLang[lang].push(subject);
-    return byLang;
+    byGroupType[groupType].push(subject);
+    return byGroupType;
   }, {});
-  let articleCategories = $$('article-categories');
-  forEach(byLang, (subjects, lang) => {
-    let groupEl = $$('subj-group');
-    if (lang !== 'undefined') {
-      groupEl.attr('xml:lang', lang);
-    }
+
+  const articleCategories = $$('article-categories');
+  forEach(byGroupType, (subjects, groupType) => {
+    const groupEl = $$('subj-group');
+
+    // FIXME: Not needed at present, see above FIXME comment.
+    // if (lang !== 'undefined') {
+    //   groupEl.attr('xml:lang', lang);
+    // }
+    grouptEl.attr('subj-group-type', groupType);
+
     groupEl.append(
       subjects.map(subject => {
         return $$('subject')
@@ -177,19 +196,19 @@ function _exportSubjects(jats, doc) {
 }
 
 function _exportTitleGroup(jats, doc, jatsExporter) {
-  let $$ = jats.$$;
+  const $$ = jats.$$;
   // ATTENTION: ATM only title and subtitle is supported
   // JATS supports more titles beyond this (e.g. for special purposes)
   const TITLE_PATH = ['article', 'title'];
   const SUBTITLE_PATH = ['article', 'subTitle'];
-  let titleGroupEl = $$('title-group');
-  let articleTitle = $$('article-title');
+  const titleGroupEl = $$('title-group');
+  const articleTitle = $$('article-title');
   _exportAnnotatedText(jatsExporter, TITLE_PATH, articleTitle);
   titleGroupEl.append(articleTitle);
 
   // Export subtitle if it's not empty
   if (doc.get(SUBTITLE_PATH)) {
-    let articleSubTitle = $$('subtitle');
+    const articleSubTitle = $$('subtitle');
     _exportAnnotatedText(jatsExporter, SUBTITLE_PATH, articleSubTitle);
     titleGroupEl.append(articleSubTitle);
   }
@@ -200,11 +219,11 @@ function _exportTitleGroup(jats, doc, jatsExporter) {
 function _exportContribGroup(jats, doc, exporter, collectionPath, type) {
   // FIXME: this should not happen if we have general support for 'person-groups'
   // ATM, we only support authors, and editors.
-  let $$ = jats.$$;
-  let contribs = doc.resolve(collectionPath);
-  let contribGroupEl = $$('contrib-group').attr('content-type', type);
-  let groupedContribs = _groupContribs(contribs);
-  for (let [groupId, persons] of groupedContribs) {
+  const $$ = jats.$$;
+  const contribs = doc.resolve(collectionPath);
+  const contribGroupEl = $$('contrib-group').attr('content-type', type);
+  const groupedContribs = _groupContribs(contribs);
+  for (const [groupId, persons] of groupedContribs) {
     // append persons without a group first
     if (groupId === 'NOGROUP') {
       persons.forEach(person => {
@@ -212,7 +231,7 @@ function _exportContribGroup(jats, doc, exporter, collectionPath, type) {
       });
       // persons within a group are nested into an extra <contrib> layer
     } else {
-      let group = doc.get(groupId);
+      const group = doc.get(groupId);
       contribGroupEl.append(_exportGroup($$, exporter, group, persons));
     }
   }
@@ -227,10 +246,10 @@ function _exportContribGroup(jats, doc, exporter, collectionPath, type) {
   [p1,p2g1,p3g2,p4g1] => {p1: p1, g1: [p2,p4], g2: [p3] }
 */
 function _groupContribs(contribs) {
-  let groups = new Map();
+  const groups = new Map();
   groups.set('NOGROUP', []);
-  for (let contrib of contribs) {
-    let groupId = contrib.group;
+  for (const contrib of contribs) {
+    const groupId = contrib.group;
     if (groupId) {
       if (!groups.has(groupId)) {
         groups.set(groupId, []);
@@ -244,7 +263,7 @@ function _groupContribs(contribs) {
 }
 
 function _exportPerson($$, exporter, node) {
-  let el = $$('contrib').attr({
+  const el = $$('contrib').attr({
     id: node.id,
     'contrib-type': 'person',
     'equal-contrib': node.equalContrib ? 'yes' : 'no',
@@ -280,15 +299,15 @@ function _exportPerson($$, exporter, node) {
 }
 
 function _createBioElement($$, exporter, node) {
-  let content = node.resolve('bio');
+  const content = node.resolve('bio');
   if (content.length > 0) {
     // NOTE: we don't want to export empty containers
     // e.g. if there is only one empty paragraph we are not exporting anything
-    let first = content[0];
+    const first = content[0];
     if (content.length === 1 && first.isText() && first.isEmpty()) {
       return;
     }
-    let bioEl = $$('bio').append(content.map(p => exporter.convertNode(p)));
+    const bioEl = $$('bio').append(content.map(p => exporter.convertNode(p)));
     return bioEl;
   }
 }
@@ -313,13 +332,13 @@ function _exportGroup($$, exporter, node, groupMembers) {
         </collab>
     </contrib>
   */
-  let contribEl = $$('contrib').attr({
+  const contribEl = $$('contrib').attr({
     id: node.id,
     'contrib-type': 'group',
     'equal-contrib': node.equalContrib ? 'yes' : 'no',
     corresp: node.corresp ? 'yes' : 'no',
   });
-  let collab = $$('collab');
+  const collab = $$('collab');
   collab.append(
     $$('named-content')
       .attr('content-type', 'name')
@@ -344,9 +363,9 @@ function _exportGroup($$, exporter, node, groupMembers) {
   });
   // Add group members
   // <contrib-group contrib-type="group-member">
-  let contribGroup = $$('contrib-group').attr('contrib-type', 'group-member');
+  const contribGroup = $$('contrib-group').attr('contrib-type', 'group-member');
   groupMembers.forEach(person => {
-    let contribEl = _exportPerson($$, exporter, person);
+    const contribEl = _exportPerson($$, exporter, person);
     contribGroup.append(contribEl);
   });
   collab.append(contribGroup);
@@ -355,10 +374,10 @@ function _exportGroup($$, exporter, node, groupMembers) {
 }
 
 function _exportAffiliations(jats, doc) {
-  let $$ = jats.$$;
-  let affiliations = doc.resolve(['metadata', 'affiliations']);
-  let orgEls = affiliations.map(node => {
-    let el = $$('aff').attr('id', node.id);
+  const $$ = jats.$$;
+  const affiliations = doc.resolve(['metadata', 'affiliations']);
+  const orgEls = affiliations.map(node => {
+    const el = $$('aff').attr('id', node.id);
     el.append(_createTextElement($$, node.institution, 'institution', { 'content-type': 'orgname' }));
     el.append(_createTextElement($$, node.division1, 'institution', { 'content-type': 'orgdiv1' }));
     el.append(_createTextElement($$, node.division2, 'institution', { 'content-type': 'orgdiv2' }));
@@ -421,7 +440,7 @@ function _isYearDateValid(str) {
 
 function _createTextElement($$, text, tagName, attrs) {
   if (text) {
-    let el = $$(tagName).append(text);
+    const el = $$(tagName).append(text);
     forEach(attrs, (value, key) => {
       el.attr(key, value);
     });
@@ -436,11 +455,11 @@ function _createTextElement($$, text, tagName, attrs) {
  */
 function _exportAbstract(jats, doc, jatsExporter) {
   const $$ = jats.$$;
-  let sectionContainerConverter = new SectionContainerConverter();
-  let abstract = doc.get('abstract');
-  let els = [];
+  const sectionContainerConverter = new SectionContainerConverter();
+  const abstract = doc.get('abstract');
+  const els = [];
   // Main abstract
-  let abstractEl = $$('abstract');
+  const abstractEl = $$('abstract');
   // the abstract element itself is required
   // but we skip empty content
   if (!_isContainerEmpty(abstract, 'content')) {
@@ -449,12 +468,12 @@ function _exportAbstract(jats, doc, jatsExporter) {
   els.push(abstractEl);
   // Custom abstracts
   doc.resolve(['article', 'customAbstracts']).forEach(customAbstract => {
-    let customAbstractEl = $$('abstract');
+    const customAbstractEl = $$('abstract');
     if (customAbstract.abstractType) {
       customAbstractEl.attr('abstract-type', customAbstract.abstractType);
     }
     if (customAbstract.title) {
-      let titleEl = $$('title');
+      const titleEl = $$('title');
       _exportAnnotatedText(jatsExporter, [customAbstract.id, 'title'], titleEl);
       customAbstractEl.append(titleEl);
     }
@@ -471,17 +490,17 @@ function _exportKeywords(jats, doc, jatsExporter) {
   const $$ = jats.$$;
   // TODO: remove or rework tranlations of keywords
   const keywords = doc.resolve(['metadata', 'keywords']);
-  let byLang = keywords.reduce((byLang, keyword) => {
-    let lang = keyword.language;
+  const byLang = keywords.reduce((byLang, keyword) => {
+    const lang = keyword.language;
     if (!byLang[lang]) {
       byLang[lang] = [];
     }
     byLang[lang].push(keyword);
     return byLang;
   }, {});
-  let keywordGroups = [];
+  const keywordGroups = [];
   forEach(byLang, (keywords, lang) => {
-    let groupEl = $$('kwd-group');
+    const groupEl = $$('kwd-group');
     if (lang !== 'undefined') {
       groupEl.attr('xml:lang', lang);
     }
@@ -499,12 +518,12 @@ function _exportKeywords(jats, doc, jatsExporter) {
 
 function _exportFunders(jats, doc) {
   const $$ = jats.$$;
-  let funders = doc.resolve(['metadata', 'funders']);
+  const funders = doc.resolve(['metadata', 'funders']);
   if (funders.length > 0) {
-    let fundingGroupEl = $$('funding-group');
+    const fundingGroupEl = $$('funding-group');
     funders.forEach(funder => {
-      let el = $$('award-group').attr('id', funder.id);
-      let institutionWrapEl = $$('institution-wrap');
+      const el = $$('award-group').attr('id', funder.id);
+      const institutionWrapEl = $$('institution-wrap');
       institutionWrapEl.append(
         _createTextElement($$, funder.fundRefId, 'institution-id', { 'institution-id-type': 'FundRef' }),
       );
@@ -517,17 +536,17 @@ function _exportFunders(jats, doc) {
 }
 
 function _populateBody(jats, doc, jatsExporter) {
-  let body = doc.get('body');
+  const body = doc.get('body');
   if (!_isContainerEmpty(body, 'content')) {
-    let bodyEl = jatsExporter.convertNode(body);
-    let oldBody = jats.find('article > body');
+    const bodyEl = jatsExporter.convertNode(body);
+    const oldBody = jats.find('article > body');
     oldBody.parentNode.replaceChild(oldBody, bodyEl);
   }
 }
 
 function _populateBack(jats, doc, jatsExporter) {
-  let $$ = jats.$$;
-  let backEl = jats.find('article > back');
+  const $$ = jats.$$;
+  const backEl = jats.find('article > back');
   /*
     back:
     (
@@ -535,7 +554,7 @@ function _populateBack(jats, doc, jatsExporter) {
       ref-list?,
     )
   */
-  let footnotes = doc.resolve(['article', 'footnotes']);
+  const footnotes = doc.resolve(['article', 'footnotes']);
   if (footnotes.length > 0) {
     backEl.append(
       $$('fn-group').append(
@@ -546,7 +565,7 @@ function _populateBack(jats, doc, jatsExporter) {
     );
   }
 
-  let references = doc.resolve(['article', 'references']);
+  const references = doc.resolve(['article', 'references']);
   if (references.length > 0) {
     backEl.append(
       $$('ref-list').append(
@@ -563,10 +582,10 @@ function _exportAnnotatedText(jatsExporter, path, el) {
 }
 
 function _isContainerEmpty(node, propertyName) {
-  let ids = node[propertyName];
+  const ids = node[propertyName];
   if (ids.length === 0) return true;
   if (ids.length > 1) return false;
-  let doc = node.getDocument();
-  let first = doc.get(ids[0]);
+  const doc = node.getDocument();
+  const first = doc.get(ids[0]);
   return first && first.isText() && !first.getText();
 }

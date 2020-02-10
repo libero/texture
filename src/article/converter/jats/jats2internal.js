@@ -1,7 +1,7 @@
+/* eslint-disable @typescript-eslint/no-use-before-define */
 import { uuid, documentHelpers } from 'substance';
 import { findChild, getText, retainChildren } from '../util/domHelpers';
 import SectionContainerConverter from './SectionContainerConverter';
-import { RelatedArticle } from '../../nodes';
 
 export default function jats2internal(jats, doc, jatsImporter) {
   // metadata
@@ -26,12 +26,13 @@ export default function jats2internal(jats, doc, jatsImporter) {
 
   return doc;
 }
+
 function _populateAffiliations(doc, jats) {
   // FIXME: At the moment we are ONLY getting affiliations for Authors, so we are missing editors, etc. I think that
   //        to properly support them all we need to re-model the metadata model.
   const affEls = jats.findAll('article > front > article-meta > contrib-group[content-type=author] > aff');
-  let orgIds = affEls.map(el => {
-    let org = {
+  const orgIds = affEls.map(el => {
+    const org = {
       id: el.id,
       type: 'affiliation',
       institution: getText(el, 'institution[content-type=orgname]') || getText(el, 'institution:not([content-type])'),
@@ -55,21 +56,21 @@ function _populateAffiliations(doc, jats) {
 }
 
 function _populateAuthors(doc, jats, importer) {
-  let authorEls = jats.findAll(`contrib-group[content-type=author] > contrib`);
+  const authorEls = jats.findAll(`contrib-group[content-type=author] > contrib`);
   _populateContribs(doc, jats, importer, ['metadata', 'authors'], authorEls);
 }
 
 function _populateEditors(doc, jats, importer) {
-  let editorEls = jats.findAll(`contrib-group[content-type=editor] > contrib`);
+  const editorEls = jats.findAll(`contrib-group[content-type=editor] > contrib`);
   _populateContribs(doc, jats, importer, ['metadata', 'editors'], editorEls);
 }
 
 function _populateContribs(doc, jats, importer, contribsPath, contribEls, groupId) {
-  for (let contribEl of contribEls) {
+  for (const contribEl of contribEls) {
     if (contribEl.attr('contrib-type') === 'group') {
       // ATTENTION: groups are defined 'inplace'
       // the members of the group are appended to the list of persons
-      let group = {
+      const group = {
         id: contribEl.id,
         type: 'group',
         name: getText(contribEl, 'named-content[content-type=name]'),
@@ -81,10 +82,10 @@ function _populateContribs(doc, jats, importer, contribsPath, contribEls, groupI
       };
       documentHelpers.append(doc, ['metadata', 'groups'], doc.create(group).id);
 
-      let memberEls = contribEl.findAll('contrib');
+      const memberEls = contribEl.findAll('contrib');
       _populateContribs(doc, jats, importer, contribsPath, memberEls, group.id);
     } else {
-      let contrib = doc.create({
+      const contrib = doc.create({
         id: contribEl.id,
         type: 'person',
         givenNames: getText(contribEl, 'given-names'),
@@ -109,9 +110,9 @@ function _populateContribs(doc, jats, importer, contribsPath, contribEls, groupI
 }
 
 function _populateAuthorNotes(doc, jats, jatsImporter) {
-  let $$ = jats.createElement.bind(jats);
-  let fnEls = jats.findAll('article > front > article-meta > author-notes > fn');
-  let article = doc.get('article');
+  const $$ = jats.createElement.bind(jats);
+  const fnEls = jats.findAll('article > front > article-meta > author-notes > fn');
+  const article = doc.get('article');
   article.authorNotes = fnEls.map(fnEl => {
     // there must be at least one paragraph
     if (!fnEl.find('p')) {
@@ -122,14 +123,14 @@ function _populateAuthorNotes(doc, jats, jatsImporter) {
 }
 
 function _getAuthorCompetingInterests(el, importer) {
-  let xrefs = el.findAll('xref[ref-type=fn]');
-  let ids = xrefs.map(xref => xref.attr('rid'));
+  const xrefs = el.findAll('xref[ref-type=fn]');
+  const ids = xrefs.map(xref => xref.attr('rid'));
   return ids;
 }
 
 // ATTENTION: bio is not a specific node anymore, just a collection of paragraphs
 function _getBioContent(el, importer) {
-  let $$ = el.createElement.bind(el.getOwnerDocument());
+  const $$ = el.createElement.bind(el.getOwnerDocument());
   let bioEl = findChild(el, 'bio');
   // If there is no bio element we should provide it
   if (!bioEl) {
@@ -154,26 +155,26 @@ function _getAffiliationIds(el, isGroup) {
   if (isGroup) {
     xrefs = el.findAll('collab > xref[ref-type=aff]');
   }
-  let affs = xrefs.map(xref => xref.attr('rid'));
+  const affs = xrefs.map(xref => xref.attr('rid'));
   return affs;
 }
 
 function _getContributorIds(el, importer) {
-  let elements = el.findAll('contrib-id');
-  let contributorIds = elements.map(element => importer.convertElement(element).id);
+  const elements = el.findAll('contrib-id');
+  const contributorIds = elements.map(element => importer.convertElement(element).id);
   return contributorIds;
 }
 
 function _getAwardIds(el) {
-  let xrefs = el.findAll('xref[ref-type=award]');
-  let awardIds = xrefs.map(xref => xref.attr('rid'));
+  const xrefs = el.findAll('xref[ref-type=award]');
+  const awardIds = xrefs.map(xref => xref.attr('rid'));
   return awardIds;
 }
 
 function _populateFunders(doc, jats) {
   const awardEls = jats.findAll('article > front > article-meta > funding-group > award-group');
-  let funderIds = awardEls.map(el => {
-    let funder = {
+  const funderIds = awardEls.map(el => {
+    const funder = {
       id: el.id,
       type: 'funder',
       institution: getText(el, 'institution'),
@@ -187,9 +188,9 @@ function _populateFunders(doc, jats) {
 
 // TODO: use doc API for manipulation, not a bare object
 function _populateArticleInfo(doc, jats, jatsImporter) {
-  let articleEl = jats.find('article');
-  let articleMetaEl = articleEl.find('front > article-meta');
-  let metadata = doc.get('metadata');
+  const articleEl = jats.find('article');
+  const articleMetaEl = articleEl.find('front > article-meta');
+  const metadata = doc.get('metadata');
   Object.assign(metadata, {
     articleType: articleEl.getAttribute('article-type') || '',
     elocationId: getText(articleMetaEl, 'elocation-id'),
@@ -199,7 +200,7 @@ function _populateArticleInfo(doc, jats, jatsImporter) {
     volume: getText(articleMetaEl, 'volume'),
     pageRange: getText(articleMetaEl, 'page-range'),
   });
-  let issueTitleEl = findChild(articleMetaEl, 'issue-title');
+  const issueTitleEl = findChild(articleMetaEl, 'issue-title');
   if (issueTitleEl) {
     metadata['issueTitle'] = jatsImporter.annotatedText(issueTitleEl, ['metadata', 'issueTtle']);
   }
@@ -208,7 +209,7 @@ function _populateArticleInfo(doc, jats, jatsImporter) {
   // An empty permission is already there, but will be replaced if <permission> element is there
   if (permissionsEl) {
     doc.delete(metadata.permission);
-    let permission = jatsImporter.convertElement(permissionsEl);
+    const permission = jatsImporter.convertElement(permissionsEl);
     // ATTENTION: so that the document model is correct we need to use
     // the Document API  to set the permission id
     metadata.permission = permission.id;
@@ -216,7 +217,7 @@ function _populateArticleInfo(doc, jats, jatsImporter) {
 
   const articleDateEls = articleMetaEl.findAll('history > date, pub-date');
   if (articleDateEls.length > 0) {
-    let dates = {};
+    const dates = {};
     articleDateEls.forEach(dateEl => {
       const date = _extractDate(dateEl);
       dates[date.type] = date.value;
@@ -244,8 +245,8 @@ function _extractDate(el) {
 }
 
 function _populateKeywords(doc, jats, jatsImporter) {
-  let kwdEls = jats.findAll('article > front > article-meta > kwd-group > kwd');
-  let kwdIds = kwdEls.map(kwdEl => {
+  const kwdEls = jats.findAll('article > front > article-meta > kwd-group > kwd');
+  const kwdIds = kwdEls.map(kwdEl => {
     const kwd = doc.create({
       type: 'keyword',
       category: kwdEl.getAttribute('content-type'),
@@ -258,8 +259,8 @@ function _populateKeywords(doc, jats, jatsImporter) {
 }
 
 function _populateRelatedArticles(doc, jats, jatsImporter) {
-  let relatedArticleEls = jats.findAll('article > front > article-meta > related-article');
-  let relatedArticleIds = relatedArticleEls.map(relatedArticleEl => {
+  const relatedArticleEls = jats.findAll('article > front > article-meta > related-article');
+  const relatedArticleIds = relatedArticleEls.map(relatedArticleEl => {
     const relatedArticle = doc.create({
       type: 'related-article',
       extLinkType: relatedArticleEl.getAttribute('ext-link-type'),
@@ -277,17 +278,19 @@ function _populateSubjects(doc, jats) {
   // to be able to define an ontology, also hierarchically
   // This implementation assumes that subjects are flat.
   // To support translations, multiple subj-groups can be provided with different xml:lang
-  let subjGroups = jats.findAll('article > front > article-meta > article-categories > subj-group');
+  const subjGroups = jats.findAll('article > front > article-meta > article-categories > subj-group');
   // TODO: get this from the article element
   const DEFAULT_LANG = 'en';
-  for (let subjGroup of subjGroups) {
-    let language = subjGroup.attr('xml:lang') || DEFAULT_LANG;
-    let subjectEls = subjGroup.findAll('subject');
-    for (let subjectEl of subjectEls) {
-      let subject = doc.create({
+  for (const subjGroup of subjGroups) {
+    const language = subjGroup.attr('xml:lang') || DEFAULT_LANG;
+    const groupType = subjGroup.attr('subj-group-type');
+    const subjectEls = subjGroup.findAll('subject');
+    for (const subjectEl of subjectEls) {
+      const subject = doc.create({
         type: 'subject',
         name: subjectEl.textContent,
         category: subjectEl.getAttribute('content-type'),
+        groupType,
         language,
       });
       documentHelpers.append(doc, ['metadata', 'subjects'], subject.id);
@@ -296,8 +299,8 @@ function _populateSubjects(doc, jats) {
 }
 
 function _populateTitle(doc, jats, jatsImporter) {
-  let article = doc.get('article');
-  let titleEl = jats.find('article > front > article-meta > title-group > article-title');
+  const article = doc.get('article');
+  const titleEl = jats.find('article > front > article-meta > title-group > article-title');
   if (titleEl) {
     article.title = jatsImporter.annotatedText(titleEl, ['article', 'title']);
   }
@@ -319,22 +322,22 @@ function _populateTitle(doc, jats, jatsImporter) {
 }
 
 function _populateSubTitle(doc, jats, jatsImporter) {
-  let article = doc.get('article');
-  let subTitleEl = jats.find('article > front > article-meta > title-group > subtitle');
+  const article = doc.get('article');
+  const subTitleEl = jats.find('article > front > article-meta > title-group > subtitle');
   if (subTitleEl) {
     article.subTitle = jatsImporter.annotatedText(subTitleEl, ['article', 'subTitle']);
   }
 }
 
 function _populateAbstract(doc, jats, jatsImporter) {
-  let $$ = jats.createElement.bind(jats);
-  let sectionContainerConverter = new SectionContainerConverter();
+  const $$ = jats.createElement.bind(jats);
+  const sectionContainerConverter = new SectionContainerConverter();
 
   // NOTE: The first abstract without abstract-type is used as main abstract,
   // if there are others they should be imported as a custom abstract
   // as well as abstracts with abstract-type attribute
-  let mainAbstract = doc.get('abstract');
-  let abstractEls = jats.findAll('article > front > article-meta > abstract');
+  const mainAbstract = doc.get('abstract');
+  const abstractEls = jats.findAll('article > front > article-meta > abstract');
   let mainAbstractImported = false;
   abstractEls.forEach(abstractEl => {
     const titleEl = findChild(abstractEl, 'title');
@@ -350,7 +353,7 @@ function _populateAbstract(doc, jats, jatsImporter) {
       sectionContainerConverter.import(abstractEl, mainAbstract, jatsImporter);
       mainAbstractImported = true;
     } else {
-      let abstract = doc.create({
+      const abstract = doc.create({
         type: 'custom-abstract',
         id: abstractEl.id,
         abstractType: abstractType,
@@ -382,10 +385,10 @@ function _populateAbstract(doc, jats, jatsImporter) {
 }
 
 function _populateAcknowledgements(doc, jats, jatsImporter) {
-  let $$ = jats.createElement.bind(jats);
-  let sectionContainerConverter = new SectionContainerConverter();
+  const $$ = jats.createElement.bind(jats);
+  const sectionContainerConverter = new SectionContainerConverter();
 
-  let acknowledgments = jats.findAll('article > back > ack');
+  const acknowledgments = jats.findAll('article > back > ack');
   acknowledgments.forEach(acknowledgment => {
     // Need to remove the 'title' from the child nodes, otherwise it will appear inline with the main text of the
     // acknowledgement.
@@ -399,7 +402,7 @@ function _populateAcknowledgements(doc, jats, jatsImporter) {
       acknowledgment.append($$('p'));
     }
 
-    let node = doc.create({
+    const node = doc.create({
       type: 'acknowledgement',
       id: acknowledgment.id,
     });
@@ -413,21 +416,21 @@ function _populateAcknowledgements(doc, jats, jatsImporter) {
 }
 
 function _populateBody(doc, jats, jatsImporter) {
-  let $$ = jats.createElement.bind(jats);
+  const $$ = jats.createElement.bind(jats);
   // ATTENTION: JATS can have multiple abstracts
   // ATM we only take the first, loosing the others
-  let bodyEl = jats.find('article > body');
+  const bodyEl = jats.find('article > body');
   if (bodyEl) {
     // add an empty paragraph if the body is empty
     if (bodyEl.getChildCount() === 0) {
       bodyEl.append($$('p'));
     }
-    let body = doc.get('body');
+    const body = doc.get('body');
     // ATTENTION: because there is already a body node in the document, *the* body, with id 'body'
     // we must change the id of the body element so that it does not collide with the internal one
     bodyEl.id = uuid();
-    let tmp = jatsImporter.convertElement(bodyEl);
-    let ids = tmp.content.slice();
+    const tmp = jatsImporter.convertElement(bodyEl);
+    const ids = tmp.content.slice();
     tmp.content = [];
     body.content = ids;
     doc.delete(tmp);
@@ -435,9 +438,9 @@ function _populateBody(doc, jats, jatsImporter) {
 }
 
 function _populateFootnotes(doc, jats, jatsImporter) {
-  let $$ = jats.createElement.bind(jats);
-  let fnEls = jats.findAll('article > back > fn-group > fn');
-  let article = doc.get('article');
+  const $$ = jats.createElement.bind(jats);
+  const fnEls = jats.findAll('article > back > fn-group > fn');
+  const article = doc.get('article');
   article.footnotes = fnEls.map(fnEl => {
     // there must be at least one paragraph
     if (!fnEl.find('p')) {
@@ -449,10 +452,10 @@ function _populateFootnotes(doc, jats, jatsImporter) {
 
 function _populateReferences(doc, jats, jatsImporter) {
   // TODO: make sure that we only allow this place for references via restricting the TextureJATS schema
-  let refListEl = jats.find('article > back > ref-list');
+  const refListEl = jats.find('article > back > ref-list');
   if (refListEl) {
-    let article = doc.get('article');
-    let refEls = refListEl.findAll('ref');
+    const article = doc.get('article');
+    const refEls = refListEl.findAll('ref');
     article.references = refEls.map(refEl => jatsImporter.convertElement(refEl).id);
   }
 }
