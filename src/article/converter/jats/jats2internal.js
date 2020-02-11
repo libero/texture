@@ -245,16 +245,22 @@ function _extractDate(el) {
 }
 
 function _populateKeywords(doc, jats, jatsImporter) {
-  const kwdEls = jats.findAll('article > front > article-meta > kwd-group > kwd');
-  const kwdIds = kwdEls.map(kwdEl => {
-    const kwd = doc.create({
-      type: 'keyword',
-      category: kwdEl.getAttribute('content-type'),
-      language: kwdEl.getParent().getAttribute('xml:lang'),
-    });
-    kwd.name = jatsImporter.annotatedText(kwdEl, [kwd.id, 'name']);
-    return kwd.id;
-  });
+  const kwdGroupEls = jats.findAll('article > front > article-meta > kwd-group');
+  const kwdIds = [];
+  for (const kwdGroup of kwdGroupEls) {
+    const kwdGroupType = kwdGroup.getAttribute('kwd-group-type');
+    const kwdEls = kwdGroup.findAll('kwd');
+    for (const kwdEl of kwdEls) {
+      const kwd = doc.create({
+        type: 'keyword',
+        groupType: kwdGroupType,
+        category: kwdEl.getAttribute('content-type'),
+        language: kwdEl.getParent().getAttribute('xml:lang'),
+      });
+      kwd.name = jatsImporter.annotatedText(kwdEl, [kwd.id, 'name']);
+      kwdIds.push(kwd.id);
+    }
+  }
   doc.get('metadata').keywords = kwdIds;
 }
 

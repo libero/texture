@@ -490,19 +490,31 @@ function _exportKeywords(jats, doc, jatsExporter) {
   const $$ = jats.$$;
   // TODO: remove or rework tranlations of keywords
   const keywords = doc.resolve(['metadata', 'keywords']);
-  const byLang = keywords.reduce((byLang, keyword) => {
-    const lang = keyword.language;
-    if (!byLang[lang]) {
-      byLang[lang] = [];
+
+  // FIXME: I've change the export behaviour here based on groupType. This should be driven be a configuration value!
+  const byGroupType = keywords.reduce((byGroupType, keyword) => {
+    const groupType = keyword.language;
+    if (!byGroupType[groupType]) {
+      byGroupType[groupType] = [];
     }
-    byLang[lang].push(keyword);
-    return byLang;
+    byGroupType[groupType].push(keyword);
+    return byGroupType;
   }, {});
+
+  // const byLang = keywords.reduce((byLang, keyword) => {
+  //   const lang = keyword.language;
+  //   if (!byLang[lang]) {
+  //     byLang[lang] = [];
+  //   }
+  //   byLang[lang].push(keyword);
+  //   return byLang;
+  // }, {});
+
   const keywordGroups = [];
-  forEach(byLang, (keywords, lang) => {
+  forEach(byGroupType, (keywords, groupType) => {
     const groupEl = $$('kwd-group');
-    if (lang !== 'undefined') {
-      groupEl.attr('xml:lang', lang);
+    if (groupType !== 'undefined') {
+      groupEl.attr('kwd-group-type ', groupType);
     }
     groupEl.append(
       keywords.map(keyword => {
