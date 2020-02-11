@@ -192,6 +192,7 @@ function _populateArticleInfo(doc, jats, jatsImporter) {
   const articleMetaEl = articleEl.find('front > article-meta');
   const metadata = doc.get('metadata');
   Object.assign(metadata, {
+    doi: getText(articleMetaEl, 'article-id[pub-id-type=doi]'),
     articleType: articleEl.getAttribute('article-type') || '',
     elocationId: getText(articleMetaEl, 'elocation-id'),
     fpage: getText(articleMetaEl, 'fpage'),

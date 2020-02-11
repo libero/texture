@@ -153,6 +153,11 @@ export default {
     config.addLabel('article-information-type-label', 'Article Type');
     config.addLabel('article-information-keywords-label', 'Keywords');
     config.addLabel('article-information-research-organisms-label', 'Research Organisms');
+    config.addLabel('article-information-doi-label', 'Article DOI');
+    config.addLabel('article-information-elocation-id-label', 'eLocation ID');
+    config.addLabel('article-information-year-label', 'Year');
+    config.addLabel('article-information-volume-label', 'Volume');
+    config.addLabel('article-information-publish-date-label', 'Publish date');
 
     // Keywords
     config.addLabel('author-generated', 'Keywords');

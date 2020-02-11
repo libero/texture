@@ -19,6 +19,10 @@ export default class ArticleInformationComponent extends CustomSurface {
     // Models
     const subjectsModel = this.props.model.getSubjects();
     const keywordsModel = this.props.model.getKeywords();
+    const articleDoi = this.props.model.getDoi();
+    const articleELocationId = this.props.model.getELocationId();
+    const articleVolume = this.props.model.getVolume();
+    const articlePublishDate = this.props.model.getPublishDate();
 
     // Subjects
     el.append($$(SectionLabel, { label: this.getLabel('article-information-subjects-label') }));
@@ -58,6 +62,45 @@ export default class ArticleInformationComponent extends CustomSurface {
       }).addClass('sm-subjects-list'),
     );
 
+    // Article DOI
+    if (articleDoi) {
+      el.append($$(SectionLabel, { label: this.getLabel('article-information-doi-label') }));
+      el.append(
+        $$('p')
+          .addClass('se-article-information-doi')
+          .append(articleDoi),
+      );
+    }
+
+    // Article eLocation ID
+    if (articleELocationId) {
+      el.append($$(SectionLabel, { label: this.getLabel('article-information-elocation-id-label') }));
+      el.append(
+        $$('p')
+          .addClass('se-article-information-elocation-id')
+          .append(articleELocationId),
+      );
+    }
+
+    // Article Volume
+    if (articleVolume) {
+      el.append($$(SectionLabel, { label: this.getLabel('article-information-volume-label') }));
+      el.append(
+        $$('p')
+          .addClass('se-article-information-volume')
+          .append(articleVolume),
+      );
+    }
+
+    // Publish Date
+    if (articlePublishDate) {
+      el.append($$(SectionLabel, { label: this.getLabel('article-information-publish-date-label') }));
+      el.append(
+        $$('p')
+          .addClass('se-article-information-publish-date')
+          .append(articlePublishDate),
+      );
+    }
     return el;
   }
 
