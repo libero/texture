@@ -1,7 +1,4 @@
 import { CustomSurface, FontAwesomeIcon } from 'substance';
-import { NodeComponent } from '../../kit';
-import FootnoteComponent from './FootnoteComponent';
-import { CONTENT_MODE } from '../ArticleConstants';
 
 export default class ArticleInformationComponent extends CustomSurface {
   getInitialState() {
@@ -13,7 +10,36 @@ export default class ArticleInformationComponent extends CustomSurface {
 
   render($$) {
     const el = $$('div').addClass('sc-article-information');
-    el.append($$('div').append('Hello World!'));
+
+    // Components
+    const SubjectsListComponent = this.getComponent('subjects-list');
+    const SectionLabel = this.getComponent('section-label');
+
+    // Models
+    const subjectsModel = this.props.model.getSubjects();
+
+    // Subjects
+    el.append($$(SectionLabel, { label: this.getLabel('article-information-subjects-label') }));
+    el.append(
+      $$(SubjectsListComponent, {
+        model: subjectsModel,
+        type: 'subject',
+      }).addClass('sm-subjects-list'),
+    );
+
+    // Keywords By Group
+
+    // Research Organisms
+
+    // Article Type
+    el.append($$(SectionLabel, { label: this.getLabel('article-information-type-label') }));
+    el.append(
+      $$(SubjectsListComponent, {
+        model: subjectsModel,
+        type: 'heading',
+      }).addClass('sm-subjects-list'),
+    );
+
     return el;
   }
 

@@ -14,7 +14,6 @@ export default class ManuscriptComponent extends Component {
     const AuthorDetailsListComponent = this.getComponent('author-details-list');
     const ReferenceListComponent = this.getComponent('reference-list');
     const RelatedArticlesListComponent = this.getComponent('related-articles-list');
-    //const SubjectsListComponent = this.getComponent('subjects-list');
 
     const el = $$('div').addClass('sc-manuscript');
 
@@ -170,74 +169,15 @@ export default class ManuscriptComponent extends Component {
       $$(ManuscriptSection, {
         name: 'article-information',
         label: this.getLabel('article-information-label'),
-        model: [],
+        model: this.props.model,
         hideWhenEmpty: false,
       }).append(
         $$(ArticleInformationComponent, {
-          model: [],
+          model: this.props.model,
+          manuscript: this,
         }),
       ),
     );
-
-    // el.append(
-    //   $$(ManuscriptSection, {
-    //     name: 'article-information',
-    //     label: this.getLabel('article-information-label'),
-    //     model: [],
-    //     hideWhenEmpty: false,
-    //   }),
-    // );
-
-    // // Subjects
-    // const subjectsModel = manuscript.getSubjects();
-    // el.append(
-    //   $$(ManuscriptSection, {
-    //     name: 'article-information-subjects',
-    //     label: this.getLabel('article-information-subjects-label'),
-    //     model: subjectsModel,
-    //     hideWhenEmpty: false,
-    //   }).append(
-    //     $$(SubjectsListComponent, {
-    //       model: subjectsModel,
-    //       type: 'subject',
-    //     }).addClass('sm-subjects-list'),
-    //   ),
-    // );
-
-    // // Keywords
-    // el.append(
-    //   $$(ManuscriptSection, {
-    //     name: 'article-information-keywords',
-    //     label: this.getLabel('article-information-keywords-label'),
-    //     model: [],
-    //     hideWhenEmpty: false,
-    //   }),
-    // );
-
-    // // Research Organisms
-    // el.append(
-    //   $$(ManuscriptSection, {
-    //     name: 'article-information-research-organisms',
-    //     label: this.getLabel('article-information-research-organisms-label'),
-    //     model: [],
-    //     hideWhenEmpty: false,
-    //   }),
-    // );
-
-    // // Article Type
-    // el.append(
-    //   $$(ManuscriptSection, {
-    //     name: 'article-information-type',
-    //     label: this.getLabel('article-information-type-label'),
-    //     model: subjectsModel,
-    //     hideWhenEmpty: false,
-    //   }).append(
-    //     $$(SubjectsListComponent, {
-    //       model: subjectsModel,
-    //       type: 'heading',
-    //     }).addClass('sm-subjects-list'),
-    //   ),
-    // );
 
     // Related Articles
     const relatedArticlesModel = manuscript.getRelatedArticles();
