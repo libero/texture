@@ -248,7 +248,7 @@ function _populateKeywords(doc, jats, jatsImporter) {
   const kwdGroupEls = jats.findAll('article > front > article-meta > kwd-group');
   const kwdIds = [];
   for (const kwdGroup of kwdGroupEls) {
-    const kwdGroupType = kwdGroup.getAttribute('kwd-group-type');
+    const kwdGroupType = kwdGroup.getAttribute('kwd-group-type') || 'author-generated';
     const kwdEls = kwdGroup.findAll('kwd');
     for (const kwdEl of kwdEls) {
       const kwd = doc.create({

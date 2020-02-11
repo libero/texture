@@ -12,11 +12,13 @@ export default class ArticleInformationComponent extends CustomSurface {
     const el = $$('div').addClass('sc-article-information');
 
     // Components
+    const KeywordsListComponent = this.getComponent('keywords-list');
     const SubjectsListComponent = this.getComponent('subjects-list');
     const SectionLabel = this.getComponent('section-label');
 
     // Models
     const subjectsModel = this.props.model.getSubjects();
+    const keywordsModel = this.props.model.getKeywords();
 
     // Subjects
     el.append($$(SectionLabel, { label: this.getLabel('article-information-subjects-label') }));
@@ -27,9 +29,25 @@ export default class ArticleInformationComponent extends CustomSurface {
       }).addClass('sm-subjects-list'),
     );
 
-    // Keywords By Group
+    // FIXME: This code be changed to get all keywords, sort by group then render each group.
 
-    // Research Organisms
+    // Keywords By Author
+    el.append($$(SectionLabel, { label: this.getLabel('author-generated') }));
+    el.append(
+      $$(KeywordsListComponent, {
+        model: keywordsModel,
+        type: 'author-generated',
+      }).addClass('sm-keywords-list'),
+    );
+
+    // Keywords Research Organisms
+    el.append($$(SectionLabel, { label: this.getLabel('research-organism') }));
+    el.append(
+      $$(KeywordsListComponent, {
+        model: keywordsModel,
+        type: 'research-organism',
+      }).addClass('sm-keywords-list'),
+    );
 
     // Article Type
     el.append($$(SectionLabel, { label: this.getLabel('article-information-type-label') }));

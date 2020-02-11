@@ -21,6 +21,7 @@ import {
   InlineFormulaComponent,
   InlineGraphicComponent,
   ItalicComponent,
+  KeywordsListComponent,
   ListComponent,
   ListItemComponent,
   ManuscriptComponent,
@@ -67,6 +68,7 @@ export default {
     config.addComponent('inline-formula', InlineFormulaComponent);
     config.addComponent('inline-graphic', InlineGraphicComponent);
     config.addComponent('italic', ItalicComponent);
+    config.addComponent('keywords-list', KeywordsListComponent);
     config.addComponent('list', ListComponent);
     config.addComponent('list-item', ListItemComponent);
     config.addComponent('manuscript', ManuscriptComponent);
@@ -151,5 +153,9 @@ export default {
     config.addLabel('article-information-type-label', 'Article Type');
     config.addLabel('article-information-keywords-label', 'Keywords');
     config.addLabel('article-information-research-organisms-label', 'Research Organisms');
+
+    // Keywords
+    config.addLabel('author-generated', 'Keywords');
+    config.addLabel('research-organism', 'Research organisms');
   },
 };

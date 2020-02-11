@@ -37,6 +37,14 @@ export default class ArticleModel extends Model {
     return this.getFootnotes().length > 0;
   }
 
+  getKeywords() {
+    return this._getValueModel('metadata.keywords');
+  }
+
+  hasKeywords() {
+    return this.getKeywords().length > 0;
+  }
+
   getReferences() {
     return this._getValueModel('article.references');
   }
