@@ -5,12 +5,16 @@ import ManuscriptSection from './ManuscriptSection';
 export default class ManuscriptComponent extends Component {
   render($$) {
     const manuscript = this.props.model;
+
+    // TODO: Need to understand why in some places they 'lookup' the components and assign them to variables, vs just a
+    //       simple import. Assume there is some method to - what seems to me - madness in doing things different ways.
     const AffiliationsListComponent = this.getComponent('affiliations-list');
+    const ArticleInformationComponent = this.getComponent('article-information');
     const AuthorsListComponent = this.getComponent('authors-list');
     const AuthorDetailsListComponent = this.getComponent('author-details-list');
     const ReferenceListComponent = this.getComponent('reference-list');
     const RelatedArticlesListComponent = this.getComponent('related-articles-list');
-    const SubjectsListComponent = this.getComponent('subjects-list');
+    //const SubjectsListComponent = this.getComponent('subjects-list');
 
     const el = $$('div').addClass('sc-manuscript');
 
@@ -168,59 +172,72 @@ export default class ManuscriptComponent extends Component {
         label: this.getLabel('article-information-label'),
         model: [],
         hideWhenEmpty: false,
-      }),
-    );
-
-    // Subjects
-    const subjectsModel = manuscript.getSubjects();
-    el.append(
-      $$(ManuscriptSection, {
-        name: 'article-information-subjects',
-        label: this.getLabel('article-information-subjects-label'),
-        model: subjectsModel,
-        hideWhenEmpty: false,
       }).append(
-        $$(SubjectsListComponent, {
-          model: subjectsModel,
-          type: 'subject',
-        }).addClass('sm-subjects-list'),
+        $$(ArticleInformationComponent, {
+          model: [],
+        }),
       ),
     );
 
-    // Keywords
-    el.append(
-      $$(ManuscriptSection, {
-        name: 'article-information-keywords',
-        label: this.getLabel('article-information-keywords-label'),
-        model: [],
-        hideWhenEmpty: false,
-      }),
-    );
+    // el.append(
+    //   $$(ManuscriptSection, {
+    //     name: 'article-information',
+    //     label: this.getLabel('article-information-label'),
+    //     model: [],
+    //     hideWhenEmpty: false,
+    //   }),
+    // );
 
-    // Research Organisms
-    el.append(
-      $$(ManuscriptSection, {
-        name: 'article-information-research-organisms',
-        label: this.getLabel('article-information-research-organisms-label'),
-        model: [],
-        hideWhenEmpty: false,
-      }),
-    );
+    // // Subjects
+    // const subjectsModel = manuscript.getSubjects();
+    // el.append(
+    //   $$(ManuscriptSection, {
+    //     name: 'article-information-subjects',
+    //     label: this.getLabel('article-information-subjects-label'),
+    //     model: subjectsModel,
+    //     hideWhenEmpty: false,
+    //   }).append(
+    //     $$(SubjectsListComponent, {
+    //       model: subjectsModel,
+    //       type: 'subject',
+    //     }).addClass('sm-subjects-list'),
+    //   ),
+    // );
 
-    // Article Type
-    el.append(
-      $$(ManuscriptSection, {
-        name: 'article-information-type',
-        label: this.getLabel('article-information-type-label'),
-        model: subjectsModel,
-        hideWhenEmpty: false,
-      }).append(
-        $$(SubjectsListComponent, {
-          model: subjectsModel,
-          type: 'heading',
-        }).addClass('sm-subjects-list'),
-      ),
-    );
+    // // Keywords
+    // el.append(
+    //   $$(ManuscriptSection, {
+    //     name: 'article-information-keywords',
+    //     label: this.getLabel('article-information-keywords-label'),
+    //     model: [],
+    //     hideWhenEmpty: false,
+    //   }),
+    // );
+
+    // // Research Organisms
+    // el.append(
+    //   $$(ManuscriptSection, {
+    //     name: 'article-information-research-organisms',
+    //     label: this.getLabel('article-information-research-organisms-label'),
+    //     model: [],
+    //     hideWhenEmpty: false,
+    //   }),
+    // );
+
+    // // Article Type
+    // el.append(
+    //   $$(ManuscriptSection, {
+    //     name: 'article-information-type',
+    //     label: this.getLabel('article-information-type-label'),
+    //     model: subjectsModel,
+    //     hideWhenEmpty: false,
+    //   }).append(
+    //     $$(SubjectsListComponent, {
+    //       model: subjectsModel,
+    //       type: 'heading',
+    //     }).addClass('sm-subjects-list'),
+    //   ),
+    // );
 
     // Related Articles
     const relatedArticlesModel = manuscript.getRelatedArticles();

@@ -4,6 +4,7 @@ import {
   AbstractComponent,
   AcknowledgementComponent,
   AffiliationsListComponent,
+  ArticleInformationComponent,
   AuthorsListComponent,
   AuthorDetailsListComponent,
   BlockFormulaComponent,
@@ -49,6 +50,7 @@ export default {
     config.addComponent('abstract', AbstractComponent);
     config.addComponent('acknowledgement', AcknowledgementComponent);
     config.addComponent('affiliations-list', AffiliationsListComponent);
+    config.addComponent('article-information', ArticleInformationComponent);
     config.addComponent('authors-list', AuthorsListComponent);
     config.addComponent('author-details-list', AuthorDetailsListComponent);
     config.addComponent('bold', BoldComponent);
