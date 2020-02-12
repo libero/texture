@@ -91,6 +91,10 @@ export default class ArticleModel extends Model {
     return this._getValueModel('metadata.elocationId')._value;
   }
 
+  getCollectionDate() {
+    return this._getValueModel('metadata.collectionDate')._value;
+  }
+
   getVolume() {
     return this._getValueModel('metadata.volume')._value;
   }

@@ -27,4 +27,5 @@ Metadata.schema = {
   revRequestedDate: STRING,
   permission: CHILD('permission'),
   doi: STRING,
+  collectionDate: STRING,
 };

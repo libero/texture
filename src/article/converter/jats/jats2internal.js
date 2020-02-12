@@ -216,15 +216,21 @@ function _populateArticleInfo(doc, jats, jatsImporter) {
     metadata.permission = permission.id;
   }
 
-  const articleDateEls = articleMetaEl.findAll('history > date, pub-date');
+  // FIXME: This isn't an effective means to handle dates in my mind. We should parse all 'date' and 'pub-date' elements
+  //        into internal 'date' nodes, stored as a collection under the Metadata node. There should then be helper
+  //        functions to get specific dates.
+  //const articleDateEls = articleMetaEl.findAll('history > date, pub-date');
+  const articleDateEls = articleMetaEl.findAll('pub-date');
   if (articleDateEls.length > 0) {
     const dates = {};
     articleDateEls.forEach(dateEl => {
-      const date = _extractDate(dateEl);
+      const date = _extractPubDate(dateEl);
       dates[date.type] = date.value;
     });
     Object.assign(metadata, dates);
   }
+
+  console.log(metadata);
 }
 
 const DATE_TYPES_MAP = {
@@ -239,6 +245,29 @@ function _extractDate(el) {
   const dateType = el.getAttribute('date-type');
   const value = el.getAttribute('iso-8601-date');
   const entityProp = DATE_TYPES_MAP[dateType];
+  return {
+    value: value,
+    type: entityProp,
+  };
+}
+
+const PUB_DATE_TYPES_MAP = {
+  publication: 'publishedDate',
+  collection: 'collectionDate',
+};
+
+function _extractPubDate(el) {
+  const dateType = el.getAttribute('pub-type') || el.getAttribute('date-type');
+  const day = getText(el, 'day');
+  const month = getText(el, 'month');
+  const year = getText(el, 'year');
+  const value = [day, month, year]
+    .reduce((acc, val) => {
+      if (val) acc.push(val);
+      return acc;
+    }, [])
+    .join('/');
+  const entityProp = PUB_DATE_TYPES_MAP[dateType];
   return {
     value: value,
     type: entityProp,
