@@ -53,7 +53,7 @@ export default class ManuscriptTOC extends Component {
     tocEntries.append(
       $$(SectionTOCEntry, {
         label: this.getLabel('acknowledgement'),
-        section: 'acknowledgement',
+        section: 'acknowledgements',
       }),
     );
 
