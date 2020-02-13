@@ -229,8 +229,6 @@ function _populateArticleInfo(doc, jats, jatsImporter) {
     });
     Object.assign(metadata, dates);
   }
-
-  console.log(metadata);
 }
 
 const DATE_TYPES_MAP = {
