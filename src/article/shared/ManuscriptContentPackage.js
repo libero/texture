@@ -162,5 +162,9 @@ export default {
     // Keywords
     config.addLabel('author-generated', 'Keywords');
     config.addLabel('research-organism', 'Research organisms');
+
+    // Subjects
+    config.addLabel('select-subject', 'Select subject');
+    config.addLabel('select-heading', 'Select type');
   },
 };

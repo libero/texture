@@ -3,6 +3,7 @@ import { CustomSurface } from 'substance';
 import { NodeComponent } from '../../kit';
 import { default as SubjectEditor } from './SubjectEditor';
 import { getLabel } from '../shared/nodeHelpers';
+import { createValueModel } from '../../kit/model/index';
 
 export default class SubjectsListComponent extends CustomSurface {
   getInitialState() {
@@ -35,11 +36,15 @@ export default class SubjectsListComponent extends CustomSurface {
   }
 
   _renderSubjects($$) {
+    const api = this.context.api;
     const sel = this.context.editorState.selection;
     const subjects = this._getSubjects(this.props.type);
     const els = [];
     subjects.forEach((subject, index) => {
-      const subjectElement = $$(SubjectEditor, { node: subject }).ref(subject.id);
+      // TODO: So here, I need to create a 'model' for the subject, and then pass that through to the SubjectEditor.
+      //       Issue that I have is I don't know how to properly construct a model!
+      const model = createValueModel(api, [subject.id, 'name']);
+      const subjectElement = $$(SubjectEditor, { model, subjectType: subject.groupType }).ref(subject.id);
       if (sel && sel.nodeId === subject.id) {
         subjectElement.addClass('sm-selected');
       }
