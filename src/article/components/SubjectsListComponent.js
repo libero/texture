@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import { CustomSurface } from 'substance';
 import { NodeComponent } from '../../kit';
+import { default as SubjectEditor } from './SubjectEditor';
 import { getLabel } from '../shared/nodeHelpers';
 
 export default class SubjectsListComponent extends CustomSurface {
@@ -38,7 +39,7 @@ export default class SubjectsListComponent extends CustomSurface {
     const subjects = this._getSubjects(this.props.type);
     const els = [];
     subjects.forEach((subject, index) => {
-      const subjectElement = $$(SubjectDisplay, { node: subject }).ref(subject.id);
+      const subjectElement = $$(SubjectEditor, { node: subject }).ref(subject.id);
       if (sel && sel.nodeId === subject.id) {
         subjectElement.addClass('sm-selected');
       }
