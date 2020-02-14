@@ -63,45 +63,57 @@ export default class ArticleInformationComponent extends CustomSurface {
       }).addClass('sm-subjects-list'),
     );
 
+    const container = $$('div').addClass('article-information-container');
+
     // Article DOI
     if (articleDoi) {
-      el.append($$(SectionLabel, { label: this.getLabel('article-information-doi-label') }));
-      el.append(
+      const subContainer = $$('div').addClass('article-information-sub-container');
+      subContainer.append($$(SectionLabel, { label: this.getLabel('article-information-doi-label') }));
+      subContainer.append(
         $$('p')
           .addClass('se-article-information-doi')
           .append(articleDoi),
       );
+      container.append(subContainer);
     }
 
     // Article eLocation ID
     if (articleELocationId) {
-      el.append($$(SectionLabel, { label: this.getLabel('article-information-elocation-id-label') }));
-      el.append(
+      const subContainer = $$('div').addClass('article-information-sub-container');
+      subContainer.append($$(SectionLabel, { label: this.getLabel('article-information-elocation-id-label') }));
+      subContainer.append(
         $$('p')
           .addClass('se-article-information-elocation-id')
           .append(articleELocationId),
       );
+      container.append(subContainer);
     }
 
     // Article Year
     if (articleYear) {
-      el.append($$(SectionLabel, { label: this.getLabel('article-information-year-label') }));
-      el.append(
+      const subContainer = $$('div').addClass('article-information-sub-container');
+      subContainer.append($$(SectionLabel, { label: this.getLabel('article-information-year-label') }));
+      subContainer.append(
         $$('p')
           .addClass('se-article-information-year')
           .append(articleYear),
       );
+      container.append(subContainer);
     }
 
     // Article Volume
     if (articleVolume) {
-      el.append($$(SectionLabel, { label: this.getLabel('article-information-volume-label') }));
-      el.append(
+      const subContainer = $$('div').addClass('article-information-sub-container');
+      subContainer.append($$(SectionLabel, { label: this.getLabel('article-information-volume-label') }));
+      subContainer.append(
         $$('p')
           .addClass('se-article-information-volume')
           .append(articleVolume),
       );
+      container.append(subContainer);
     }
+
+    el.append(container);
 
     // Publish Date
     if (articlePublishDate) {
@@ -112,6 +124,7 @@ export default class ArticleInformationComponent extends CustomSurface {
           .append(articlePublishDate),
       );
     }
+
     return el;
   }
 
