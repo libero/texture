@@ -938,6 +938,7 @@ export default {
   'preprint-ref': _delegate(preprintRenderer),
   keyword: _delegate(entityRenderer),
   'ref-contrib': _delegate(entityRenderer),
+  'contributor-identifier': _delegate(entityRenderer),
   'patent-ref': _delegate(patentRenderer),
   subject: _delegate(entityRenderer),
   'custom-abstract': _delegate(entityRenderer),
