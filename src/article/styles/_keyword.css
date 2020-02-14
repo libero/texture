@@ -1,7 +1,7 @@
 .sc-keyword {
   display: flex;
   flex-direction: row;
-  margin-right: var(--t-default-spacing);
+  margin-right: var(--t-half-spacing);
 }
 
 .sc-keyword-border {
