@@ -33,6 +33,7 @@ export { default as InsertFigureTool } from './InsertFigureTool';
 export { default as InsertInlineGraphicTool } from './InsertInlineGraphicTool';
 export { default as InsertTableTool } from './InsertTableTool';
 export { default as ItalicComponent } from './ItalicComponent';
+export { default as KeywordComponent } from './KeywordComponent';
 export { default as KeywordsListComponent } from './KeywordsListComponent';
 export { default as LabelComponent } from './LabelComponent';
 export { default as LicenseEditor } from './LicenseEditor';

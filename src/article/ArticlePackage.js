@@ -140,5 +140,6 @@ export default {
     // - This is duplicated from the MetadataPackage
     // - Each section of the editor shouldn't need a seperate icon lookup list.
     config.addIcon('remove', { fontawesome: 'fa-trash' });
+    config.addIcon('delete', { fontawesome: 'fa-times' });
   },
 };

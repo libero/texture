@@ -2,6 +2,7 @@
 import { CustomSurface } from 'substance';
 import { NodeComponent } from '../../kit';
 import { getLabel } from '../shared/nodeHelpers';
+import KeywordComponent from './KeywordComponent';
 
 export default class KeywordsListComponent extends CustomSurface {
   getInitialState() {
@@ -38,8 +39,10 @@ export default class KeywordsListComponent extends CustomSurface {
     const keywords = this._getKeywords(this.props.type);
     const els = [];
     keywords.forEach(keyword => {
-      const keywordElement = $$(KeywordDisplay, { node: keyword }).ref(keyword.id);
-      if (sel && sel.nodeId === keyword.id) {
+      const selected = sel && sel.path && sel.path[0] === keyword.id ? true : false;
+      const keywordElement = $$(KeywordComponent, { node: keyword, selected }).ref(keyword.id);
+      // TODO: This should be handled maybe in the sub component
+      if (selected) {
         keywordElement.addClass('sm-selected');
       }
       els.push(keywordElement);

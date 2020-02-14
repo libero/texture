@@ -1,8 +1,6 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import { CustomSurface } from 'substance';
-import { NodeComponent } from '../../kit';
 import { default as SubjectEditor } from './SubjectEditor';
-import { getLabel } from '../shared/nodeHelpers';
 import { createValueModel } from '../../kit/model/index';
 
 export default class SubjectsListComponent extends CustomSurface {
@@ -40,9 +38,7 @@ export default class SubjectsListComponent extends CustomSurface {
     const sel = this.context.editorState.selection;
     const subjects = this._getSubjects(this.props.type);
     const els = [];
-    subjects.forEach((subject, index) => {
-      // TODO: So here, I need to create a 'model' for the subject, and then pass that through to the SubjectEditor.
-      //       Issue that I have is I don't know how to properly construct a model!
+    subjects.forEach(subject => {
       const model = createValueModel(api, [subject.id, 'name']);
       const subjectElement = $$(SubjectEditor, { model, subjectType: subject.groupType }).ref(subject.id);
       if (sel && sel.nodeId === subject.id) {
@@ -54,7 +50,7 @@ export default class SubjectsListComponent extends CustomSurface {
   }
 
   _getCustomResourceId() {
-    // FIXME: This seems like a hack to me, need to take a deeper look at this.
+    // FIXME: I'm not entirely sure that this is a decent solution, but it does the job for now.
     return 'subjects-list-' + (this.props.type || 'default');
   }
 
@@ -64,32 +60,5 @@ export default class SubjectsListComponent extends CustomSurface {
       subjects = subjects.filter(subject => subject.groupType === type);
     }
     return subjects;
-  }
-}
-
-class SubjectDisplay extends NodeComponent {
-  render($$) {
-    const subject = this.props.node;
-    // FIXME: Need a better CSS class here
-    const el = $$('span').addClass('se-contrib');
-    el.append(this.context.api.renderEntity(subject));
-    el.on('mousedown', this._onMousedown).on('click', this._onClick);
-    return el;
-  }
-
-  _onMousedown(e) {
-    e.stopPropagation();
-    if (e.button === 2) {
-      this._select();
-    }
-  }
-
-  _onClick(e) {
-    e.stopPropagation();
-    this._select();
-  }
-
-  _select() {
-    this.context.api.selectEntity(this.props.node.id);
   }
 }
