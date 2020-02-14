@@ -4,7 +4,7 @@ export default class PermissionComponent extends NodeComponent {
   render($$) {
     const node = this.props.node;
     const Button = this.getComponent('button');
-    let el = $$('div').addClass('sc-content');
+    const el = $$('div').addClass('sc-content');
     el.append(
       $$(Button, {
         icon: 'remove',

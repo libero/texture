@@ -5,6 +5,12 @@ import { getLabel } from '../shared/nodeHelpers';
 import KeywordComponent from './KeywordComponent';
 
 export default class KeywordsListComponent extends CustomSurface {
+  getActionHandlers() {
+    return {
+      removeKeyword: this._removeKeyword,
+    };
+  }
+
   getInitialState() {
     const items = this._getKeywords();
     return {
@@ -62,31 +68,8 @@ export default class KeywordsListComponent extends CustomSurface {
     }
     return keywords;
   }
-}
 
-class KeywordDisplay extends NodeComponent {
-  render($$) {
-    const keyword = this.props.node;
-    // FIXME: Need a better CSS class here
-    const el = $$('span').addClass('se-contrib');
-    el.append(this.context.api.renderEntity(keyword));
-    el.on('mousedown', this._onMousedown).on('click', this._onClick);
-    return el;
-  }
-
-  _onMousedown(e) {
-    e.stopPropagation();
-    if (e.button === 2) {
-      this._select();
-    }
-  }
-
-  _onClick(e) {
-    e.stopPropagation();
-    this._select();
-  }
-
-  _select() {
-    this.context.api.selectEntity(this.props.node.id);
+  _removeKeyword(keyword) {
+    this.props.model.removeItem(keyword);
   }
 }
