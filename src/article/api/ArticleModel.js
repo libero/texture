@@ -37,6 +37,14 @@ export default class ArticleModel extends Model {
     return this.getFootnotes().length > 0;
   }
 
+  getKeywords() {
+    return this._getValueModel('metadata.keywords');
+  }
+
+  hasKeywords() {
+    return this.getKeywords().length > 0;
+  }
+
   getReferences() {
     return this._getValueModel('article.references');
   }
@@ -57,7 +65,41 @@ export default class ArticleModel extends Model {
     return this._getValueModel('article.title');
   }
 
+  getSubjects() {
+    return this._getValueModel('metadata.subjects');
+  }
+
+  hasSubjects() {
+    return this.getSubjects().length > 0;
+  }
+
   getSubTitle() {
     return this._getValueModel('article.subTitle');
+  }
+
+  // FIXME: Should consider adding a 'getValue' method, although I don't event think that would be the right way to get
+  //        the value.
+  getDoi() {
+    return this._getValueModel('metadata.doi')._value;
+  }
+
+  getELocationId() {
+    return this._getValueModel('metadata.elocationId')._value;
+  }
+
+  getYear() {
+    return this._getValueModel('metadata.elocationId')._value;
+  }
+
+  getCollectionDate() {
+    return this._getValueModel('metadata.collectionDate')._value;
+  }
+
+  getVolume() {
+    return this._getValueModel('metadata.volume')._value;
+  }
+
+  getPublishDate() {
+    return this._getValueModel('metadata.publishedDate')._value;
   }
 }

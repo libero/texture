@@ -8,8 +8,8 @@ export default class Keyword extends DocumentNode {
   // }
 
   render(options = {}) {
-    let { category, name } = this;
-    let result = [name];
+    const { category, name } = this;
+    const result = [name];
     if (!options.short) {
       if (category) {
         result.push(', ', category);
@@ -21,6 +21,7 @@ export default class Keyword extends DocumentNode {
 
 Keyword.schema = {
   type: 'keyword',
+  groupType: STRING,
   name: TEXT(...RICH_TEXT_ANNOS),
   category: STRING,
 };

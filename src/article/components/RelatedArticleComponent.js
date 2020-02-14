@@ -1,9 +1,10 @@
+/* eslint-disable @typescript-eslint/no-use-before-define */
 import { CustomSurface } from 'substance';
 import { FormRowComponent, NodeComponent } from '../../kit';
 
 export default class RelatedArticleListComponent extends CustomSurface {
   getInitialState() {
-    let items = this._getRelatedArticles();
+    const items = this._getRelatedArticles();
     return {
       hidden: items.length === 0,
       edit: false,
@@ -32,7 +33,7 @@ export default class RelatedArticleListComponent extends CustomSurface {
   }
 
   render($$) {
-    let el = $$('div').addClass('sc-related-articles-list');
+    const el = $$('div').addClass('sc-related-articles-list');
     el.append(this._renderRelatedArticles($$));
     return el;
   }
@@ -40,7 +41,7 @@ export default class RelatedArticleListComponent extends CustomSurface {
   _renderRelatedArticles($$) {
     const sel = this.context.editorState.selection;
     const relatedArticles = this._getRelatedArticles();
-    let els = [];
+    const els = [];
     relatedArticles.forEach((relatedArticle, index) => {
       const relatedArticleEl = $$(RelatedArticleComponent, { node: relatedArticle }).ref(relatedArticle.id);
       if (sel && sel.nodeId === relatedArticle.id) {
@@ -70,12 +71,12 @@ export default class RelatedArticleListComponent extends CustomSurface {
 
 class RelatedArticleComponent extends NodeComponent {
   render($$) {
-    let node = this.props.node;
+    const node = this.props.node;
 
     const Button = this.getComponent('button');
 
     // Card
-    let el = $$('div')
+    const el = $$('div')
       .addClass('sc-card')
       .attr('data-id', node.id)
       .append(
@@ -89,7 +90,7 @@ class RelatedArticleComponent extends NodeComponent {
         .addClass('sc-header')
         .append(
           $$(Button, {
-            icon: 'remove',
+            icon: 'trash',
           })
             .addClass('se-button')
             .on('click', this._onRemove),

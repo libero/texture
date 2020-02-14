@@ -5,18 +5,22 @@ import ManuscriptSection from './ManuscriptSection';
 export default class ManuscriptComponent extends Component {
   render($$) {
     const manuscript = this.props.model;
+
+    // TODO: Need to understand why in some places they 'lookup' the components and assign them to variables, vs just a
+    //       simple import. Assume there is some method to - what seems to me - madness in doing things different ways.
     const AffiliationsListComponent = this.getComponent('affiliations-list');
+    const ArticleInformationComponent = this.getComponent('article-information');
     const AuthorsListComponent = this.getComponent('authors-list');
     const AuthorDetailsListComponent = this.getComponent('author-details-list');
     const ReferenceListComponent = this.getComponent('reference-list');
     const RelatedArticlesListComponent = this.getComponent('related-articles-list');
 
-    let el = $$('div').addClass('sc-manuscript');
+    const el = $$('div').addClass('sc-manuscript');
 
     // TODO: maybe we want to be able to configure if a section should be hidden when empty
 
     // Title
-    let titleModel = manuscript.getTitle();
+    const titleModel = manuscript.getTitle();
     el.append(
       $$(ManuscriptSection, {
         name: 'title',
@@ -28,8 +32,9 @@ export default class ManuscriptComponent extends Component {
         }).addClass('sm-title'),
       ),
     );
+
     // Sub-title
-    let subTitleModel = manuscript.getSubTitle();
+    const subTitleModel = manuscript.getSubTitle();
     el.append(
       $$(ManuscriptSection, {
         name: 'subtitle',
@@ -41,8 +46,9 @@ export default class ManuscriptComponent extends Component {
         }).addClass('sm-subtitle'),
       ),
     );
+
     // Authors
-    let authorsModel = manuscript.getAuthors();
+    const authorsModel = manuscript.getAuthors();
     el.append(
       $$(ManuscriptSection, {
         name: 'authors',
@@ -57,7 +63,7 @@ export default class ManuscriptComponent extends Component {
     );
 
     // Affiliations
-    let affiliationsModel = manuscript.getAffiliations();
+    const affiliationsModel = manuscript.getAffiliations();
     el.append(
       $$(ManuscriptSection, {
         name: 'affiliations',
@@ -72,7 +78,7 @@ export default class ManuscriptComponent extends Component {
     );
 
     // Abstract
-    let abstractModel = manuscript.getAbstract();
+    const abstractModel = manuscript.getAbstract();
     el.append(
       $$(ManuscriptSection, {
         name: 'abstract',
@@ -85,8 +91,9 @@ export default class ManuscriptComponent extends Component {
         }).addClass('sm-abstract'),
       ),
     );
+
     // Body
-    let bodyModel = manuscript.getBody();
+    const bodyModel = manuscript.getBody();
     el.append(
       $$(ManuscriptSection, {
         name: 'body',
@@ -99,8 +106,9 @@ export default class ManuscriptComponent extends Component {
         }).addClass('sm-body'),
       ),
     );
+
     // Footnotes
-    let footnotesModel = manuscript.getFootnotes();
+    const footnotesModel = manuscript.getFootnotes();
     el.append(
       $$(ManuscriptSection, {
         name: 'footnotes',
@@ -111,7 +119,7 @@ export default class ManuscriptComponent extends Component {
     );
 
     // Acknowledgements
-    let acknowledgementsModel = manuscript.getAcknowledgements();
+    const acknowledgementsModel = manuscript.getAcknowledgements();
     el.append(
       $$(ManuscriptSection, {
         name: 'acknowledgements',
@@ -127,7 +135,7 @@ export default class ManuscriptComponent extends Component {
     );
 
     // References
-    let referencesModel = manuscript.getReferences();
+    const referencesModel = manuscript.getReferences();
     el.append(
       $$(ManuscriptSection, {
         name: 'references',
@@ -142,7 +150,7 @@ export default class ManuscriptComponent extends Component {
     );
 
     // Author Details
-    let authorDetailsModel = manuscript.getAuthors();
+    const authorDetailsModel = manuscript.getAuthors();
     el.append(
       $$(ManuscriptSection, {
         name: 'author-details',
@@ -156,8 +164,23 @@ export default class ManuscriptComponent extends Component {
       ),
     );
 
+    // Article Information
+    el.append(
+      $$(ManuscriptSection, {
+        name: 'article-information',
+        label: this.getLabel('article-information-label'),
+        model: this.props.model,
+        hideWhenEmpty: false,
+      }).append(
+        $$(ArticleInformationComponent, {
+          model: this.props.model,
+          manuscript: this,
+        }),
+      ),
+    );
+
     // Related Articles
-    let relatedArticlesModel = manuscript.getRelatedArticles();
+    const relatedArticlesModel = manuscript.getRelatedArticles();
     el.append(
       $$(ManuscriptSection, {
         name: 'related-articles',
