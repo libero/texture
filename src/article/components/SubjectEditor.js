@@ -1,28 +1,5 @@
 import DropdownEditor from '../shared/DropdownEditor';
-import { PREVIEW_MODE } from '../ArticleConstants';
-
-const subjectTypes = [
-  'Biochemistry and Chemical Biology',
-  'Cancer Biology',
-  'Cell Biology',
-  'Chromosomes and Gene Expression',
-  'Computational and Systems Biology',
-  'Developmental Biology',
-  'Ecology',
-  'Epidemiology and Global Health',
-  'Evolutionary Biology',
-  'Genetics and Genomics',
-  'Human Biology and Medicine',
-  'Immunology and Inflammation',
-  'Microbiology and Infectious Disease',
-  'Neuroscience',
-  'Physics of Living Systems',
-  'Plant Biology',
-  'Stem Cells and Regenerative Medicine',
-  'Structural Biology and Molecular Biophysics',
-];
-
-const articleTypes = ['Insight', 'Research article', 'Tools and resources', 'Short report', 'Editorial'];
+import { ARTICLE_SUBJECTS, ARTICLE_TYPES } from '../ArticleConstants';
 
 export default class SubjectEditor extends DropdownEditor {
   _getLabel() {
@@ -38,14 +15,14 @@ export default class SubjectEditor extends DropdownEditor {
   _getValues() {
     let values = [];
     if (this.props.subjectType === 'subject') {
-      values = subjectTypes.map(subjectType => {
+      values = ARTICLE_SUBJECTS.map(subjectType => {
         return {
           id: subjectType,
           name: subjectType,
         };
       });
     } else if (this.props.subjectType === 'heading') {
-      values = articleTypes.map(articleType => {
+      values = ARTICLE_TYPES.map(articleType => {
         return {
           id: articleType,
           name: articleType,
