@@ -57,6 +57,20 @@ export default class ManuscriptTOC extends Component {
       }),
     );
 
+    tocEntries.append(
+      $$(SectionTOCEntry, {
+        label: this.getLabel('author-details-label'),
+        section: 'author-details',
+      }),
+    );
+
+    tocEntries.append(
+      $$(SectionTOCEntry, {
+        label: this.getLabel('article-information-label'),
+        section: 'article-information',
+      }),
+    );
+
     el.append(tocEntries);
 
     return el;
