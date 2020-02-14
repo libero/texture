@@ -7,8 +7,8 @@ export default class Subject extends DocumentNode {
   // }
 
   render(options = {}) {
-    let { category, name } = this;
-    let result = [name];
+    const { category, name } = this;
+    const result = [name];
     if (!options.short) {
       if (category) {
         result.push(', ', category);
@@ -19,6 +19,7 @@ export default class Subject extends DocumentNode {
 }
 Subject.schema = {
   type: 'subject',
+  groupType: STRING,
   name: STRING,
   category: STRING,
 };

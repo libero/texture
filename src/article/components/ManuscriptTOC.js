@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-use-before-define */
 import { Component, domHelpers, DefaultDOMElement } from 'substance';
 import { ValueComponent, renderModel, createValueModel } from '../../kit';
 
@@ -5,10 +6,10 @@ import { ValueComponent, renderModel, createValueModel } from '../../kit';
 // TODO: we should follow the same approach as in Metadata, i.e. having a model which is a list of sections
 export default class ManuscriptTOC extends Component {
   render($$) {
-    let el = $$('div').addClass('sc-toc');
-    let manuscriptModel = this.props.model;
+    const el = $$('div').addClass('sc-toc');
+    const manuscriptModel = this.props.model;
 
-    let tocEntries = $$('div')
+    const tocEntries = $$('div')
       .addClass('se-toc-entries')
       .ref('tocEntries')
       .on('click', domHelpers.stop);
@@ -57,6 +58,20 @@ export default class ManuscriptTOC extends Component {
       }),
     );
 
+    tocEntries.append(
+      $$(SectionTOCEntry, {
+        label: this.getLabel('author-details-label'),
+        section: 'author-details',
+      }),
+    );
+
+    tocEntries.append(
+      $$(SectionTOCEntry, {
+        label: this.getLabel('article-information-label'),
+        section: 'article-information',
+      }),
+    );
+
     el.append(tocEntries);
 
     return el;
@@ -70,7 +85,7 @@ export default class ManuscriptTOC extends Component {
 class SectionTOCEntry extends Component {
   render($$) {
     const { label, section } = this.props;
-    let el = $$('a')
+    const el = $$('a')
       .addClass('sc-toc-entry sm-level-1')
       .attr({ 'data-section': section })
       .on('click', this._onClick)
@@ -87,13 +102,13 @@ class SectionTOCEntry extends Component {
 
 class BodyTOCEntry extends ValueComponent {
   render($$) {
-    let items = this.props.model.getItems();
-    let headings = items.filter(node => node.type === 'heading');
+    const items = this.props.model.getItems();
+    const headings = items.filter(node => node.type === 'heading');
     return $$('div')
       .addClass('sc-toc-entry')
       .append(
         headings.map(heading => {
-          let el = $$(TOCHeadingEntry, { node: heading })
+          const el = $$(TOCHeadingEntry, { node: heading })
             .ref(heading.id)
             .addClass(`sc-toc-entry sm-level-${heading.level}`)
             .attr({ 'data-id': heading.id })
@@ -104,8 +119,8 @@ class BodyTOCEntry extends ValueComponent {
   }
 
   _onClick(event) {
-    let target = DefaultDOMElement.wrap(event.currentTarget);
-    let nodeId = target.attr('data-id');
+    const target = DefaultDOMElement.wrap(event.currentTarget);
+    const nodeId = target.attr('data-id');
     event.preventDefault();
     event.stopPropagation();
     this.send('scrollTo', { nodeId });
@@ -124,7 +139,7 @@ class TOCHeadingEntry extends Component {
   }
   render($$) {
     const api = this.context.api;
-    let heading = this.props.node;
+    const heading = this.props.node;
     return $$('div').append(renderModel($$, this, createValueModel(api, heading.getPath()), { readOnly: true }));
   }
 }
@@ -132,8 +147,8 @@ class TOCHeadingEntry extends Component {
 // only visible when collection not empty
 class DynamicTOCEntry extends ValueComponent {
   render($$) {
-    let { label, model, section } = this.props;
-    let el = $$('div')
+    const { label, model, section } = this.props;
+    const el = $$('div')
       .addClass('sc-toc-entry sm-level-1')
       .attr({ 'data-section': section })
       .on('click', this._onClick)

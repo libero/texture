@@ -4,6 +4,7 @@ import {
   AbstractComponent,
   AcknowledgementComponent,
   AffiliationsListComponent,
+  ArticleInformationComponent,
   AuthorsListComponent,
   AuthorDetailsListComponent,
   BlockFormulaComponent,
@@ -20,6 +21,7 @@ import {
   InlineFormulaComponent,
   InlineGraphicComponent,
   ItalicComponent,
+  KeywordsListComponent,
   ListComponent,
   ListItemComponent,
   ManuscriptComponent,
@@ -29,6 +31,7 @@ import {
   ReferenceListComponent,
   RelatedArticlesListComponent,
   SectionLabel,
+  SubjectsListComponent,
   SubscriptComponent,
   SuperscriptComponent,
   TableComponent,
@@ -48,6 +51,7 @@ export default {
     config.addComponent('abstract', AbstractComponent);
     config.addComponent('acknowledgement', AcknowledgementComponent);
     config.addComponent('affiliations-list', AffiliationsListComponent);
+    config.addComponent('article-information', ArticleInformationComponent);
     config.addComponent('authors-list', AuthorsListComponent);
     config.addComponent('author-details-list', AuthorDetailsListComponent);
     config.addComponent('bold', BoldComponent);
@@ -64,6 +68,7 @@ export default {
     config.addComponent('inline-formula', InlineFormulaComponent);
     config.addComponent('inline-graphic', InlineGraphicComponent);
     config.addComponent('italic', ItalicComponent);
+    config.addComponent('keywords-list', KeywordsListComponent);
     config.addComponent('list', ListComponent);
     config.addComponent('list-item', ListItemComponent);
     config.addComponent('manuscript', ManuscriptComponent);
@@ -77,6 +82,7 @@ export default {
     config.addComponent('section-label', SectionLabel);
     config.addComponent('small-caps', AnnotationComponent);
     config.addComponent('strike-through', AnnotationComponent);
+    config.addComponent('subjects-list', SubjectsListComponent);
     config.addComponent('subscript', SubscriptComponent);
     config.addComponent('superscript', SuperscriptComponent);
     config.addComponent('table', TableComponent);
@@ -140,5 +146,25 @@ export default {
     // Author details
     config.addLabel('author-details-label', 'Author Information');
     config.addLabel('author-details-correspendance', 'Corresponding author');
+
+    // Article Information
+    config.addLabel('article-information-label', 'Article Information');
+    config.addLabel('article-information-subjects-label', 'Subjects');
+    config.addLabel('article-information-type-label', 'Article Type');
+    config.addLabel('article-information-keywords-label', 'Keywords');
+    config.addLabel('article-information-research-organisms-label', 'Research Organisms');
+    config.addLabel('article-information-doi-label', 'Article DOI');
+    config.addLabel('article-information-elocation-id-label', 'eLocation ID');
+    config.addLabel('article-information-year-label', 'Year');
+    config.addLabel('article-information-volume-label', 'Volume');
+    config.addLabel('article-information-publish-date-label', 'Publish date');
+
+    // Keywords
+    config.addLabel('author-generated', 'Keywords');
+    config.addLabel('research-organism', 'Research organisms');
+
+    // Subjects
+    config.addLabel('select-subject', 'Select subject');
+    config.addLabel('select-heading', 'Select type');
   },
 };

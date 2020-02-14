@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-use-before-define */
 import { CustomSurface, FontAwesomeIcon } from 'substance';
 import { NodeComponent } from '../../kit';
 import FootnoteComponent from './FootnoteComponent';
@@ -5,7 +6,7 @@ import { CONTENT_MODE } from '../ArticleConstants';
 
 export default class AuthorDetailsListComponent extends CustomSurface {
   getInitialState() {
-    let items = this._getAuthors();
+    const items = this._getAuthors();
     return {
       hidden: items.length === 0,
       edit: false,
@@ -13,14 +14,14 @@ export default class AuthorDetailsListComponent extends CustomSurface {
   }
 
   render($$) {
-    let el = $$('div').addClass('sc-author-details-list');
+    const el = $$('div').addClass('sc-author-details-list');
     el.append(this._renderAuthors($$));
     return el;
   }
 
   _renderAuthors($$) {
     const authors = this._getAuthors();
-    let els = [];
+    const els = [];
     authors.forEach((author, index) => {
       const authorEl = $$(AuthorDetailsDisplay, { node: author }).ref(author.id);
       els.push(authorEl);
@@ -42,7 +43,7 @@ class AuthorDetailsDisplay extends NodeComponent {
     const author = this.props.node;
     const doc = author.document;
 
-    let el = $$('div').addClass('se-author-details');
+    const el = $$('div').addClass('se-author-details');
     el.append(
       $$('p')
         .addClass('se-author-details-fullname')

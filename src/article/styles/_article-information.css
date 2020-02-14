@@ -1,0 +1,10 @@
+.article-information-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.article-information-sub-container {
+  display: flex;
+  flex-direction: column;
+}

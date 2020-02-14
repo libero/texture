@@ -1,0 +1,20 @@
+.sc-keyword {
+  display: flex;
+  flex-direction: row;
+  margin-right: var(--t-half-spacing);
+}
+
+.sc-keyword-border {
+  box-sizing: border-box;
+  border: 1px solid #cccccc;
+  border-radius: 4px;
+  padding: 0px 4px;
+}
+
+.sc-keyword * .se-input {
+  width: fit-content;
+}
+
+.sc-keyword > .sc-button {
+  margin-left: var(--t-button-padding);
+}

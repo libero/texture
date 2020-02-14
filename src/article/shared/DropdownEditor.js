@@ -5,7 +5,7 @@ export default class DropdownEditor extends ValueComponent {
   render($$) {
     const model = this.props.model;
     const value = model.getValue();
-    let el = $$('div').addClass(this._getClassNames());
+    const el = $$('div').addClass(this._getClassNames());
 
     const dropdownSelector = $$('select')
       .ref('input')

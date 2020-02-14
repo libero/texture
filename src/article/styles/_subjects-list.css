@@ -1,0 +1,4 @@
+.sc-subjects-list {
+  display: flex;
+  flex-direction: row;
+}

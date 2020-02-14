@@ -41,6 +41,29 @@ export const JATS_BIBR_TYPES_TO_INTERNAL = {
   periodical: PERIODICAL_REF,
 };
 
+export const ARTICLE_SUBJECTS = [
+  'Biochemistry and Chemical Biology',
+  'Cancer Biology',
+  'Cell Biology',
+  'Chromosomes and Gene Expression',
+  'Computational and Systems Biology',
+  'Developmental Biology',
+  'Ecology',
+  'Epidemiology and Global Health',
+  'Evolutionary Biology',
+  'Genetics and Genomics',
+  'Human Biology and Medicine',
+  'Immunology and Inflammation',
+  'Microbiology and Infectious Disease',
+  'Neuroscience',
+  'Physics of Living Systems',
+  'Plant Biology',
+  'Stem Cells and Regenerative Medicine',
+  'Structural Biology and Molecular Biophysics',
+];
+
+export const ARTICLE_TYPES = ['Insight', 'Research article', 'Tools and resources', 'Short report', 'Editorial'];
+
 export const INTERNAL_BIBR_TYPES_TO_JATS = Object.keys(JATS_BIBR_TYPES_TO_INTERNAL).reduce((map, jatsType) => {
   let internalType = JATS_BIBR_TYPES_TO_INTERNAL[jatsType];
   map[internalType] = jatsType;
