@@ -59,23 +59,4 @@ class ContributorIDEditorComponent extends DefaultNodeComponent {
     }
     return props;
   }
-  //
-  // // using a special inplace property editor for 'ref-contrib's
-  // _getPropertyEditorClass(name, value) {
-  //   if (value.hasTargetType('ref-contrib')) {
-  //     return InplaceRefContribsEditor;
-  //   } else {
-  //     switch (name) {
-  //       case 'specificUse':
-  //         return SpecificUseEditor;
-  //
-  //       default:
-  //         return super._getPropertyEditorClass(name, value);
-  //     }
-  //   }
-  // }
-  //
-  // render($$) {
-  //   return super.render($$);
-  // }
 }
