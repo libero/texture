@@ -7,7 +7,7 @@ export default class PermissionComponent extends NodeComponent {
     const el = $$('div').addClass('sc-content');
     el.append(
       $$(Button, {
-        icon: 'remove',
+        icon: 'trash',
       })
         .addClass('se-remove-value')
         .on('click', this._onRemove),

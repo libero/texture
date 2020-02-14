@@ -59,7 +59,7 @@ class InplaceRefContribEditor extends NodeComponent {
             placeholder: this.getLabel('given-names'),
           }).addClass('sm-given-names'),
           $$(Button, {
-            icon: 'remove',
+            icon: 'trash',
             // TODO: do we need this ref?
           })
             .ref('remove-button')
