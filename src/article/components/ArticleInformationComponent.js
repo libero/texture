@@ -1,4 +1,6 @@
 import { CustomSurface, FontAwesomeIcon } from 'substance';
+import { createValueModel } from '../../kit/model/index';
+import { default as LicenseEditor } from './LicenseEditor';
 
 export default class ArticleInformationComponent extends CustomSurface {
   getInitialState() {
@@ -9,6 +11,9 @@ export default class ArticleInformationComponent extends CustomSurface {
   }
 
   render($$) {
+    const api = this.context.api;
+    const model = this.props.model;
+
     const el = $$('div').addClass('sc-article-information');
 
     // Components
@@ -17,15 +22,15 @@ export default class ArticleInformationComponent extends CustomSurface {
     const SectionLabel = this.getComponent('section-label');
 
     // Models
-    const subjectsModel = this.props.model.getSubjects();
-    const keywordsModel = this.props.model.getKeywords();
-    const articleDoi = this.props.model.getDoi();
-    const articleELocationId = this.props.model.getELocationId();
-    const articleVolume = this.props.model.getVolume();
-    const articlePublishDate = this.props.model.getPublishDate();
-    const articleYear = this.props.model.getCollectionDate();
-    const articlePermissionsId = this.props.model.getPermissions();
-    const articlePermissions = this.context.api.getDocument().get(articlePermissionsId);
+    const subjectsModel = model.getSubjects();
+    const keywordsModel = model.getKeywords();
+    const articleDoi = model.getDoi();
+    const articleELocationId = model.getELocationId();
+    const articleVolume = model.getVolume();
+    const articlePublishDate = model.getPublishDate();
+    const articleYear = model.getCollectionDate();
+    const articlePermissionsId = model.getPermissions();
+    const articlePermissions = api.getDocument().get(articlePermissionsId);
 
     // Subjects
     el.append($$(SectionLabel, { label: this.getLabel('article-information-subjects-label') }));
@@ -129,12 +134,9 @@ export default class ArticleInformationComponent extends CustomSurface {
 
     // License Type
     if (articlePermissions && articlePermissions.license) {
+      const model = createValueModel(api, [articlePermissions.id, 'license']);
       el.append($$(SectionLabel, { label: this.getLabel('article-information-license-type-label') }));
-      el.append(
-        $$('p')
-          .addClass('se-article-information-license-type')
-          .append(articlePermissions.license),
-      );
+      el.append($$(LicenseEditor, { model }).ref(articlePermissions.id));
     }
 
     // Copyright Statement
