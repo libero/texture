@@ -40,8 +40,9 @@ import {
   SupplementaryFileComponent,
   DefaultNodeComponent,
   ModelPreviewComponent,
+  PersonComponent
 } from '../components';
-import { PersonComponent } from "../components/PersonComponent";
+
 
 export default {
   name: 'manuscript-content',

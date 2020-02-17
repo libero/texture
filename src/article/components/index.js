@@ -71,3 +71,4 @@ export { default as UploadSingleImageTool } from './UploadSingleImageTool';
 export { default as UploadTool } from './UploadTool';
 export { default as XrefComponent } from './XrefComponent';
 export { default as XrefEditor } from './XrefEditor';
+export { default as PersonComponent } from "./PersonComponent";

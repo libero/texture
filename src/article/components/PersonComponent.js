@@ -3,7 +3,7 @@ import { METADATA_MODE } from "../ArticleConstants";
 import DefaultNodeComponent from "./DefaultNodeComponent";
 import ContributorIdentifierEditor from "../metadata/ContributorIdentifierEditor";
 
-export class PersonComponent extends NodeComponent {
+export default class PersonComponent extends NodeComponent {
   render($$) {
     const mode = this.props.mode;
     const node = this.props.node;

@@ -36,22 +36,6 @@ class ContributorIDEditorComponent extends DefaultNodeComponent {
     return 'sc-reference sm-metadata';
   }
 
-  _createPropertyModels() {
-    const api = this.context.api;
-    const node = this.props.node;
-    const doc = node.getDocument();
-    return createNodePropertyModels(api, this.props.node, p => {
-      switch (p.name) {
-        case 'stringDate': {
-          let stringDate = doc.get(node.stringDate);
-          return createNodePropertyModels(api, stringDate);
-        }
-        default:
-          return createValueModel(api, [node.id, p.name], p);
-      }
-    });
-  }
-
   _getPropertyEditorProps(name, value) {
     const props = super._getPropertyEditorProps(name, value);
     if (name === 'authenticated') {
