@@ -62,7 +62,22 @@ export const ARTICLE_SUBJECTS = [
   'Structural Biology and Molecular Biophysics',
 ];
 
-export const ARTICLE_TYPES = ['Insight', 'Research article', 'Tools and resources', 'Short report', 'Editorial'];
+export const ARTICLE_TYPES = [
+  'Research Article',
+  'Short Report',
+  'Tools and Resources',
+  'Research Advance',
+  'Registered Report',
+  'Replication Study',
+  'Research Communication',
+  'Feature Article',
+  'Insight',
+  'Editorial',
+  'Correction',
+  'Retraction',
+  'Scientific Correspondence',
+  'Review Article',
+];
 
 export const INTERNAL_BIBR_TYPES_TO_JATS = Object.keys(JATS_BIBR_TYPES_TO_INTERNAL).reduce((map, jatsType) => {
   let internalType = JATS_BIBR_TYPES_TO_INTERNAL[jatsType];
