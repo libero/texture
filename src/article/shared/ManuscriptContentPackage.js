@@ -43,7 +43,9 @@ import {
   SupplementaryFileComponent,
   DefaultNodeComponent,
   ModelPreviewComponent,
+  PersonComponent
 } from '../components';
+
 
 export default {
   name: 'manuscript-content',
@@ -77,6 +79,7 @@ export default {
     config.addComponent('paragraph', ParagraphComponent);
     config.addComponent('permission', PermissionComponent);
     config.addComponent('reference', ReferenceComponent);
+    config.addComponent('person', PersonComponent);
     config.addComponent('reference-list', ReferenceListComponent);
     config.addComponent('related-articles-list', RelatedArticlesListComponent);
     config.addComponent('section-label', SectionLabel);

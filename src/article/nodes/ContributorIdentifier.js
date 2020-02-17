@@ -1,6 +1,10 @@
 import { DocumentNode, STRING, BOOLEAN } from 'substance';
 
-export default class ContributorIdentifier extends DocumentNode {}
+export default class ContributorIdentifier extends DocumentNode {
+  render(options = {}) {
+    return ''
+  }
+}
 
 ContributorIdentifier.schema = {
   type: 'contributor-identifier',
