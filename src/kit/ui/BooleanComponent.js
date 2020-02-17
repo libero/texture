@@ -15,7 +15,7 @@ export default class BooleanComponent extends ValueComponent {
     if (!this.context.editable) {
       el.addclass('sm-readonly');
     }
-    el.append($$(CheckboxInput, { value }));
+    el.append($$(CheckboxInput, { value, disabled: this.props.disabled }));
     return el;
   }
 
