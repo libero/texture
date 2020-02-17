@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import { CustomSurface } from 'substance';
-import { FormRowComponent, NodeComponent } from '../../kit';
+import { createValueModel, FormRowComponent, NodeComponent } from "../../kit";
+import { RelatedArticleTypeEditor } from "./index";
 
 export default class RelatedArticleListComponent extends CustomSurface {
   getInitialState() {
@@ -97,6 +98,8 @@ class RelatedArticleComponent extends NodeComponent {
         ),
     );
 
+    const relatedArticleTypeModel = createValueModel(this.context.api, [node.id, 'relatedArticleType']);
+
     el.append(
       $$('div')
         .addClass('sc-related-article')
@@ -114,12 +117,8 @@ class RelatedArticleComponent extends NodeComponent {
           $$(FormRowComponent, { label: this.getLabel('relatedArticleType') })
             .attr('data-id', node.id)
             .addClass('sm-related-article')
-            .append(
-              this._renderValue($$, 'relatedArticleType', {
-                placeholder: this.getLabel('relatedArticleTypePlaceholder'),
-              }).addClass('sm-name'),
-            ),
-        ),
+            .append($$(RelatedArticleTypeEditor, { model: relatedArticleTypeModel }))
+        )
     );
 
     return el;

@@ -43,9 +43,8 @@ import {
   SupplementaryFileComponent,
   DefaultNodeComponent,
   ModelPreviewComponent,
-  PersonComponent
+  PersonComponent,
 } from '../components';
-
 
 export default {
   name: 'manuscript-content',
@@ -161,6 +160,9 @@ export default {
     config.addLabel('article-information-year-label', 'Year');
     config.addLabel('article-information-volume-label', 'Volume');
     config.addLabel('article-information-publish-date-label', 'Publish date');
+    config.addLabel('article-information-license-type-label', 'License Type');
+    config.addLabel('article-information-license-statement-label', 'Copyright statement');
+    config.addLabel('article-information-license-permissions-label', 'Permissions');
 
     // Keywords
     config.addLabel('author-generated', 'Keywords');

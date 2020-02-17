@@ -102,4 +102,8 @@ export default class ArticleModel extends Model {
   getPublishDate() {
     return this._getValueModel('metadata.publishedDate')._value;
   }
+
+  getPermissions() {
+    return this._getValueModel('metadata.permission')._value;
+  }
 }
