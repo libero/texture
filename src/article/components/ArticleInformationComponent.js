@@ -132,22 +132,30 @@ export default class ArticleInformationComponent extends CustomSurface {
       );
     }
 
+    const containerLicense = $$('div').addClass('article-information-container');
+
     // License Type
     if (articlePermissions && articlePermissions.license) {
+      const subContainer = $$('div').addClass('article-information-sub-container');
       const model = createValueModel(api, [articlePermissions.id, 'license']);
-      el.append($$(SectionLabel, { label: this.getLabel('article-information-license-type-label') }));
-      el.append($$(LicenseEditor, { model }).ref(articlePermissions.id));
+      subContainer.append($$(SectionLabel, { label: this.getLabel('article-information-license-type-label') }));
+      subContainer.append($$(LicenseEditor, { model }).ref(articlePermissions.id));
+      containerLicense.append(subContainer);
     }
 
     // Copyright Statement
     if (articlePermissions && articlePermissions.copyrightStatement) {
-      el.append($$(SectionLabel, { label: this.getLabel('article-information-license-statement-label') }));
-      el.append(
+      const subContainer = $$('div').addClass('article-information-sub-container');
+      subContainer.append($$(SectionLabel, { label: this.getLabel('article-information-license-statement-label') }));
+      subContainer.append(
         $$('p')
           .addClass('se-article-information-license-statement')
           .append(articlePermissions.copyrightStatement),
       );
+      containerLicense.append(subContainer);
     }
+
+    el.append(containerLicense);
 
     // Permissions
     if (articlePermissions && articlePermissions.licenseText) {
