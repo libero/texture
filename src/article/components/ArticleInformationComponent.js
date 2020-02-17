@@ -24,6 +24,8 @@ export default class ArticleInformationComponent extends CustomSurface {
     const articleVolume = this.props.model.getVolume();
     const articlePublishDate = this.props.model.getPublishDate();
     const articleYear = this.props.model.getCollectionDate();
+    const articlePermissionsId = this.props.model.getPermissions();
+    const articlePermissions = this.context.api.getDocument().get(articlePermissionsId);
 
     // Subjects
     el.append($$(SectionLabel, { label: this.getLabel('article-information-subjects-label') }));
@@ -122,6 +124,36 @@ export default class ArticleInformationComponent extends CustomSurface {
         $$('p')
           .addClass('se-article-information-publish-date')
           .append(articlePublishDate),
+      );
+    }
+
+    // License Type
+    if (articlePermissions && articlePermissions.license) {
+      el.append($$(SectionLabel, { label: this.getLabel('article-information-license-type-label') }));
+      el.append(
+        $$('p')
+          .addClass('se-article-information-license-type')
+          .append(articlePermissions.license),
+      );
+    }
+
+    // Copyright Statement
+    if (articlePermissions && articlePermissions.copyrightStatement) {
+      el.append($$(SectionLabel, { label: this.getLabel('article-information-license-statement-label') }));
+      el.append(
+        $$('p')
+          .addClass('se-article-information-license-statement')
+          .append(articlePermissions.copyrightStatement),
+      );
+    }
+
+    // Permissions
+    if (articlePermissions && articlePermissions.licenseText) {
+      el.append($$(SectionLabel, { label: this.getLabel('article-information-license-permissions-label') }));
+      el.append(
+        $$('p')
+          .addClass('se-article-information-permissions')
+          .append(articlePermissions.licenseText),
       );
     }
 
