@@ -178,7 +178,7 @@ function _exportSubjects(jats, doc) {
     // if (lang !== 'undefined') {
     //   groupEl.attr('xml:lang', lang);
     // }
-    grouptEl.attr('subj-group-type', groupType);
+    groupEl.attr('subj-group-type', groupType);
 
     groupEl.append(
       subjects.map(subject => {

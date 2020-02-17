@@ -1,4 +1,6 @@
 import { CustomSurface, FontAwesomeIcon } from 'substance';
+import { createValueModel } from '../../kit/model/index';
+import { default as LicenseEditor } from './LicenseEditor';
 
 export default class ArticleInformationComponent extends CustomSurface {
   getInitialState() {
@@ -9,6 +11,9 @@ export default class ArticleInformationComponent extends CustomSurface {
   }
 
   render($$) {
+    const api = this.context.api;
+    const model = this.props.model;
+
     const el = $$('div').addClass('sc-article-information');
 
     // Components
@@ -17,13 +22,15 @@ export default class ArticleInformationComponent extends CustomSurface {
     const SectionLabel = this.getComponent('section-label');
 
     // Models
-    const subjectsModel = this.props.model.getSubjects();
-    const keywordsModel = this.props.model.getKeywords();
-    const articleDoi = this.props.model.getDoi();
-    const articleELocationId = this.props.model.getELocationId();
-    const articleVolume = this.props.model.getVolume();
-    const articlePublishDate = this.props.model.getPublishDate();
-    const articleYear = this.props.model.getCollectionDate();
+    const subjectsModel = model.getSubjects();
+    const keywordsModel = model.getKeywords();
+    const articleDoi = model.getDoi();
+    const articleELocationId = model.getELocationId();
+    const articleVolume = model.getVolume();
+    const articlePublishDate = model.getPublishDate();
+    const articleYear = model.getCollectionDate();
+    const articlePermissionsId = model.getPermissions();
+    const articlePermissions = api.getDocument().get(articlePermissionsId);
 
     // Subjects
     el.append($$(SectionLabel, { label: this.getLabel('article-information-subjects-label') }));
@@ -122,6 +129,41 @@ export default class ArticleInformationComponent extends CustomSurface {
         $$('p')
           .addClass('se-article-information-publish-date')
           .append(articlePublishDate),
+      );
+    }
+
+    const containerLicense = $$('div').addClass('article-information-container');
+
+    // License Type
+    if (articlePermissions && articlePermissions.license) {
+      const subContainer = $$('div').addClass('article-information-sub-container');
+      const model = createValueModel(api, [articlePermissions.id, 'license']);
+      subContainer.append($$(SectionLabel, { label: this.getLabel('article-information-license-type-label') }));
+      subContainer.append($$(LicenseEditor, { model }).ref(articlePermissions.id));
+      containerLicense.append(subContainer);
+    }
+
+    // Copyright Statement
+    if (articlePermissions && articlePermissions.copyrightStatement) {
+      const subContainer = $$('div').addClass('article-information-sub-container');
+      subContainer.append($$(SectionLabel, { label: this.getLabel('article-information-license-statement-label') }));
+      subContainer.append(
+        $$('p')
+          .addClass('se-article-information-license-statement')
+          .append(articlePermissions.copyrightStatement),
+      );
+      containerLicense.append(subContainer);
+    }
+
+    el.append(containerLicense);
+
+    // Permissions
+    if (articlePermissions && articlePermissions.licenseText) {
+      el.append($$(SectionLabel, { label: this.getLabel('article-information-license-permissions-label') }));
+      el.append(
+        $$('p')
+          .addClass('se-article-information-permissions')
+          .append(articlePermissions.licenseText),
       );
     }
 
