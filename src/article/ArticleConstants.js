@@ -79,6 +79,22 @@ export const ARTICLE_TYPES = [
   'Review Article',
 ];
 
+export const JATS_LINK_TYPES = [
+  {id: 'addendum', name: 'Addendum'},
+  {id: 'commentary', name: 'Commentary'},
+  {id: 'commentary-article', name: 'Commentary article'},
+  {id: 'companion', name: 'Companion'},
+  {id: 'corrected-article', name: 'Corrected article'},
+  {id: 'correction-forward', name: 'Correction Forward'},
+  {id: 'in-this-issue', name: 'In this issue'},
+  {id: 'letter', name: 'letter'},
+  {id: 'partial-retraction', name: 'Partial retraction'},
+  {id: 'preprint', name: 'Preprint'},
+  {id: 'retracted-article', name: 'Retracted article'},
+  {id: 'retraction-forward', name: 'Retraction forward'},
+  {id: 'version-of-record', name: 'Version of record'}
+]
+
 export const INTERNAL_BIBR_TYPES_TO_JATS = Object.keys(JATS_BIBR_TYPES_TO_INTERNAL).reduce((map, jatsType) => {
   let internalType = JATS_BIBR_TYPES_TO_INTERNAL[jatsType];
   map[internalType] = jatsType;
