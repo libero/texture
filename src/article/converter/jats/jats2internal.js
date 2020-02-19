@@ -200,7 +200,20 @@ function _populateArticleInfo(doc, jats, jatsImporter) {
     issue: getText(articleMetaEl, 'issue'),
     volume: getText(articleMetaEl, 'volume'),
     pageRange: getText(articleMetaEl, 'page-range'),
+    dtdVersion: articleEl.getAttribute('dtd-version'),
   });
+
+  // TODO: At the moment I am only getting the bits I need, but need to generalise and process
+  //       the whole of the journal-meta section.
+  const journalMetaEl = articleEl.find('front > journal-meta');
+  if (journalMetaEl) {
+    metadata['issn'] = getText(journalMetaEl, 'issn');
+    const publisherEl = findChild(journalMetaEl, 'publisher');
+    if (publisherEl) {
+      metadata['publisherName'] = getText(publisherEl, 'publisher-name');
+    }
+  }
+
   const issueTitleEl = findChild(articleMetaEl, 'issue-title');
   if (issueTitleEl) {
     metadata['issueTitle'] = jatsImporter.annotatedText(issueTitleEl, ['metadata', 'issueTtle']);
