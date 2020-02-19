@@ -28,4 +28,7 @@ Metadata.schema = {
   permission: CHILD('permission'),
   doi: STRING,
   collectionDate: STRING,
+  issn: STRING,
+  dtdVersion: STRING,
+  publisherName: STRING,
 };

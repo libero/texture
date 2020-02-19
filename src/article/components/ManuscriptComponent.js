@@ -14,6 +14,7 @@ export default class ManuscriptComponent extends Component {
     const AuthorDetailsListComponent = this.getComponent('author-details-list');
     const ReferenceListComponent = this.getComponent('reference-list');
     const RelatedArticlesListComponent = this.getComponent('related-articles-list');
+    const JournalMetaComponent = this.getComponent('journal-meta');
 
     const el = $$('div').addClass('sc-manuscript');
 
@@ -192,6 +193,14 @@ export default class ManuscriptComponent extends Component {
           model: relatedArticlesModel,
         }).addClass('sm-related-articles'),
       ),
+    );
+
+    // Journal Meta
+    el.append(
+      $$(JournalMetaComponent, {
+        model: this.props.model,
+        manuscript: this,
+      }).addClass('sm-journal-meta'),
     );
 
     return el;
