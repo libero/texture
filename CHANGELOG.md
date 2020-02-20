@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.13](https://github.com/libero/texture/compare/v0.0.12...v0.0.13) (2020-02-20)
+
+
+### Features
+
+* add article information section to main article view ([4cbb8a6](https://github.com/libero/texture/commit/4cbb8a69699b77e7d2126bbcb85f59faca8b125e))
+* display article license information in article view ([ae27448](https://github.com/libero/texture/commit/ae274485ffaaa4cf236e7837e854bb0271052731))
+* display journal-meta information ([6a75ab0](https://github.com/libero/texture/commit/6a75ab0f2ae2724df32a4501805f1d23405e2f7e))
+
+
+### Bug Fixes
+
+* acknowledgement entry in contents doesn't scroll main view ([f4fe268](https://github.com/libero/texture/commit/f4fe26806d82c3dd93e931aaf927f77b5ef15d9e))
+* code formatting ([40012a0](https://github.com/libero/texture/commit/40012a055af00216b69333361daffcb2a1a60d73))
+* contributorIds field is not displayed correctly in metadata view ([#15](https://github.com/libero/texture/issues/15)) ([14c560c](https://github.com/libero/texture/commit/14c560c2ecd931636b61aad37640c23d49c98093))
+* formatting and linting issues in make.js ([a10e7fb](https://github.com/libero/texture/commit/a10e7fbc0353824874b51613837ac53f9179e924))
+* linter warnings in top level index.js ([927682d](https://github.com/libero/texture/commit/927682d85e70bd4e5a9f8f734c96d400ad7159d0))
+* update article type constants ([b27a176](https://github.com/libero/texture/commit/b27a176d30eb9123f2e82c2ad581ff8b45db1c6c))
+
 ### [0.0.12](https://github.com/libero/texture/compare/v0.0.11...v0.0.12) (2020-01-27)
 
 
