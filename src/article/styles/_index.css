@@ -56,6 +56,6 @@
 @import './_unsupported.css';
 @import './_upload-tool.css';
 @import './_workflow-modal.css';
-@import './_xref';
+@import './_xref.css';
 
 @import '../metadata/styles/_index.css';
