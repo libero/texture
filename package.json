@@ -64,7 +64,7 @@
     "format-fix": "prettier --write \"src/**/*.js\"",
     "start": "node --require esm make dev -s -w -d data",
     "build": "npm run lib",
-    "build-webpack": "webpack --config config/webpack.config.dev.js",
+    "build-webpack": "node make.js build:schema && webpack --config config/webpack.config.dev.js",
     "lib": "node --require esm make lib",
     "app": "node make run-app -w",
     "release": "standard-version",
