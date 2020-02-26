@@ -14,7 +14,7 @@ module.exports = {
     filename: '[name].js',
     library: 'texture',
     libraryExport: '',
-    libraryTarget: 'window',
+    libraryTarget: 'global',
   },
   module: {
     rules: [
