@@ -1,5 +1,3 @@
-import './styles/_index.css';
-
 export * from './article/index';
 export * from './dar/index';
 export * from './shared/index';

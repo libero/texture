@@ -4,18 +4,20 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
-  mode: "development",
-
+  mode: 'development',
+  entry: {
+    texture: ['./src/index.js', './src/styles/_index.css'],
+  },
   output: {
     path: path.resolve(__dirname, '../dist'),
-    filename: 'texture.js',
+    filename: '[name].js',
     library: 'texture',
     libraryTarget: 'global'
   },
   module: {
     rules: [{
       test: /\.js?$/,
-      include: [ path.resolve(__dirname, "src") ],
+      include: [ path.resolve(__dirname, 'src') ],
     }, {
       test: /\.css$/,
       use: [
