@@ -21,6 +21,7 @@ import {
   InlineFormulaComponent,
   InlineGraphicComponent,
   ItalicComponent,
+  JournalMetaComponent,
   KeywordsListComponent,
   ListComponent,
   ListItemComponent,
@@ -69,6 +70,7 @@ export default {
     config.addComponent('inline-formula', InlineFormulaComponent);
     config.addComponent('inline-graphic', InlineGraphicComponent);
     config.addComponent('italic', ItalicComponent);
+    config.addComponent('journal-meta', JournalMetaComponent);
     config.addComponent('keywords-list', KeywordsListComponent);
     config.addComponent('list', ListComponent);
     config.addComponent('list-item', ListItemComponent);

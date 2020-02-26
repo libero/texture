@@ -106,4 +106,20 @@ export default class ArticleModel extends Model {
   getPermissions() {
     return this._getValueModel('metadata.permission')._value;
   }
+
+  getArticleType() {
+    return this._getValueModel('metadata.articleType')._value;
+  }
+
+  getArticleISSN() {
+    return this._getValueModel('metadata.issn')._value;
+  }
+
+  getArticleDTDVersion() {
+    return this._getValueModel('metadata.dtdVersion')._value;
+  }
+
+  getArticlePublisherName() {
+    return this._getValueModel('metadata.publisherName')._value;
+  }
 }

@@ -1,0 +1,10 @@
+.sm-journal-meta {
+  display: flex;
+  flex-direction: row;
+  font-size: var(--t-tiny-font-size);
+  margin-top: var(--t-double-spacing);
+}
+
+.sm-journal-meta > p:not(:first-child) {
+  margin-left: var(--t-input-padding);
+}
