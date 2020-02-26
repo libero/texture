@@ -5,26 +5,28 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
   mode: 'development',
+  devtool: false,
   entry: {
-    texture: ['./src/index.js', './src/styles/_index.css'],
+    texture: './webpack-entry.js',
   },
   output: {
     path: path.resolve(__dirname, '../dist'),
     filename: '[name].js',
     library: 'texture',
-    libraryTarget: 'global'
+    libraryExport: '',
+    libraryTarget: 'window',
   },
   module: {
-    rules: [{
-      test: /\.js?$/,
-      include: [ path.resolve(__dirname, 'src') ],
-    }, {
-      test: /\.css$/,
-      use: [
-        { loader: MiniCssExtractPlugin.loader },
-        'css-loader',
-      ],
-    }]
+    rules: [
+      {
+        test: /\.js?$/,
+        include: [path.resolve(__dirname, 'src')],
+      },
+      {
+        test: /\.css$/,
+        use: [{ loader: MiniCssExtractPlugin.loader }, 'css-loader'],
+      },
+    ],
   },
   plugins: [
     new CleanWebpackPlugin(),
@@ -40,7 +42,7 @@ module.exports = {
       { from: './node_modules/substance/dist/substance.js', to: 'lib/substance' },
       { from: './node_modules/substance/dist/substance.min.js', to: 'lib/substance' },
       { from: './node_modules/texture-plugin-jats/dist', to: 'plugins/texture-plugin-jats' },
-      { from: './texture-reset.css', to: 'texture-reset.css' }
+      { from: './texture-reset.css', to: 'texture-reset.css' },
     ]),
-  ]
+  ],
 };
