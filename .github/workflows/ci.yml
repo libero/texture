@@ -26,7 +26,7 @@ jobs:
       - name: Test
         if: always()
         run: |
-          npm run test
+          npm run test-nodejs
           npm run unit-test
       # Only publish for a tagged release on the master branch
       - name: Publish
