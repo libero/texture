@@ -24,6 +24,7 @@ jobs:
         run: |
           npm run lint
       - name: Unit Tests
+        if: always()
         run: |
           npm run unit-tests
       - name: Integration Tests
