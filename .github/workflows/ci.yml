@@ -23,11 +23,13 @@ jobs:
         if: always()
         run: |
           npm run lint
-      - name: Test
+      - name: Unit Tests
+        run: |
+          npm run unit-tests
+      - name: Integration Tests
         if: always()
         run: |
           npm run test-nodejs
-          npm run unit-test
       # Only publish for a tagged release on the master branch
       - name: Publish
         if: contains(github.ref, 'refs/tags/v')
