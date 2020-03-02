@@ -19,6 +19,7 @@
 }
 
 .sc-affiliations-list > .sc-affiliation > .se-icon {
+  font-size: var(--t-icon-font-size);
 }
 
 .sc-affiliations-list > .se-add-affiliation {

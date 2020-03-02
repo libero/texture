@@ -38,6 +38,7 @@
   margin: 4px 0 0 var(--t-half-spacing);
   font-weight: var(--t-bold-font-weight);
   text-align: center;
+  font-size: var(--t-icon-font-size);
 }
 
 .sc-reference > .fa-edit {
