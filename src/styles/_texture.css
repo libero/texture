@@ -1,57 +1,61 @@
 :root {
-   /* Font families */
-   /* ----------------------------------------------------------------------*/
+  /* Font families */
+  /* ----------------------------------------------------------------------*/
 
-   /* Used for interface elements */
-   --t-interface-font: 'Inter UI', system-ui, sans-serif;
-   /* Used for flowing text, such as paragraphs */
-   --t-text-font: 'Inter UI', system-ui, sans-serif;
-   /* used for code, URLS, etc */
-   --t-code-font: Monaco, 'Courier New';
+  /* Used for interface elements */
+  --t-interface-font: 'Inter UI', system-ui, sans-serif;
+  /* Used for flowing text, such as paragraphs */
+  --t-text-font: 'Inter UI', system-ui, sans-serif;
+  /* used for code, URLS, etc */
+  --t-code-font: Monaco, 'Courier New';
 
-   /* Font sizes */
-   /* ----------------------------------------------------------------------*/
+  /* Font sizes */
+  /* ----------------------------------------------------------------------*/
 
-   /* Used for main text */
-   --t-text-font-size: 17px;
-   /* Used for authors list */
-   --t-large-font-size: 19px;
-   /* Table of contents */
-   --t-small-font-size: 14px;
-   /* Used in toolbars and section labels */
-   --t-tiny-font-size: 12px;
-   /* Used in toolbar dropdown menus */
-   --t-dropdown-font-size: 11px;
-   /* E.g. article title */
-   --t-title-font-size: 36px;
-   /* Heading level 1 */
-   --t-h1-font-size: 23px;
-   /* Heading level 2 */
-   --t-h2-font-size: 21px;
-   /* Heading level 3 */
-   --t-h3-font-size: 19px;
-   /* Heading level 4 */
-   --t-h4-font-size: 17px;
+  /* Used for main text */
+  --t-text-font-size: 17px;
+  /* Used for authors list */
+  --t-large-font-size: 19px;
+  /* Table of contents */
+  --t-small-font-size: 14px;
+  /* Used in toolbars and section labels */
+  --t-tiny-font-size: 12px;
+  /* Used in toolbar dropdown menus */
+  --t-dropdown-font-size: 11px;
+  /* Superscript font size */
+  --t-superscript-font-size: 10px;
+  /* E.g. article title */
+  --t-title-font-size: 36px;
+  /* Heading level 1 */
+  --t-h1-font-size: 23px;
+  /* Heading level 2 */
+  --t-h2-font-size: 21px;
+  /* Heading level 3 */
+  --t-h3-font-size: 19px;
+  /* Heading level 4 */
+  --t-h4-font-size: 17px;
+  /* Icon font size */
+  --t-icon-font-size: 14px;
 
-   /* Font weights */
-   /* ----------------------------------------------------------------------*/
+  /* Font weights */
+  /* ----------------------------------------------------------------------*/
 
-   --t-normal-font-weight: 400; /* Normal text weight */
-   --t-bold-font-weight: 500; /* Strong emphasis */
+  --t-normal-font-weight: 400; /* Normal text weight */
+  --t-bold-font-weight: 500; /* Strong emphasis */
 
-   /* Line heights */
-   /* ----------------------------------------------------------------------*/
+  /* Line heights */
+  /* ----------------------------------------------------------------------*/
 
-   /* Used in main text */
-   --t-default-line-height: 1.5;
+  /* Used in main text */
+  --t-default-line-height: 1.5;
 
-   /* Colors */
-   /* ----------------------------------------------------------------------*/
+  /* Colors */
+  /* ----------------------------------------------------------------------*/
 
   /* Default background color, used when we need to cover content, e.g. in overlays */
   --t-background-color: #fff;
   /* Light (greyish) background color */
-  --t-light-background-color: #2E72EA0a;
+  --t-light-background-color: #2e72ea0a;
   /* Background for action buttons */
   --t-action-background-color: #4e4e4e;
   /* Button backgorund */
@@ -77,8 +81,8 @@
   /* Default light border color */
   --t-border-color: #ddd;
 
-   /* Paddings */
-   /* ----------------------------------------------------------------------*/
+  /* Paddings */
+  /* ----------------------------------------------------------------------*/
   --t-half-spacing: 10px; /* Half of the default spacing */
   --t-default-spacing: 20px; /* Default padding to create some whitespace, e.g. in figure */
   --t-text-spacing: 15px; /* Used as the margin between content elements */
@@ -86,14 +90,15 @@
   --t-input-padding: 4px; /* Padding used input boxes */
   --t-cell-padding: 6px; /* Padding used table cells */
   --t-button-padding: 7px; /* Padding used by buttons */
+  --t-tiny-padding: 2px; /* Padding used for superscript */
 
-   /* Margins */
-   /* ----------------------------------------------------------------------*/
+  /* Margins */
+  /* ----------------------------------------------------------------------*/
 
   --t-flowing-content-margin: 20px 0; /* Space between content elements, e.g. between two paragraphs */
 
-   /* Borders */
-   /* ----------------------------------------------------------------------*/
+  /* Borders */
+  /* ----------------------------------------------------------------------*/
 
   --t-input-default-border: 2px solid transparent;
   --t-input-outline-border: 2px solid var(--t-border-color);
@@ -104,25 +109,25 @@
   --t-tool-border-radius: 3px; /* Default border radius for tools */
   --t-default-border: 1px solid var(--t-border-color);
 
-   /* Box shadows */
-   /* ----------------------------------------------------------------------*/
+  /* Box shadows */
+  /* ----------------------------------------------------------------------*/
 
   --t-default-box-shadow: 0 0 0 0.75pt #d1d1d1, 0 0 3pt 0.75pt #ccc;
-  --t-popup-box-shadow: 0 2px 10px -2px rgba(0,0,0,0.8);
+  --t-popup-box-shadow: 0 2px 10px -2px rgba(0, 0, 0, 0.8);
 
-   /* Substance Styles */
-   /* ----------------------------------------------------------------------*/
+  /* Substance Styles */
+  /* ----------------------------------------------------------------------*/
   --t-small-layout-width: 300px;
   --t-medium-layout-width: 620px;
   --t-large-layout-width: 960px;
-  --t-separator-color: rgba(0,0,0,0.05);
+  --t-separator-color: rgba(0, 0, 0, 0.05);
 }
 
 .sc-texture {
   line-height: var(--t-default-line-height);
   height: 100%;
   position: relative;
-  font-family: var(--t-interface-font)
+  font-family: var(--t-interface-font);
 }
 
 .sc-texture a {
@@ -154,7 +159,8 @@
   font-size: smaller;
 }
 
-.sc-texture .sc-annotation.sm-monospace, .sc-texture .sm-preformat {
+.sc-texture .sc-annotation.sm-monospace,
+.sc-texture .sm-preformat {
   /* Attention: double monospace here for correcting the inheritance
   and scaling of font size in all browsers */
   font-family: monospace, monospace;

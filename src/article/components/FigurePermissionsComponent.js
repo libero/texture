@@ -8,9 +8,9 @@ export default class FigurePermissionsComponent extends ValueComponent {
   }
 
   render($$) {
-    let items = this.props.model.getItems();
+    const items = this.props.model.getItems();
     const Button = this.getComponent('button');
-    let el = $$('div').addClass('sc-permissions');
+    const el = $$('div').addClass('sc-permissions');
 
     if (items.length > 0) {
       el.append(items.map(field => this._renderPermissionCard($$, field)));
@@ -28,7 +28,7 @@ export default class FigurePermissionsComponent extends ValueComponent {
   }
 
   _renderPermissionCard($$, node) {
-    let PermissionComponent = this.getComponent(node.type);
+    const PermissionComponent = this.getComponent(node.type);
     const el = $$('div')
       .addClass('sc-card')
       .attr('data-id', node.id)

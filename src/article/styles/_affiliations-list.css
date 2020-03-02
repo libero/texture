@@ -10,14 +10,16 @@
 
 .sc-affiliations-list > .sc-affiliation > .se-label {
   align-self: flex-start;
+  font-size: var(--t-superscript-font-size);
 }
 
 .sc-affiliations-list > .sc-affiliation > .se-text {
   flex-grow: 1;
-  margin-left: var(--t-button-padding);
+  margin-left: var(--t-input-padding);
 }
 
 .sc-affiliations-list > .sc-affiliation > .se-icon {
+  font-size: var(--t-icon-font-size);
 }
 
 .sc-affiliations-list > .se-add-affiliation {
