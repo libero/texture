@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-use-before-define */
 import { CustomSurface } from 'substance';
 import { NodeComponent } from '../../kit';
 import { FontAwesomeIcon } from 'substance';
@@ -5,7 +6,7 @@ import { getLabel, sortCitationsByPosition } from '../shared/nodeHelpers';
 
 export default class AffiliationsListComponent extends CustomSurface {
   getInitialState() {
-    let items = this._getAffiliations();
+    const items = this._getAffiliations();
     return {
       hidden: items.length === 0,
     };
@@ -27,7 +28,7 @@ export default class AffiliationsListComponent extends CustomSurface {
   }
 
   render($$) {
-    let el = $$('div').addClass('sc-affiliations-list');
+    const el = $$('div').addClass('sc-affiliations-list');
     el.append(this._renderAffiliations($$));
     return el;
   }
@@ -36,7 +37,7 @@ export default class AffiliationsListComponent extends CustomSurface {
     const affiliations = this._getAffiliations();
     const Button = this.getComponent('button');
 
-    let els = [];
+    const els = [];
     affiliations.forEach((affiliation, index) => {
       const affiliationEl = $$(AffiliationDisplay, { node: affiliation }).ref(affiliation.id);
       els.push(affiliationEl);
@@ -61,13 +62,15 @@ export default class AffiliationsListComponent extends CustomSurface {
     return this.props.model.getItems().sort(sortCitationsByPosition);
   }
 
-  _addAffiliation() {}
+  _addAffiliation() {
+    return;
+  }
 }
 
 class AffiliationDisplay extends NodeComponent {
   render($$) {
-    let label = this._getAffiliationLabel();
-    let el = $$('div').addClass('sc-affiliation');
+    const label = this._getAffiliationLabel();
+    const el = $$('div').addClass('sc-affiliation');
     el.append(
       $$(label === '?' ? 'div' : 'sup')
         .addClass('se-label')
