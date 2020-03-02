@@ -1,10 +1,11 @@
+/* eslint-disable @typescript-eslint/no-use-before-define */
 import { CustomSurface } from 'substance';
 import { NodeComponent } from '../../kit';
 import { getLabel } from '../shared/nodeHelpers';
 
 export default class AuthorsListComponent extends CustomSurface {
   getInitialState() {
-    let items = this._getAuthors();
+    const items = this._getAuthors();
     return {
       hidden: items.length === 0,
       edit: false,
@@ -27,7 +28,7 @@ export default class AuthorsListComponent extends CustomSurface {
   }
 
   render($$) {
-    let el = $$('div').addClass('sc-authors-list');
+    const el = $$('div').addClass('sc-authors-list');
     el.append(this._renderAuthors($$));
     return el;
   }
@@ -35,7 +36,7 @@ export default class AuthorsListComponent extends CustomSurface {
   _renderAuthors($$) {
     const sel = this.context.editorState.selection;
     const authors = this._getAuthors();
-    let els = [];
+    const els = [];
     authors.forEach((author, index) => {
       const authorEl = $$(AuthorDisplay, { node: author }).ref(author.id);
       if (sel && sel.nodeId === author.id) {
@@ -61,14 +62,10 @@ export default class AuthorsListComponent extends CustomSurface {
 class AuthorDisplay extends NodeComponent {
   render($$) {
     const person = this.props.node;
-    let el = $$('span').addClass('se-contrib');
+    const el = $$('span').addClass('se-contrib');
     el.append(this.context.api.renderEntity(person));
     if (person.affiliations.length > 0) {
-      el.append(
-        $$('sup')
-          .addClass('se-affiliations')
-          .append(getLabel(person)),
-      );
+      el.append($$('sup').append(getLabel(person)));
     }
 
     el.on('mousedown', this._onMousedown).on('click', this._onClick);

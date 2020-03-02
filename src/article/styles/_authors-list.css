@@ -27,3 +27,8 @@
 .sc-authors-list > .se-content > .se-empty-list {
   color: var(--t-light-text-color);
 }
+
+.sc-authors-list > .se-contrib > sup {
+  font-size: var(--t-superscript-font-size);
+  padding-left: var(--t-superscript-padding);
+}
