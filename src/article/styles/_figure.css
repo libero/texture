@@ -23,6 +23,10 @@
   font-size: var(--t-small-font-size);
 }
 
+.sc-figure .sc-permissions {
+  margin-top: var(--t-double-spacing);
+}
+
 .sc-figure .sc-permissions .sc-card:last-of-type {
   margin-bottom: var(--t-default-spacing);
 }
