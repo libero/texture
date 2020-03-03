@@ -83,7 +83,7 @@ class RelatedArticleComponent extends NodeComponent {
       .append(
         $$('div')
           .addClass('se-label')
-          .append(this.getLabel('relatedArticle')),
+          .append(this.getLabel('relatedArticleItemTitle')),
       );
 
     el.append(
