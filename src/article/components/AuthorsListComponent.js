@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
-import { CustomSurface } from 'substance';
+import { CustomSurface, FontAwesomeIcon } from 'substance';
 import { NodeComponent } from '../../kit';
 import { getLabel } from '../shared/nodeHelpers';
 
@@ -28,8 +28,15 @@ export default class AuthorsListComponent extends CustomSurface {
   }
 
   render($$) {
-    const el = $$('div').addClass('sc-authors-list');
-    el.append(this._renderAuthors($$));
+    const el = $$('div').addClass('sc-authors-list-container');
+    const editIcon = $$(FontAwesomeIcon, { icon: 'fa-edit' }).addClass('se-icon');
+    const list = $$('div')
+      .addClass('sc-authors-list')
+      .append(this._renderAuthors($$));
+
+    editIcon.on('click', this._openEditDialog.bind(this));
+
+    el.append([list, editIcon]);
     return el;
   }
 
@@ -56,6 +63,12 @@ export default class AuthorsListComponent extends CustomSurface {
 
   _getAuthors() {
     return this.props.model.getItems();
+  }
+
+  _openEditDialog() {
+    const firstAuthor = this._getAuthors()[0];
+    this.context.api.selectEntity(firstAuthor.id);
+    this.send('executeCommand', 'edit-author');
   }
 }
 

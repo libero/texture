@@ -2,8 +2,17 @@
   display: none;
 }
 
+.sc-authors-list-container {
+  display: flex;
+}
+
+.sc-authors-list-container > .se-icon {
+  font-size: var(--t-icon-font-size);
+}
+
 .sc-authors-list {
   cursor: default;
+  flex-grow: 1;
 }
 
 .sc-authors-list .se-contrib {
