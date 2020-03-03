@@ -45,4 +45,9 @@ module.exports = {
       { from: './texture-reset.css', to: 'texture-reset.css' },
     ]),
   ],
+  devServer: {
+    contentBase: path.join(__dirname, 'dist'),
+    compress: true,
+    port: 9000,
+  },
 };
