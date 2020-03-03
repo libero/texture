@@ -1,3 +1,7 @@
+.sm-related-articles > .sc-related-articles-list > :first-child {
+  margin-top: var(--t-default-spacing);
+}
+
 .sc-card > .sc-related-article {
   padding-top: 0px;
 }

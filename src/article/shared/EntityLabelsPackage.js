@@ -226,7 +226,8 @@ export default {
     config.addLabel('fn', 'Footnote');
 
     // related article labels
-    config.addLabel('relatedArticle', 'Related Articles');
+    config.addLabel('relatedArticleSectionTitle', 'Related Articles');
+    config.addLabel('relatedArticleItemTitle', 'Related Article');
     config.addLabel('relatedArticleHref', 'Article DOI');
     config.addLabel('relatedArticleHrefPlaceholder', '10.7554/eLife.00000');
     config.addLabel('relatedArticleType', 'Link Type');

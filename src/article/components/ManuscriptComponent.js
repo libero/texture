@@ -185,7 +185,7 @@ export default class ManuscriptComponent extends Component {
     el.append(
       $$(ManuscriptSection, {
         name: 'related-articles',
-        label: 'Related Articles',
+        label: this.getLabel('relatedArticleSectionTitle'),
         model: relatedArticlesModel,
         hideWhenEmpty: true,
       }).append(

@@ -59,7 +59,8 @@
     "texture-plugin-jats": "0.2.0",
     "texture-xml-utils": "0.2.0",
     "webpack": "4.41.6",
-    "webpack-cli": "3.3.11"
+    "webpack-cli": "3.3.11",
+    "webpack-dev-server": "^3.10.3"
   },
   "scripts": {
     "prepack": "npm install && node make lib",
@@ -69,7 +70,8 @@
     "format-fix": "prettier --write \"src/**/*.js\"",
     "start": "node --require esm make dev -s -w -d data",
     "build": "npm run lib",
-    "build-webpack": "node make.js build:schema && webpack --config config/webpack.config.dev.js",
+    "webpack:build": "node make.js build:schema && webpack --config config/webpack.config.dev.js",
+    "webpack:start": "webpack-dev-server --config config/webpack.config.dev.js",
     "lib": "node --require esm make lib",
     "app": "node make run-app -w",
     "release": "standard-version",
