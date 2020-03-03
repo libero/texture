@@ -436,30 +436,36 @@ function _populateAcknowledgements(doc, jats, jatsImporter) {
   const sectionContainerConverter = new SectionContainerConverter();
 
   const acknowledgments = jats.findAll('article > back > ack');
-  acknowledgments.forEach(acknowledgment => {
-    // Need to remove the 'title' from the child nodes, otherwise it will appear inline with the main text of the
-    // acknowledgement.
-    const titleEl = findChild(acknowledgment, 'title');
-    if (titleEl) {
-      acknowledgment.removeChild(titleEl);
-    }
+  if (acknowledgments.length > 0) {
+    acknowledgments.forEach(acknowledgment => {
+      // Need to remove the 'title' from the child nodes, otherwise it will appear inline with the main text of the
+      // acknowledgement.
+      const titleEl = findChild(acknowledgment, 'title');
+      if (titleEl) {
+        acknowledgment.removeChild(titleEl);
+      }
 
-    // If there are no childNodes (e.g. its an empty element), then add an empty paragraph
-    if (acknowledgment.getChildCount() === 0) {
-      acknowledgment.append($$('p'));
-    }
+      // If there are no childNodes (e.g. its an empty element), then add an empty paragraph
+      if (acknowledgment.getChildCount() === 0) {
+        acknowledgment.append($$('p'));
+      }
 
-    const node = doc.create({
-      type: 'acknowledgement',
-      id: acknowledgment.id,
+      const node = doc.create({
+        type: 'acknowledgement',
+        id: acknowledgment.id,
+      });
+
+      sectionContainerConverter.import(acknowledgment, node, jatsImporter);
+      if (titleEl) {
+        node.title = jatsImporter.annotatedText(titleEl, [node.id, 'title']);
+      }
+      documentHelpers.append(doc, ['article', 'acknowledgements'], node.id);
     });
-
-    sectionContainerConverter.import(acknowledgment, node, jatsImporter);
-    if (titleEl) {
-      node.title = jatsImporter.annotatedText(titleEl, [node.id, 'title']);
-    }
+  } else {
+    // If there is no 'ack' element present, then insert an empty one into the doc.
+    const node = doc.create({ type: 'acknowledgement', content: [doc.create({ type: 'paragraph' }).id] });
     documentHelpers.append(doc, ['article', 'acknowledgements'], node.id);
-  });
+  }
 }
 
 function _populateBody(doc, jats, jatsImporter) {
