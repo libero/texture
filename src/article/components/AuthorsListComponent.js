@@ -68,9 +68,21 @@ export default class AuthorsListComponent extends CustomSurface {
   }
 
   _openEditDialog() {
-    const firstAuthor = this._getAuthors()[0];
-    this.context.api.selectEntity(firstAuthor.id);
+    if (!this._isAuthorSelected()) {
+      const firstAuthor = this._getAuthors()[0];
+      this.context.api.selectEntity(firstAuthor.id);
+    }
     this.send('executeCommand', 'edit-author');
+  }
+
+  _isAuthorSelected() {
+    const selectedNode = this.context.editorState.selectionState.node;
+    if (selectedNode) {
+      return selectedNode
+        .getXpath()
+        .toArray()
+        .some(x => x.property === 'authors');
+    }
   }
 }
 
