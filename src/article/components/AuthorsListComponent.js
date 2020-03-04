@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
-import { CustomSurface, FontAwesomeIcon } from 'substance';
+import { CustomSurface } from 'substance';
 import { NodeComponent } from '../../kit';
 import { getLabel } from '../shared/nodeHelpers';
 
