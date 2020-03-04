@@ -32,8 +32,8 @@ export default class AuthorsListComponent extends CustomSurface {
     const el = $$('div').addClass('sc-authors-list-container');
     const editButton = $$(Button, { icon: 'edit-section' })
       .addClass('se-edit-button')
-      .on('click', this._openEditDialog.bind(this));
-    
+      .on('click', this._openEditDialog, this);
+
     const list = $$('div')
       .addClass('sc-authors-list')
       .append(this._renderAuthors($$));

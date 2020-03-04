@@ -41,16 +41,11 @@ export default class AuthorDetailsListComponent extends CustomSurface {
 class AuthorDetailsDisplay extends NodeComponent {
   render($$) {
     const author = this.props.node;
-    const doc = author.document;
 
     const el = $$('div').addClass('se-author-details');
-    el.append(
-      $$('p')
-        .addClass('se-author-details-fullname')
-        .append(`${author.givenNames} ${author.surname}`),
-    );
+    el.append(this._renderHeader($$, author));
 
-    // Only display an email fir corresponding authors
+    // Only display an email for corresponding authors
     if (author.email) {
       el.append(
         $$('p')
@@ -63,66 +58,108 @@ class AuthorDetailsDisplay extends NodeComponent {
           ),
       );
     }
+    if (author.contributorIds.length > 0) {
+      el.append(this._renderContribIds($$, author));
+    }
+
+    el.append(this._renderBio($$, author));
 
     // Render affliations in the format, <insitution> <dept> <city> <country>
     if (author.affiliations.length > 0) {
-      author.affiliations.map(affiliationId => {
-        const affiliationElement = doc.get(affiliationId);
-        if (affiliationElement) {
-          el.append(
-            $$('p')
-              .addClass('se-author-details-affilations')
-              .append(affiliationElement.toString()),
-          );
-        }
-      });
-    }
-
-    if (author.contributorIds.length > 0) {
-      author.contributorIds.map(contributorId => {
-        const orcidIdElement = $$('div').addClass('se-author-details-orchid');
-        const contributorIdElement = doc.get(contributorId);
-        if (contributorIdElement && contributorIdElement.contribIdType === 'orcid') {
-          if (contributorIdElement.authenticated) {
-            orcidIdElement.append($$(FontAwesomeIcon, { icon: 'fa-circle' }).addClass('se-icon'));
-          }
-          // FIXME: Not 100% happy with the below solution, there is likely a better way to do this.
-          const match = /0000-000(1-[5-9]|2-[0-9]|3-[0-4])\d{3}-\d{3}[\dX]/.exec(contributorIdElement.content);
-          if (match) {
-            orcidIdElement.append(
-              $$('p')
-                .addClass('se-author-details-orcid')
-                .append(
-                  $$('a')
-                    .attr('href', match.input)
-                    .append(match[0]),
-                ),
-            );
-          } else {
-            orcidIdElement.append(
-              $$('p')
-                .addClass('se-author-details-orcid')
-                .append(
-                  $$('a')
-                    .attr('href', contributorIdElement.content)
-                    .append(contributorIdElement.content),
-                ),
-            );
-          }
-        }
-        el.append(orcidIdElement);
-      });
+      el.append(this._renderAffiliations($$, author));
     }
 
     if (author.competingInterests.length > 0) {
-      author.competingInterests.map(id => {
-        const element = doc.get(id);
-        if (element) {
-          el.append($$(FootnoteComponent, { node: element, mode: CONTENT_MODE }));
-        }
-      });
+      el.append(this._renderCompetingInterests($$, author));
     }
 
     return el;
+  }
+
+  _openEditAuthorDialog() {
+    this.context.api.selectEntity(this.props.node.id);
+    this.send('executeCommand', 'edit-author');
+  }
+
+  _renderAffiliations($$, author) {
+    const doc = author.document;
+    const affiliationsContainer = $$('div')
+      .addClass('se-author-affiliations-container')
+      .append(
+        $$('p')
+          .addClass('se-affiliations-title')
+          .append(this.getLabel('affiliations-label')),
+      );
+
+    const affiliations = author.affiliations.reduce((elements, affiliationId) => {
+      const affiliationElement = doc.get(affiliationId);
+      if (affiliationElement) {
+        const affRendered = $$('li')
+          .addClass('se-author-details-affilations')
+          .append(affiliationElement.toString());
+        elements.push(affRendered);
+      }
+      return elements;
+    }, []);
+
+    return affiliationsContainer.append($$('ul').append(affiliations));
+  }
+
+  _renderHeader($$, author) {
+    const Button = this.context.config.getComponent('button');
+    const authorNameEl = $$('p')
+      .addClass('se-author-details-fullname')
+      .append(`${author.givenNames} ${author.surname}`);
+    const editButton = $$(Button, { icon: 'edit-section' })
+      .addClass('se-author-details-edit-button')
+      .on('click', this._openEditAuthorDialog, this);
+
+    return $$('div')
+      .addClass('se-author-details-header')
+      .append([authorNameEl, editButton]);
+  }
+
+  _renderBio($$, author) {
+    const doc = author.document;
+    const Paragraph = this.context.config.getComponent('paragraph');
+    const bioParagraphs = author.bio.map(path => $$(Paragraph, { node: doc.get(path) }));
+    return $$('div').append(bioParagraphs);
+  }
+
+  _renderContribIds($$, author) {
+    const doc = author.document;
+    return author.contributorIds.reduce((elements, contributorId) => {
+      const orcidIdElement = $$('div').addClass('se-author-details-orchid');
+      const contributorIdElement = doc.get(contributorId);
+      if (contributorIdElement && contributorIdElement.contribIdType === 'orcid') {
+        const orcidLink = $$('a')
+          .attr('href', contributorIdElement.content)
+          .attr('target', '_blank');
+
+        if (contributorIdElement.authenticated) {
+          orcidLink.append($$('span').addClass('se-author-details-orchid-icon'));
+        }
+
+        orcidLink.append(' ' + contributorIdElement.content);
+        orcidIdElement.append(orcidLink);
+      }
+      elements.push(orcidIdElement);
+      return elements;
+    }, []);
+  }
+
+  _renderCompetingInterests($$, author) {
+    const doc = author.document;
+    const competingInterests = author.competingInterests.reduce((elements, id) => {
+      const element = doc.get(id);
+      if (element) {
+        elements.push($$(FootnoteComponent, { node: element, mode: CONTENT_MODE }));
+      }
+      return elements;
+    }, []);
+
+    return $$('div')
+      .addClass('se-author-competing-interests')
+      .append(competingInterests);
   }
 }
