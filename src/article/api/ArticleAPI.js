@@ -658,6 +658,9 @@ export default class ArticleAPI {
       case 'group': {
         return doc.get('metadata').resolve('groups');
       }
+      case 'footnote': {
+        return doc.get('article').resolve('footnotes');
+      }
       default:
         throw new Error('Unsupported relationship: ' + targetType);
     }
