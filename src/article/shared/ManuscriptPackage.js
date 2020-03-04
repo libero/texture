@@ -342,6 +342,7 @@ export default {
     config.addIcon('toggle-unordered-list', { fontawesome: 'fa-list-ul' });
     config.addIcon('toggle-ordered-list', { fontawesome: 'fa-list-ol' });
     config.addIcon('trash', { fontawesome: 'fa-trash' });
+    config.addIcon('edit-section', { fontawesome: 'fa-edit' });
     config.addIcon('input-loading', { fontawesome: 'fa-spinner fa-spin' });
     config.addIcon('input-error', { fontawesome: 'fa-exclamation-circle' });
     config.addIcon('left-control', { fontawesome: 'fa-chevron-left' });
