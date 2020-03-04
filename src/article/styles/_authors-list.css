@@ -6,7 +6,7 @@
   display: flex;
 }
 
-.sc-authors-list-container > .se-icon {
+.sc-authors-list-container > .se-edit-button {
   font-size: var(--t-icon-font-size);
 }
 

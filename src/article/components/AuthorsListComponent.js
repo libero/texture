@@ -28,15 +28,17 @@ export default class AuthorsListComponent extends CustomSurface {
   }
 
   render($$) {
+    const Button = this.getComponent('button');
     const el = $$('div').addClass('sc-authors-list-container');
-    const editIcon = $$(FontAwesomeIcon, { icon: 'fa-edit' }).addClass('se-icon');
+    const editButton = $$(Button, { icon: 'edit-section' })
+      .addClass('se-edit-button')
+      .on('click', this._openEditDialog.bind(this));
+    
     const list = $$('div')
       .addClass('sc-authors-list')
       .append(this._renderAuthors($$));
 
-    editIcon.on('click', this._openEditDialog.bind(this));
-
-    el.append([list, editIcon]);
+    el.append([list, editButton]);
     return el;
   }
 
