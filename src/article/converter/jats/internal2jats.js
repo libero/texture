@@ -566,7 +566,10 @@ function _populateBack(jats, doc, jatsExporter) {
       ref-list?,
     )
   */
-  const footnotes = doc.resolve(['article', 'footnotes']);
+
+  // NOTE: Conflicts of Interest are a specific type of footnote, we just handle them internally as a seperate entity,
+  //       hence here we need to combine both footnotes and COI-statements and write them out as a singular group.
+  const footnotes = [...doc.resolve(['article', 'footnotes']), ...doc.resolve(['article', 'conflictOfInterests'])];
   if (footnotes.length > 0) {
     backEl.append(
       $$('fn-group').append(

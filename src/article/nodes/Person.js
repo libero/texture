@@ -40,5 +40,5 @@ Person.schema = {
   corresp: BOOLEAN,
   deceased: BOOLEAN,
   contributorIds: CONTAINER('contributor-identifier'),
-  competingInterests: MANY('footnote'),
+  competingInterests: MANY('conflict-of-interest'),
 };

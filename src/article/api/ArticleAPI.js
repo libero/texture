@@ -32,7 +32,6 @@ import {
   TableFigure,
   InlineGraphic,
   BlockQuote,
-  Box,
   Person,
   Affiliation,
   CustomAbstract,
@@ -47,7 +46,7 @@ const DISALLOWED_MANIPULATION = 'Manipulation is not allowed.';
 
 export default class ArticleAPI {
   constructor(editorSession, archive, config) {
-    let doc = editorSession.getDocument();
+    const doc = editorSession.getDocument();
 
     this.editorSession = editorSession;
     this.config = config;
@@ -120,11 +119,11 @@ export default class ArticleAPI {
     // to replicate it, currently only for metadata fields
     const panelTemplate = figure.getTemplateFromCurrentPanel();
     this.editorSession.transaction(tx => {
-      let template = FigurePanel.getTemplate();
+      const template = FigurePanel.getTemplate();
       template.content.href = href;
       template.content.mimeType = file.type;
       Object.assign(template, panelTemplate);
-      let node = documentHelpers.createNodeFromJson(tx, template);
+      const node = documentHelpers.createNodeFromJson(tx, template);
       documentHelpers.insertAt(tx, [figure.id, 'panels'], insertPos, node.id);
       tx.set([figure.id, 'state', 'currentPanelIndex'], insertPos);
     });
@@ -132,11 +131,11 @@ export default class ArticleAPI {
 
   // TODO: it is not so common to add footnotes without an xref in the text
   addFootnote(footnoteCollectionPath) {
-    let editorSession = this.getEditorSession();
+    const editorSession = this.getEditorSession();
     editorSession.transaction(tx => {
-      let node = documentHelpers.createNodeFromJson(tx, Footnote.getTemplate());
+      const node = documentHelpers.createNodeFromJson(tx, Footnote.getTemplate());
       documentHelpers.append(tx, footnoteCollectionPath, node.id);
-      let p = tx.get(node.content[0]);
+      const p = tx.get(node.content[0]);
       tx.setSelection({
         type: 'property',
         path: p.getPath(),
@@ -152,21 +151,21 @@ export default class ArticleAPI {
   }
 
   addReferences(refsData) {
-    let editorSession = this.getEditorSession();
+    const editorSession = this.getEditorSession();
     editorSession.transaction(tx => {
-      let refNodes = refsData.map(refData => documentHelpers.createNodeFromJson(tx, refData));
+      const refNodes = refsData.map(refData => documentHelpers.createNodeFromJson(tx, refData));
       refNodes.forEach(ref => {
         documentHelpers.append(tx, ['article', 'references'], ref.id);
       });
       if (refNodes.length > 0) {
-        let newSelection = this._createEntitySelection(refNodes[0]);
+        const newSelection = this._createEntitySelection(refNodes[0]);
         tx.setSelection(newSelection);
       }
     });
   }
 
   canCreateAnnotation(annoType) {
-    let editorState = this.getEditorState();
+    const editorState = this.getEditorState();
     const sel = editorState.selection;
     const selectionState = editorState.selectionState;
     if (
@@ -177,7 +176,7 @@ export default class ArticleAPI {
       selectionState.property.targetTypes.has(annoType)
     ) {
       // otherwise these annos are only allowed to 'touch' the current selection, not overlap.
-      for (let anno of selectionState.annos) {
+      for (const anno of selectionState.annos) {
         if (sel.overlaps(anno.getSelection(), 'strict')) return false;
       }
       return true;
@@ -190,12 +189,12 @@ export default class ArticleAPI {
   }
 
   canInsertBlockNode(nodeType) {
-    let editorState = this.getEditorState();
-    let doc = editorState.document;
-    let sel = editorState.selection;
-    let selState = editorState.selectionState;
+    const editorState = this.getEditorState();
+    const doc = editorState.document;
+    const sel = editorState.selection;
+    const selState = editorState.selectionState;
     if (sel && !sel.isNull() && !sel.isCustomSelection() && sel.isCollapsed() && selState.containerPath) {
-      let containerProp = doc.getProperty(selState.containerPath);
+      const containerProp = doc.getProperty(selState.containerPath);
       if (containerProp.targetTypes.has(nodeType)) {
         return true;
       }
@@ -218,12 +217,12 @@ export default class ArticleAPI {
    * @param {boolean} collapsedOnly true if insertion is allowed only for collapsed selection
    */
   canInsertInlineNode(type, collapsedOnly) {
-    let editorState = this.getEditorState();
+    const editorState = this.getEditorState();
     const sel = editorState.selection;
     const selectionState = editorState.selectionState;
     if (sel && !sel.isNull() && sel.isPropertySelection() && (!collapsedOnly || sel.isCollapsed())) {
       // make sure that the schema allows to insert that node
-      let targetTypes = selectionState.property.targetTypes;
+      const targetTypes = selectionState.property.targetTypes;
       if (targetTypes.size > 0 && targetTypes.has(type)) {
         return true;
       }
@@ -232,23 +231,23 @@ export default class ArticleAPI {
   }
 
   canMoveEntityUp(nodeId) {
-    let node = this._getNode(nodeId);
+    const node = this._getNode(nodeId);
     if (node && this._isCollectionItem(node) && !this._isManagedCollectionItem(node)) {
       return node.getPosition() > 0;
     }
   }
 
   canMoveEntityDown(nodeId) {
-    let node = this._getNode(nodeId);
+    const node = this._getNode(nodeId);
     if (node && this._isCollectionItem(node) && !this._isManagedCollectionItem(node)) {
-      let pos = node.getPosition();
-      let ids = this.getDocument().get(this._getCollectionPathForItem(node));
+      const pos = node.getPosition();
+      const ids = this.getDocument().get(this._getCollectionPathForItem(node));
       return pos < ids.length - 1;
     }
   }
 
   canRemoveEntity(nodeId) {
-    let node = this._getNode(nodeId);
+    const node = this._getNode(nodeId);
     if (node) {
       return this._isCollectionItem(node);
     } else {
@@ -265,7 +264,7 @@ export default class ArticleAPI {
   }
 
   dedent() {
-    let editorSession = this.getEditorSession();
+    const editorSession = this.getEditorSession();
     editorSession.transaction(tx => {
       tx.dedent();
     });
@@ -284,8 +283,8 @@ export default class ArticleAPI {
   }
 
   focusEditor(path) {
-    let editorSession = this.getEditorSession();
-    let surface = editorSession.getSurfaceForProperty(path);
+    const editorSession = this.getEditorSession();
+    const surface = editorSession.getSurfaceForProperty(path);
     if (surface) {
       surface.selectFirst();
     }
@@ -326,9 +325,9 @@ export default class ArticleAPI {
     }
     let valueModel = this._valueModelCache.get(propKey);
     if (!valueModel) {
-      let doc = this.getDocument();
-      let path = propKey.split('.');
-      let prop = doc.getProperty(path);
+      const doc = this.getDocument();
+      const path = propKey.split('.');
+      const prop = doc.getProperty(path);
       if (!prop) throw new Error('Property does not exist');
       valueModel = createValueModel(this, path, prop);
     }
@@ -343,7 +342,7 @@ export default class ArticleAPI {
   }
 
   indent() {
-    let editorSession = this.getEditorSession();
+    const editorSession = this.getEditorSession();
     editorSession.transaction(tx => {
       tx.indent();
     });
@@ -357,7 +356,7 @@ export default class ArticleAPI {
   }
 
   insertBlockNode(nodeData) {
-    let nodeId = this._insertBlockNode(tx => {
+    const nodeId = this._insertBlockNode(tx => {
       return documentHelpers.createNodeFromJson(tx, nodeData);
     });
     return this.getDocument().get(nodeId);
@@ -378,9 +377,9 @@ export default class ArticleAPI {
   insertFootnoteReference() {
     if (!this.canInsertCrossReference()) throw new Error(DISALLOWED_MANIPULATION);
     // In table-figures we want to allow only cross-reference to table-footnotes
-    let selectionState = this.getEditorState().selectionState;
+    const selectionState = this.getEditorState().selectionState;
     const xpath = selectionState.xpath;
-    let refType = xpath.find(n => n.type === TableFigure.type) ? 'table-fn' : 'fn';
+    const refType = xpath.find(n => n.type === TableFigure.type) ? 'table-fn' : 'fn';
     return this._insertCrossReference(refType);
   }
 
@@ -391,10 +390,10 @@ export default class ArticleAPI {
     // This way the archive gets 'polluted', i.e. a redo of that change does
     // not remove the asset.
     const editorSession = this.getEditorSession();
-    let paths = files.map(file => {
+    const paths = files.map(file => {
       return this.archive.addAsset(file);
     });
-    let sel = editorSession.getSelection();
+    const sel = editorSession.getSelection();
     if (!sel || !sel.containerPath) return;
     editorSession.transaction(tx => {
       importFigures(tx, sel, files, paths);
@@ -402,7 +401,7 @@ export default class ArticleAPI {
   }
 
   insertInlineNode(nodeData) {
-    let nodeId = this._insertInlineNode(tx => {
+    const nodeId = this._insertInlineNode(tx => {
       return documentHelpers.createNodeFromJson(tx, nodeData);
     });
     return this.getDocument().get(nodeId);
@@ -435,14 +434,14 @@ export default class ArticleAPI {
   insertSupplementaryFile(file, url) {
     const articleSession = this.editorSession;
     if (file) url = this.archive.addAsset(file);
-    let sel = articleSession.getSelection();
+    const sel = articleSession.getSelection();
     articleSession.transaction(tx => {
-      let containerPath = sel.containerPath;
-      let nodeData = SupplementaryFile.getTemplate();
+      const containerPath = sel.containerPath;
+      const nodeData = SupplementaryFile.getTemplate();
       nodeData.mimetype = file ? file.type : '';
       nodeData.href = url;
       nodeData.remote = !file;
-      let supplementaryFile = documentHelpers.createNodeFromJson(tx, nodeData);
+      const supplementaryFile = documentHelpers.createNodeFromJson(tx, nodeData);
       tx.insertBlockNode(supplementaryFile);
       selectionHelpers.selectNode(tx, supplementaryFile.id, containerPath);
     });
@@ -475,23 +474,23 @@ export default class ArticleAPI {
 
   removeEntity(nodeId) {
     if (!this.canRemoveEntity(nodeId)) throw new Error(DISALLOWED_MANIPULATION);
-    let node = this._getNode(nodeId);
+    const node = this._getNode(nodeId);
     if (!node) throw new Error('Invalid argument.');
-    let collectionPath = this._getCollectionPathForItem(node);
+    const collectionPath = this._getCollectionPathForItem(node);
     this._removeItemFromCollection(nodeId, collectionPath);
   }
 
   removeFootnote(footnoteId) {
     // ATTENTION: footnotes appear in different contexts
     // e.g. article.footnotes, or table-fig.footnotes
-    let doc = this.getDocument();
-    let footnote = doc.get(footnoteId);
-    let parent = footnote.getParent();
+    const doc = this.getDocument();
+    const footnote = doc.get(footnoteId);
+    const parent = footnote.getParent();
     this._removeItemFromCollection(footnoteId, [parent.id, 'footnotes']);
   }
 
   renderEntity(entity, options) {
-    let exporter = this.config.createExporter('html');
+    const exporter = this.config.createExporter('html');
     return renderEntity(entity, exporter);
   }
 
@@ -504,7 +503,7 @@ export default class ArticleAPI {
   }
 
   selectNode(nodeId) {
-    let selData = this._createNodeSelection(nodeId);
+    const selData = this._createNodeSelection(nodeId);
     if (selData) {
       this.editorSession.setSelection(selData);
     }
@@ -529,7 +528,7 @@ export default class ArticleAPI {
 
   switchFigurePanel(figure, newPanelIndex) {
     const editorSession = this.editorSession;
-    let sel = editorSession.getSelection();
+    const sel = editorSession.getSelection();
     if (!sel.isNodeSelection() || sel.getNodeId() !== figure.id) {
       this.selectNode(figure.id);
     }
@@ -542,7 +541,7 @@ export default class ArticleAPI {
       createNode = tx => tx.create({ type });
     }
     editorSession.transaction(tx => {
-      let node = createNode(tx);
+      const node = createNode(tx);
       documentHelpers.append(tx, collectionPath, node.id);
       tx.setSelection(this._createEntitySelection(node));
     });
@@ -551,18 +550,18 @@ export default class ArticleAPI {
   // This is used by CollectionModel
   _appendChild(collectionPath, data) {
     this.editorSession.transaction(tx => {
-      let node = tx.create(data);
+      const node = tx.create(data);
       documentHelpers.append(tx, collectionPath, node.id);
     });
   }
 
   _createNodeSelection(nodeId) {
-    let editorState = this.getEditorState();
-    let doc = editorState.document;
+    const editorState = this.getEditorState();
+    const doc = editorState.document;
     const node = doc.get(nodeId);
     if (node) {
-      let editorSession = this.getEditorSession();
-      let sel = editorState.selection;
+      const editorSession = this.getEditorSession();
+      const sel = editorState.selection;
       const containerPath = this._getContainerPathForNode(node);
       const surface = editorSession.surfaceManager._getSurfaceForProperty(containerPath);
       const surfaceId = surface ? surface.getId() : sel ? sel.surfaceId : null;
@@ -641,13 +640,13 @@ export default class ArticleAPI {
   // Instead we could use dedicated Components derived from the ones from the kit
   // and use specific API to accomplish this
   _getAvailableOptions(model) {
-    let targetTypes = Array.from(model._targetTypes);
+    const targetTypes = Array.from(model._targetTypes);
     if (targetTypes.length !== 1) {
       throw new Error('Unsupported relationship. Expected to find one targetType');
     }
-    let doc = this.getDocument();
-    let first = targetTypes[0];
-    let targetType = first;
+    const doc = this.getDocument();
+    const first = targetTypes[0];
+    const targetType = first;
     switch (targetType) {
       case 'funder': {
         return doc.get('metadata').resolve('funders');
@@ -658,8 +657,8 @@ export default class ArticleAPI {
       case 'group': {
         return doc.get('metadata').resolve('groups');
       }
-      case 'footnote': {
-        return doc.get('article').resolve('footnotes');
+      case 'conflict-of-interest': {
+        return doc.get('article').resolve('conflictOfInterests');
       }
       default:
         throw new Error('Unsupported relationship: ' + targetType);
@@ -668,7 +667,7 @@ export default class ArticleAPI {
 
   // TODO: how could we make this extensible via plugins?
   _getAvailableXrefTargets(xref) {
-    let refType = xref.refType;
+    const refType = xref.refType;
     let manager;
     switch (refType) {
       case BlockFormula.refType: {
@@ -682,7 +681,7 @@ export default class ArticleAPI {
       case 'fn': {
         // EXPERIMENTAL: table footnotes
         // TableFootnoteManager is stored on the TableFigure instance
-        let tableFigure = findParentByType(xref, 'table-figure');
+        const tableFigure = findParentByType(xref, 'table-figure');
         if (tableFigure) {
           manager = tableFigure.getFootnoteManager();
         } else {
@@ -691,7 +690,7 @@ export default class ArticleAPI {
         break;
       }
       case 'table-fn': {
-        let tableFigure = findParentByType(xref, 'table-figure');
+        const tableFigure = findParentByType(xref, 'table-figure');
         if (tableFigure) {
           manager = tableFigure.getFootnoteManager();
         }
@@ -714,11 +713,11 @@ export default class ArticleAPI {
     }
     if (!manager) return [];
 
-    let selectedTargets = xref.resolve('refTargets');
+    const selectedTargets = xref.resolve('refTargets');
     // retrieve all possible nodes that this
     // xref could potentially point to,
     // so that we can let the user select from a list.
-    let availableTargets = manager.getSortedCitables();
+    const availableTargets = manager.getSortedCitables();
     let targets = availableTargets.map(target => {
       // ATTENTION: targets are not just nodes
       // but entries with some information
@@ -729,7 +728,7 @@ export default class ArticleAPI {
       };
     });
     // Determine broken targets (such that don't exist in the document)
-    let brokenTargets = without(selectedTargets, ...availableTargets);
+    const brokenTargets = without(selectedTargets, ...availableTargets);
     if (brokenTargets.length > 0) {
       targets = targets.concat(
         brokenTargets.map(id => {
@@ -743,11 +742,11 @@ export default class ArticleAPI {
   }
 
   _getCollectionPathForItem(node) {
-    let parent = node.getParent();
-    let propName = node.getXpath().property;
+    const parent = node.getParent();
+    const propName = node.getXpath().property;
     if (parent && propName) {
-      let collectionPath = [parent.id, propName];
-      let property = node.getDocument().getProperty(collectionPath);
+      const collectionPath = [parent.id, propName];
+      const property = node.getDocument().getProperty(collectionPath);
       if (property.isArray() && property.isReference()) {
         return collectionPath;
       }
@@ -755,9 +754,9 @@ export default class ArticleAPI {
   }
 
   _getContainerPathForNode(node) {
-    let last = node.getXpath();
-    let prop = last.property;
-    let prev = last.prev;
+    const last = node.getXpath();
+    const prop = last.property;
+    const prev = last.prev;
     if (prev && prop) {
       return [prev.id, prop];
     }
@@ -767,8 +766,8 @@ export default class ArticleAPI {
     // TODO: still not sure if this is the right approach
     // Maybe it would be simpler to just use configuration
     // and fall back to 'node' or 'card' selection otherwise
-    let schema = node.getSchema();
-    for (let p of schema) {
+    const schema = node.getSchema();
+    for (const p of schema) {
       if (p.name === 'id' || !this._isFieldRequired([node.type, p.name])) continue;
       return p;
     }
@@ -782,8 +781,8 @@ export default class ArticleAPI {
   // exploiting knowledge about the implemented view structure
   // in manuscript it is either top-level (e.g. title, abstract) or part of a container (body)
   _getSurfaceId(node, propertyName) {
-    let xpath = node.getXpath().toArray();
-    let idx = xpath.findIndex(entry => entry.id === 'body');
+    const xpath = node.getXpath().toArray();
+    const idx = xpath.findIndex(entry => entry.id === 'body');
     let relXpath;
     if (idx >= 0) {
       relXpath = xpath.slice(idx);
@@ -795,10 +794,10 @@ export default class ArticleAPI {
   }
 
   _insertBlockNode(createNode) {
-    let editorSession = this.getEditorSession();
+    const editorSession = this.getEditorSession();
     let nodeId;
     editorSession.transaction(tx => {
-      let node = createNode(tx);
+      const node = createNode(tx);
       tx.insertBlockNode(node);
       tx.setSelection(this._createNodeSelection(node));
       nodeId = node.id;
@@ -816,10 +815,10 @@ export default class ArticleAPI {
   }
 
   _insertInlineNode(createNode) {
-    let editorSession = this.getEditorSession();
+    const editorSession = this.getEditorSession();
     let nodeId;
     editorSession.transaction(tx => {
-      let inlineNode = createNode(tx);
+      const inlineNode = createNode(tx);
       tx.insertInlineNode(inlineNode);
       // TODO: some inline nodes have an input field
       // which we might want to focus initially
@@ -836,8 +835,8 @@ export default class ArticleAPI {
 
   _isFieldRequired(path) {
     // ATTENTION: this API is experimental
-    let settings = this.getEditorState().settings;
-    let valueSettings = settings.getSettingsForValue(path);
+    const settings = this.getEditorState().settings;
+    const valueSettings = settings.getSettingsForValue(path);
     return Boolean(valueSettings['required']);
   }
 
@@ -848,16 +847,16 @@ export default class ArticleAPI {
 
   // TODO: we need a better way to update settings
   _loadSettings(settings) {
-    let editorState = this.getContext().editorState;
+    const editorState = this.getContext().editorState;
     editorState.settings.load(settings);
     editorState._setDirty('settings');
     editorState.propagateUpdates();
   }
 
   _moveEntity(nodeId, shift) {
-    let node = this._getNode(nodeId);
+    const node = this._getNode(nodeId);
     if (!node) throw new Error('Invalid argument.');
-    let collectionPath = this._getCollectionPathForItem(node);
+    const collectionPath = this._getCollectionPathForItem(node);
     this._moveChild(collectionPath, nodeId, shift);
   }
 
@@ -869,8 +868,8 @@ export default class ArticleAPI {
   // from EditorSession logic
   _moveChild(collectionPath, childId, shift, txHook) {
     this.editorSession.transaction(tx => {
-      let ids = tx.get(collectionPath);
-      let pos = ids.indexOf(childId);
+      const ids = tx.get(collectionPath);
+      const pos = ids.indexOf(childId);
       if (pos === -1) return;
       documentHelpers.removeAt(tx, collectionPath, pos);
       documentHelpers.insertAt(tx, collectionPath, pos + shift, childId);
@@ -907,7 +906,7 @@ export default class ArticleAPI {
   _removeItemFromCollection(itemId, collectionPath) {
     const editorSession = this.getEditorSession();
     editorSession.transaction(tx => {
-      let item = tx.get(itemId);
+      const item = tx.get(itemId);
       documentHelpers.removeFromCollection(tx, collectionPath, itemId);
       // TODO: discuss if we really should do this, or want to do something different.
       this._removeCorrespondingXrefs(tx, item);
@@ -942,8 +941,8 @@ export default class ArticleAPI {
 
   _toggleRelationship(path, id) {
     this.editorSession.transaction(tx => {
-      let ids = tx.get(path);
-      let idx = ids.indexOf(id);
+      const ids = tx.get(path);
+      const idx = ids.indexOf(id);
       if (idx === -1) {
         tx.update(path, { type: 'insert', pos: ids.length, value: id });
       } else {
@@ -954,8 +953,8 @@ export default class ArticleAPI {
   }
 
   _toggleXrefTarget(xref, targetId) {
-    let targetIds = xref.refTargets;
-    let index = targetIds.indexOf(targetId);
+    const targetIds = xref.refTargets;
+    const index = targetIds.indexOf(targetId);
     if (index >= 0) {
       this.editorSession.transaction(tx => {
         tx.update([xref.id, 'refTargets'], { type: 'delete', pos: index });

@@ -37,6 +37,14 @@ export default class ArticleModel extends Model {
     return this.getFootnotes().length > 0;
   }
 
+  getConflictOfInterests() {
+    return this._getValueModel('article.conflictOfInterests');
+  }
+
+  hasConflictOfInterests() {
+    return this.getConflictOfInterests().length > 0;
+  }
+
   getKeywords() {
     return this._getValueModel('metadata.keywords');
   }
