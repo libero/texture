@@ -1,0 +1,18 @@
+.sc-sortable-item {
+    display: flex;
+}
+
+.sc-sortable-item .sc-sortable-item-handle {
+    width: 5px;
+    height: 10px;
+    align-self: center;
+    margin: 2px 4px 0 4px;
+    cursor: grab;
+    background-size: contain;
+    background-image: url("data:image/svg+xml,%3Csvg width='5px' height='10px' viewBox='0 0 5 10' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3C!-- Generator: sketchtool 63.1 (101010) - https://sketch.com --%3E%3Ctitle%3E7504B2B0-2524-43A4-AF13-0E21E4C87972%3C/title%3E%3Cdesc%3ECreated with sketchtool.%3C/desc%3E%3Cg id='Article-Display' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E%3Cg id='article-display' transform='translate(-270.000000, -324.000000)' fill='%23888888'%3E%3Cg id='editable-text/paragraph' transform='translate(268.000000, 290.000000)'%3E%3Cg id='drag-and-drop/horizontal-item' transform='translate(0.000000, 25.000000)'%3E%3Cg id='drag-and-drop/handle' transform='translate(2.000000, 9.000000)'%3E%3Cg id='drag-and-drop'%3E%3Crect id='Rectangle' x='0' y='0' width='2' height='2'%3E%3C/rect%3E%3Crect id='Rectangle' x='0' y='4' width='2' height='2'%3E%3C/rect%3E%3Crect id='Rectangle' x='0' y='8' width='2' height='2'%3E%3C/rect%3E%3Crect id='Rectangle' x='3' y='0' width='2' height='2'%3E%3C/rect%3E%3Crect id='Rectangle' x='3' y='4' width='2' height='2'%3E%3C/rect%3E%3Crect id='Rectangle' x='3' y='8' width='2' height='2'%3E%3C/rect%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+
+.sc-sortable-item .sc-sortable-item-content {
+    flex-grow: 1;
+}
+

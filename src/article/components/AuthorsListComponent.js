@@ -2,6 +2,7 @@
 import { CustomSurface } from 'substance';
 import { NodeComponent } from '../../kit';
 import { getLabel } from '../shared/nodeHelpers';
+import SortableContainerComponent from './SortableContainerComponent';
 
 export default class AuthorsListComponent extends CustomSurface {
   getInitialState() {
@@ -34,7 +35,7 @@ export default class AuthorsListComponent extends CustomSurface {
       .addClass('se-edit-button')
       .on('click', this._openEditDialog, this);
 
-    const list = $$('div')
+    const list = $$(SortableContainerComponent)
       .addClass('sc-authors-list')
       .append(this._renderAuthors($$));
 
@@ -52,9 +53,9 @@ export default class AuthorsListComponent extends CustomSurface {
         authorEl.addClass('sm-selected');
       }
       els.push(authorEl);
-      if (index < authors.length - 1) {
-        els.push(', ');
-      }
+      // if (index < authors.length - 1) {
+      //   els.push(', ');
+      // }
     });
     return els;
   }
