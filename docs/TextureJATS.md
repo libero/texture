@@ -128,7 +128,7 @@ id, xml:base
 </pre>
 **Contains**:
 <pre style="white-space:pre-wrap;">
-article-id*,article-categories?,title-group?,contrib-group*,aff*,pub-date*,volume?,issue?,issue-title?,isbn?,(((fpage,lpage?)?,page-range?)|elocation-id)?,history?,permissions?,related-article?,abstract*,trans-abstract*,kwd-group*,funding-group*
+article-id*,article-categories?,title-group?,contrib-group*,aff*,pub-date*,volume?,issue?,issue-title?,isbn?,(((fpage,lpage?)?,page-range?)|elocation-id)?,history?,permissions?,related-article?,author-notes?,abstract*,trans-abstract*,kwd-group*,funding-group*
 </pre>
 **This element may be contained in:**
 <pre style="white-space:pre-wrap;">
@@ -163,6 +163,21 @@ id, xml:base, specific-use, xml:lang
 **This element may be contained in:**
 <pre style="white-space:pre-wrap;">
 disp-quote
+</pre>
+
+### `<author-notes>`
+
+**Attributes**:
+<pre style="white-space:pre-wrap;">
+
+</pre>
+**Contains**:
+<pre style="white-space:pre-wrap;">
+fn*
+</pre>
+**This element may be contained in:**
+<pre style="white-space:pre-wrap;">
+article-meta
 </pre>
 
 ### `<award-group>`
@@ -747,7 +762,7 @@ label?,p+
 </pre>
 **This element may be contained in:**
 <pre style="white-space:pre-wrap;">
-fn-group
+author-notes, fn-group
 </pre>
 
 ### `<fn-group>`
@@ -2100,7 +2115,6 @@ element-citation, date, pub-date
 - app-group
 - array
 - author-comment
-- author-notes
 - boxed-text
 - chem-struct
 - chem-struct-wrap

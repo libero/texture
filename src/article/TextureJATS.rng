@@ -23,7 +23,6 @@
   <s:not-implemented name="app-group"/>
   <s:not-implemented name="array"/>
   <s:not-implemented name="author-comment"/>
-  <s:not-implemented name="author-notes"/>
   <s:not-implemented name="boxed-text"/>
   <s:not-implemented name="chem-struct"/>
   <s:not-implemented name="chem-struct-wrap"/>
@@ -43,7 +42,7 @@
   <s:not-implemented name="corresp"/>
   <s:not-implemented name="count"/>
   <s:not-implemented name="counts"/>
-  <s:not-implemented name="custom-meta"/>
+  <s:not-implemented name="custom-meta"/> 
   <s:not-implemented name="custom-meta-group"/>
   <s:not-implemented name="def"/>
   <s:not-implemented name="def-head"/>
@@ -442,6 +441,9 @@
       <optional>
         <ref name="related-article"/>
       </optional>
+      <optional>
+        <ref name="author-notes"/>
+      </optional>
       <zeroOrMore>
         <ref name="abstract"/>
       </zeroOrMore>
@@ -500,6 +502,14 @@
       <ref name="article-categories-attlist"/>
       <zeroOrMore>
         <ref name="subj-group"/>
+      </zeroOrMore>
+    </element>
+  </define>
+
+  <define name="author-notes">
+    <element name="author-notes">
+      <zeroOrMore>
+        <ref name="fn"/>
       </zeroOrMore>
     </element>
   </define>

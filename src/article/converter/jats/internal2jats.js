@@ -57,7 +57,17 @@ function _populateArticleMeta(jats, doc, jatsExporter) {
   // aff*
   articleMeta.append(_exportAffiliations(jats, doc));
 
-  // author-notes? // not supported yet
+  // author-notes*
+  const authorNotes = doc.resolve(['article', 'conflictOfInterests']);
+  if (authorNotes.length > 0) {
+    articleMeta.append(
+      $$('author-notes').append(
+        authorNotes.map(authorNote => {
+          return jatsExporter.convertNode(authorNote);
+        }),
+      ),
+    );
+  }
 
   // pub-date*,
   articleMeta.append(_exportDate($$, metadata, 'publishedDate', 'pub', 'pub-date'));
@@ -567,9 +577,9 @@ function _populateBack(jats, doc, jatsExporter) {
     )
   */
 
-  // NOTE: Conflicts of Interest are a specific type of footnote, we just handle them internally as a seperate entity,
-  //       hence here we need to combine both footnotes and COI-statements and write them out as a singular group.
-  const footnotes = [...doc.resolve(['article', 'footnotes']), ...doc.resolve(['article', 'conflictOfInterests'])];
+  // FIXME: Seems at the moment footnotes are written into a single group, hence when loaded any group information will
+  //        be lost!
+  const footnotes = doc.resolve(['article', 'footnotes']);
   if (footnotes.length > 0) {
     backEl.append(
       $$('fn-group').append(
