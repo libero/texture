@@ -15,10 +15,13 @@ class SortableComponent extends Component {
 }
 
 export default class SortableContainerComponent extends Component {
+
   render($$) {
     const sortableContainer = $$('div')
-      .addClass('sortable-container')
-      .on('dragstart', this._dragStart, this);
+      .addClass('sc-sortable-container')
+      .on('dragstart', this._dragStart, this)
+      .on('dragover', this._dragOver, this)
+      .on('dragend', this._dragEnd, this);
 
     const draggableChildren = this.props.children.map(child => {
       return $$(SortableComponent).append(child);
@@ -28,21 +31,71 @@ export default class SortableContainerComponent extends Component {
   }
 
   _dragStart(event) {
-    const dragEl = event.target; // Remembering an element that will be moved
+    this._dragOrigin = event.target; // Remembering an element that will be moved
 
     // Limiting the movement type
     event.dataTransfer.effectAllowed = 'move';
-    event.dataTransfer.setData('text/html', dragEl.outerHTML);
+    event.dataTransfer.setData('text/html', this.outerHTML);
 
-    // Subscribing to the events at dnd
-    // rootEl.addEventListener('dragover', _onDragOver, false);
-    // rootEl.addEventListener('dragend', _onDragEnd, false);
+    setTimeout(() => {
+      // If this action is performed without setTimeout, then
+      // the moved object will be of this class.
+      event.target.classList.add('sc-draggable-shadow');
+    }, 0);
+  }
 
+  _dragEnd(event) {
+    event.preventDefault();
+    this._dragOrigin.classList.remove('sc-draggable-shadow');
+    this.el.emit('sorted', {});
+  }
 
-    // setTimeout(function () {
-    //   // If this action is performed without setTimeout, then
-    //   // the moved object will be of this class.
-    //   dragEl.classList.add('ghost');
-    // }, 0)
+  // Function responsible for sorting
+  _dragOver(event) {
+    event.preventDefault();
+    event.dataTransfer.dropEffect = 'move';
+    const sortableItem = this._getSortableItemFromDragOverTarget(event.target);
+
+    if(!sortableItem) {
+      return;
+    }
+
+    if (!sortableItem.classList.contains('sc-draggable-shadow')) {
+      // Sorting
+      const offset = this._getMouseOffset(event);
+      const middleX = this._getElementVerticalCenter(event.target);
+
+      const parentContainer = this._dragOrigin.parentNode;
+      if (offset.x > middleX) {
+        parentContainer.insertBefore(this._dragOrigin, sortableItem.nextSibling)
+      } else {
+        parentContainer.insertBefore(this._dragOrigin, sortableItem)
+      }
+    }
+  }
+
+  _getMouseOffset(event) {
+    const targetRect = event.target.getBoundingClientRect();
+    return {
+      x: event.pageX - targetRect.left,
+      y: event.pageY - targetRect.top
+    }
+  }
+
+  _getSortableItemFromDragOverTarget(element) {
+    if (element.classList.contains('sc-sortable-item')) {
+      return element;
+    }
+
+    if (element.classList.contains('sc-sortable-container') || element.nodeName === 'BODY') {
+      return null;
+    }
+
+    return this._getSortableItemFromDragOverTarget(element.parentNode);
+  }
+
+  _getElementVerticalCenter(el) {
+    const rect = el.getBoundingClientRect();
+    return (rect.right - rect.left) / 2
   }
 }

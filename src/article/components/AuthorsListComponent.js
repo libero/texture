@@ -37,6 +37,7 @@ export default class AuthorsListComponent extends CustomSurface {
 
     const list = $$(SortableContainerComponent)
       .addClass('sc-authors-list')
+      .on('sorted', this._onListRearranged, this)
       .append(this._renderAuthors($$));
 
     el.append([list, editButton]);
@@ -58,6 +59,10 @@ export default class AuthorsListComponent extends CustomSurface {
       // }
     });
     return els;
+  }
+
+  _onListRearranged(event) {
+    console.log('onSorted', event);
   }
 
   _getCustomResourceId() {
