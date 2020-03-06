@@ -33,7 +33,9 @@ export default class ArticleInformationComponent extends CustomSurface {
     const articlePermissions = api.getDocument().get(articlePermissionsId);
 
     // Subjects
-    el.append($$(SectionLabel, { label: this.getLabel('article-information-subjects-label') }));
+    el.append(
+      $$(SectionLabel, { label: this.getLabel('article-information-subjects-label') }).addClass('sm-subjects-label'),
+    );
     el.append(
       $$(SubjectsListComponent, {
         model: subjectsModel,
@@ -44,128 +46,131 @@ export default class ArticleInformationComponent extends CustomSurface {
     // FIXME: This code be changed to get all keywords, sort by group then render each group.
 
     // Keywords By Author
-    el.append($$(SectionLabel, { label: this.getLabel('author-generated') }));
+    el.append($$(SectionLabel, { label: this.getLabel('author-generated') }).addClass('sm-keywords-label'));
     el.append(
       $$(KeywordsListComponent, {
         model: keywordsModel,
         type: 'author-generated',
-      }).addClass('sm-keywords-list'),
+      })
+        .addClass('sm-keywords-list')
+        .addClass('sm-keywords'),
     );
 
     // Keywords Research Organisms
-    el.append($$(SectionLabel, { label: this.getLabel('research-organism') }));
+    el.append($$(SectionLabel, { label: this.getLabel('research-organism') }).addClass('sm-research-organism-label'));
     el.append(
       $$(KeywordsListComponent, {
         model: keywordsModel,
         type: 'research-organism',
-      }).addClass('sm-keywords-list'),
+      })
+        .addClass('sm-keywords-list')
+        .addClass('sm-research-organism'),
     );
 
     // Article Type
-    el.append($$(SectionLabel, { label: this.getLabel('article-information-type-label') }));
+    el.append($$(SectionLabel, { label: this.getLabel('article-information-type-label') }).addClass('sm-type-label'));
     el.append(
       $$(SubjectsListComponent, {
         model: subjectsModel,
         type: 'heading',
-      }).addClass('sm-subjects-list'),
+      })
+        .addClass('sm-subjects-list')
+        .addClass('sm-type'),
     );
 
-    const container = $$('div').addClass('article-information-container');
-
     // Article DOI
-    if (articleDoi) {
-      const subContainer = $$('div').addClass('article-information-sub-container');
-      subContainer.append($$(SectionLabel, { label: this.getLabel('article-information-doi-label') }));
-      subContainer.append(
-        $$('p')
-          .addClass('se-article-information-doi')
-          .append(articleDoi),
-      );
-      container.append(subContainer);
-    }
+    el.append($$(SectionLabel, { label: this.getLabel('article-information-doi-label') }).addClass('sm-doi-label'));
+    el.append(
+      $$('p')
+        .addClass('se-article-information-doi')
+        .append(articleDoi)
+        .addClass('sm-doi'),
+    );
 
     // Article eLocation ID
-    if (articleELocationId) {
-      const subContainer = $$('div').addClass('article-information-sub-container');
-      subContainer.append($$(SectionLabel, { label: this.getLabel('article-information-elocation-id-label') }));
-      subContainer.append(
-        $$('p')
-          .addClass('se-article-information-elocation-id')
-          .append(articleELocationId),
-      );
-      container.append(subContainer);
-    }
+    el.append(
+      $$(SectionLabel, { label: this.getLabel('article-information-elocation-id-label') }).addClass(
+        'sm-elocation-id-label',
+      ),
+    );
+    el.append(
+      $$('p')
+        .addClass('se-article-information-elocation-id')
+        .append(articleELocationId)
+        .addClass('sm-elocation-id'),
+    );
 
     // Article Year
-    if (articleYear) {
-      const subContainer = $$('div').addClass('article-information-sub-container');
-      subContainer.append($$(SectionLabel, { label: this.getLabel('article-information-year-label') }));
-      subContainer.append(
-        $$('p')
-          .addClass('se-article-information-year')
-          .append(articleYear),
-      );
-      container.append(subContainer);
-    }
+    el.append($$(SectionLabel, { label: this.getLabel('article-information-year-label') }).addClass('sm-year-label'));
+    el.append(
+      $$('p')
+        .addClass('se-article-information-year')
+        .append(articleYear)
+        .addClass('sm-year'),
+    );
 
     // Article Volume
-    if (articleVolume) {
-      const subContainer = $$('div').addClass('article-information-sub-container');
-      subContainer.append($$(SectionLabel, { label: this.getLabel('article-information-volume-label') }));
-      subContainer.append(
-        $$('p')
-          .addClass('se-article-information-volume')
-          .append(articleVolume),
-      );
-      container.append(subContainer);
-    }
-
-    el.append(container);
+    el.append(
+      $$(SectionLabel, { label: this.getLabel('article-information-volume-label') }).addClass('sm-volume-label'),
+    );
+    el.append(
+      $$('p')
+        .addClass('se-article-information-volume')
+        .append(articleVolume)
+        .addClass('sm-volume'),
+    );
 
     // Publish Date
-    if (articlePublishDate) {
-      el.append($$(SectionLabel, { label: this.getLabel('article-information-publish-date-label') }));
-      el.append(
-        $$('p')
-          .addClass('se-article-information-publish-date')
-          .append(articlePublishDate),
-      );
-    }
-
-    const containerLicense = $$('div').addClass('article-information-container');
+    el.append(
+      $$(SectionLabel, { label: this.getLabel('article-information-publish-date-label') }).addClass(
+        'sm-publish-date-label',
+      ),
+    );
+    el.append(
+      $$('p')
+        .addClass('se-article-information-publish-date')
+        .append(articlePublishDate)
+        .addClass('sm-publish-date'),
+    );
 
     // License Type
-    if (articlePermissions && articlePermissions.license) {
-      const subContainer = $$('div').addClass('article-information-sub-container');
-      const model = createValueModel(api, [articlePermissions.id, 'license']);
-      subContainer.append($$(SectionLabel, { label: this.getLabel('article-information-license-type-label') }));
-      subContainer.append($$(LicenseEditor, { model }).ref(articlePermissions.id));
-      containerLicense.append(subContainer);
-    }
+    const licenseTypeModel = createValueModel(api, [articlePermissions.id, 'license']);
+    el.append(
+      $$(SectionLabel, { label: this.getLabel('article-information-license-type-label') }).addClass(
+        'sm-license-type-label',
+      ),
+    );
+    el.append(
+      $$(LicenseEditor, { model: licenseTypeModel })
+        .ref(articlePermissions.id)
+        .addClass('sm-license-type'),
+    );
 
     // Copyright Statement
-    if (articlePermissions && articlePermissions.copyrightStatement) {
-      const subContainer = $$('div').addClass('article-information-sub-container');
-      subContainer.append($$(SectionLabel, { label: this.getLabel('article-information-license-statement-label') }));
-      subContainer.append(
-        $$('p')
-          .addClass('se-article-information-license-statement')
-          .append(articlePermissions.copyrightStatement),
-      );
-      containerLicense.append(subContainer);
-    }
-
-    el.append(containerLicense);
+    el.append(
+      $$(SectionLabel, { label: this.getLabel('article-information-license-statement-label') }).addClass(
+        'sm-license-statement-label',
+      ),
+    );
+    el.append(
+      $$('p')
+        .addClass('se-article-information-license-statement')
+        .append(articlePermissions.copyrightStatement)
+        .addClass('sm-license-statement'),
+    );
 
     // Permissions
-    if (articlePermissions && articlePermissions.licenseText) {
-      el.append($$(SectionLabel, { label: this.getLabel('article-information-license-permissions-label') }));
-      el.append(
-        $$('p')
-          .addClass('se-article-information-permissions')
-          .append(articlePermissions.licenseText),
-      );
-    }
+    el.append(
+      $$(SectionLabel, { label: this.getLabel('article-information-license-permissions-label') }).addClass(
+        'sm-permissions-label',
+      ),
+    );
+    el.append(
+      $$('p')
+        .addClass('se-article-information-permissions')
+        .append(articlePermissions.licenseText)
+        .addClass('sm-permissions'),
+    );
 
     return el;
   }
