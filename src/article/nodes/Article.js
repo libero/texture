@@ -14,4 +14,5 @@ Article.schema = {
   relatedArticles: CHILDREN('related-article'),
   acknowledgements: CHILDREN('acknowledgement'),
   footnotes: CHILDREN('footnote'),
+  conflictOfInterests: CHILDREN('footnote'),
 };

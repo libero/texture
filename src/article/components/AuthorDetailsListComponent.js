@@ -69,8 +69,8 @@ class AuthorDetailsDisplay extends NodeComponent {
       el.append(this._renderAffiliations($$, author));
     }
 
-    if (author.competingInterests.length > 0) {
-      el.append(this._renderCompetingInterests($$, author));
+    if (author.conflictOfInterests.length > 0) {
+      el.append(this._renderConflictOfInterests($$, author));
     }
 
     return el;
@@ -148,9 +148,9 @@ class AuthorDetailsDisplay extends NodeComponent {
     }, []);
   }
 
-  _renderCompetingInterests($$, author) {
+  _renderConflictOfInterests($$, author) {
     const doc = author.document;
-    const competingInterests = author.competingInterests.reduce((elements, id) => {
+    const competingInterests = author.conflictOfInterests.reduce((elements, id) => {
       const element = doc.get(id);
       if (element) {
         elements.push($$(FootnoteComponent, { node: element, mode: CONTENT_MODE }));
