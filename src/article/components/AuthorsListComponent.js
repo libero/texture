@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
-import { CustomSurface, FontAwesomeIcon } from 'substance';
+import { CustomSurface } from 'substance';
 import { NodeComponent } from '../../kit';
 import { getLabel } from '../shared/nodeHelpers';
 
@@ -32,8 +32,8 @@ export default class AuthorsListComponent extends CustomSurface {
     const el = $$('div').addClass('sc-authors-list-container');
     const editButton = $$(Button, { icon: 'edit-section' })
       .addClass('se-edit-button')
-      .on('click', this._openEditDialog.bind(this));
-    
+      .on('click', this._openEditDialog, this);
+
     const list = $$('div')
       .addClass('sc-authors-list')
       .append(this._renderAuthors($$));
@@ -68,9 +68,21 @@ export default class AuthorsListComponent extends CustomSurface {
   }
 
   _openEditDialog() {
-    const firstAuthor = this._getAuthors()[0];
-    this.context.api.selectEntity(firstAuthor.id);
+    if (!this._isAuthorSelected()) {
+      const firstAuthor = this._getAuthors()[0];
+      this.context.api.selectEntity(firstAuthor.id);
+    }
     this.send('executeCommand', 'edit-author');
+  }
+
+  _isAuthorSelected() {
+    const selectedNode = this.context.editorState.selectionState.node;
+    if (selectedNode) {
+      return selectedNode
+        .getXpath()
+        .toArray()
+        .some(x => x.property === 'authors');
+    }
   }
 }
 

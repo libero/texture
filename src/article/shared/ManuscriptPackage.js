@@ -114,9 +114,7 @@ export default {
     config.addCommand('download-file', DownloadSupplementaryFileCommand, {
       commandGroup: 'file',
     });
-    config.addCommand('edit-author', EditAuthorCommand, {
-      commandGroup: 'entities',
-    });
+    config.addCommand('edit-author', EditAuthorCommand, {});
     config.addCommand('edit-metadata', EditMetadataCommand);
     config.addCommand('edit-reference', EditReferenceCommand, {
       commandGroup: 'entities',
