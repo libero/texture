@@ -166,7 +166,7 @@ export default {
     config.addLabel('equalContrib', 'Equal Contribution');
     config.addLabel('corresp', 'Corresponding Author');
     config.addLabel('deceased', 'Deceased');
-    config.addLabel('conflictOfInterests', 'Conflict of Interest Statement');
+    config.addLabel('conflictOfInterests', 'Conflict of Interests');
 
     // affiliation labels
     config.addLabel('affiliation', 'Affiliation');
