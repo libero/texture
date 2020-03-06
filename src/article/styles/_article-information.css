@@ -2,6 +2,7 @@
   display: grid;
   grid-template-columns: repeat(8, 1fr);
   grid-template-rows: auto;
+  grid-column-gap: 10px;
 }
 
 .sc-article-information > .sm-subjects-label {
@@ -55,7 +56,7 @@
 
 .sc-article-information > .sm-type {
   grid-column-start: 1;
-  grid-column-end: 9;
+  grid-column-end: 3;
   grid-row-start: 8;
   grid-row-end: 8;
 }
