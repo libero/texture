@@ -1,3 +1,7 @@
+.sc-article-information {
+  display: grid;
+}
+
 .article-information-container {
   display: flex;
   flex-direction: row;
