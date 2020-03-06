@@ -206,16 +206,16 @@ export default {
     config.addLabel('legend', 'Legend');
 
     // permission labels
-    config.addLabel('copyrightStatement', 'Copyright');
-    config.addLabel('copyrightStatement-placeholder', 'Enter copyright');
-    config.addLabel('copyrightYear', 'Year');
-    config.addLabel('copyrightYear-placeholder', 'Enter year');
-    config.addLabel('copyrightHolder', 'Holder');
-    config.addLabel('copyrightHolder-placeholder', 'Enter holder');
-    config.addLabel('license', 'License');
+    config.addLabel('copyrightStatement', 'Copyright statement');
+    config.addLabel('copyrightStatement-placeholder', 'Enter copyright statement');
+    config.addLabel('copyrightYear', 'Copyright year');
+    config.addLabel('copyrightYear-placeholder', 'Enter copyright year');
+    config.addLabel('copyrightHolder', 'Copyright holder');
+    config.addLabel('copyrightHolder-placeholder', 'Enter copyright holder');
+    config.addLabel('license', 'License URL');
     config.addLabel('license-placeholder', 'Enter license URL');
-    config.addLabel('licenseText', 'Statement');
-    config.addLabel('licenseText-placeholder', 'Enter statement');
+    config.addLabel('licenseText', 'Permissions');
+    config.addLabel('licenseText-placeholder', 'Enter permissions');
 
     // table figure labels
     config.addLabel('table-figure', 'Table');
