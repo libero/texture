@@ -9,21 +9,27 @@
 .sc-authors-list-container > .se-add-author {
   padding: 2px 0px;
   color: var(--t-action-color);
+  white-space: nowrap;
 }
 
 .sc-authors-list-container > .se-add-author > .se-label {
   margin-left: var(--t-button-padding);
+  white-space: nowrap;
 }
 
 .sc-authors-list-container > .se-edit-button {
   font-size: var(--t-icon-font-size);
 }
 
-.sc-authors-list-container .spacer { flex-grow: 1; }
+.sc-authors-list-container .spacer {
+  flex-grow: 1;
+  min-width: var(--t-default-spacing);
+}
 
 .sc-authors-list {
   cursor: default;
   display: flex;
+  flex-wrap: wrap;
 }
 
 .sc-authors-list .se-contrib {
@@ -31,6 +37,7 @@
   margin: var(--t-negative-list-padding);
   cursor: default;
   margin-right: var(--t-text-spacing);
+  white-space: nowrap;
 }
 
 .sc-authors-list .se-contrib.sm-empty {
