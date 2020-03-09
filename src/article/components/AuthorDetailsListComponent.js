@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
-import { CustomSurface, FontAwesomeIcon } from 'substance';
+import { AnnotatedTextComponent, CustomSurface } from 'substance';
 import { NodeComponent } from '../../kit';
 import FootnoteComponent from './FootnoteComponent';
 import { CONTENT_MODE } from '../ArticleConstants';
@@ -120,10 +120,7 @@ class AuthorDetailsDisplay extends NodeComponent {
   }
 
   _renderBio($$, author) {
-    const doc = author.document;
-    const Paragraph = this.context.config.getComponent('paragraph');
-    const bioParagraphs = author.bio.map(path => $$(Paragraph, { node: doc.get(path) }));
-    return $$('div').append(bioParagraphs);
+    return $$(AnnotatedTextComponent, {path: [author.bio, 'content'], doc: author.document});
   }
 
   _renderContribIds($$, author) {
