@@ -6,13 +6,23 @@
   display: flex;
 }
 
+.sc-authors-list-container > .se-add-author {
+  padding: 2px 0px;
+  color: var(--t-action-color);
+}
+
+.sc-authors-list-container > .se-add-author > .se-label {
+  margin-left: var(--t-button-padding);
+}
+
 .sc-authors-list-container > .se-edit-button {
   font-size: var(--t-icon-font-size);
 }
 
+.sc-authors-list-container .spacer { flex-grow: 1; }
+
 .sc-authors-list {
   cursor: default;
-  flex-grow: 1;
   display: flex;
 }
 
