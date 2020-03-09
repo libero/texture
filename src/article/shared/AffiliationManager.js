@@ -108,7 +108,7 @@ export default class AffiliationManager {
   }
 
   _detectRearrangeAuthors(op) {
-    return op.path[1] === 'authors' && ['insert', 'delete'].includes(op.diff.type);
+    return op.path[1] === 'authors' && op.isUpdate();
   }
 
   _updateLabels(silent) {
