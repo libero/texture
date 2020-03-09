@@ -2,7 +2,7 @@
   display: grid;
   grid-template-columns: repeat(8, 1fr);
   grid-template-rows: auto;
-  grid-column-gap: 10px;
+  grid-column-gap: var(--t-default-spacing);
 }
 
 .sc-article-information > .sm-subjects-label {
@@ -56,34 +56,34 @@
 
 .sc-article-information > .sm-type {
   grid-column-start: 1;
-  grid-column-end: 3;
+  grid-column-end: 4;
   grid-row-start: 8;
   grid-row-end: 8;
 }
 
 .sc-article-information > .sm-type {
   grid-column-start: 1;
-  grid-column-end: 3;
+  grid-column-end: 4;
   grid-row-start: 8;
   grid-row-end: 8;
 }
 
 .sc-article-information > .sm-doi-label {
   grid-column-start: 1;
-  grid-column-end: 3;
+  grid-column-end: 4;
   grid-row-start: 9;
   grid-row-end: 9;
 }
 
 .sc-article-information > .sm-elocation-id-label {
-  grid-column-start: 3;
-  grid-column-end: 5;
+  grid-column-start: 4;
+  grid-column-end: 6;
   grid-row-start: 9;
   grid-row-end: 9;
 }
 
 .sc-article-information > .sm-year-label {
-  grid-column-start: 5;
+  grid-column-start: 6;
   grid-column-end: 7;
   grid-row-start: 9;
   grid-row-end: 9;
@@ -91,27 +91,27 @@
 
 .sc-article-information > .sm-volume-label {
   grid-column-start: 7;
-  grid-column-end: 9;
+  grid-column-end: 8;
   grid-row-start: 9;
   grid-row-end: 9;
 }
 
 .sc-article-information > .sm-doi {
   grid-column-start: 1;
-  grid-column-end: 3;
+  grid-column-end: 4;
   grid-row-start: 10;
   grid-row-end: 10;
 }
 
 .sc-article-information > .sm-elocation-id {
-  grid-column-start: 3;
-  grid-column-end: 5;
+  grid-column-start: 4;
+  grid-column-end: 6;
   grid-row-start: 10;
   grid-row-end: 10;
 }
 
 .sc-article-information > .sm-year {
-  grid-column-start: 5;
+  grid-column-start: 6;
   grid-column-end: 7;
   grid-row-start: 10;
   grid-row-end: 10;
@@ -119,7 +119,7 @@
 
 .sc-article-information > .sm-volume {
   grid-column-start: 7;
-  grid-column-end: 9;
+  grid-column-end: 8;
   grid-row-start: 10;
   grid-row-end: 10;
 }
@@ -140,28 +140,28 @@
 
 .sc-article-information > .sm-license-type-label {
   grid-column-start: 1;
-  grid-column-end: 3;
+  grid-column-end: 4;
   grid-row-start: 13;
   grid-row-end: 13;
 }
 
 .sc-article-information > .sm-license-statement-label {
-  grid-column-start: 3;
-  grid-column-end: 5;
+  grid-column-start: 4;
+  grid-column-end: 7;
   grid-row-start: 13;
   grid-row-end: 13;
 }
 
 .sc-article-information > .sm-license-type {
   grid-column-start: 1;
-  grid-column-end: 3;
+  grid-column-end: 4;
   grid-row-start: 14;
   grid-row-end: 14;
 }
 
 .sc-article-information > .sm-license-statement {
-  grid-column-start: 3;
-  grid-column-end: 5;
+  grid-column-start: 4;
+  grid-column-end: 7;
   grid-row-start: 14;
   grid-row-end: 14;
 }
