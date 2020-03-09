@@ -1,10 +1,181 @@
-.article-information-container {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
+.sc-article-information {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  grid-template-rows: auto;
+  grid-column-gap: 10px;
 }
 
-.article-information-sub-container {
-  display: flex;
-  flex-direction: column;
+.sc-article-information > .sm-subjects-label {
+  grid-column-start: 1;
+  grid-column-end: 3;
+  grid-row-start: 1;
+  grid-row-end: 1;
+}
+
+.sc-article-information > .sm-subjects-list {
+  grid-column-start: 1;
+  grid-column-end: 9;
+  grid-row-start: 2;
+  grid-row-end: 2;
+}
+
+.sc-article-information > .sm-keywords-label {
+  grid-column-start: 1;
+  grid-column-end: 3;
+  grid-row-start: 3;
+  grid-row-end: 3;
+}
+
+.sc-article-information > .sm-keywords {
+  grid-column-start: 1;
+  grid-column-end: 9;
+  grid-row-start: 4;
+  grid-row-end: 4;
+}
+
+.sc-article-information > .sm-research-organism-label {
+  grid-column-start: 1;
+  grid-column-end: 3;
+  grid-row-start: 5;
+  grid-row-end: 5;
+}
+
+.sc-article-information > .sm-research-organism {
+  grid-column-start: 1;
+  grid-column-end: 9;
+  grid-row-start: 6;
+  grid-row-end: 6;
+}
+
+.sc-article-information > .sm-type-label {
+  grid-column-start: 1;
+  grid-column-end: 3;
+  grid-row-start: 7;
+  grid-row-end: 7;
+}
+
+.sc-article-information > .sm-type {
+  grid-column-start: 1;
+  grid-column-end: 3;
+  grid-row-start: 8;
+  grid-row-end: 8;
+}
+
+.sc-article-information > .sm-type {
+  grid-column-start: 1;
+  grid-column-end: 3;
+  grid-row-start: 8;
+  grid-row-end: 8;
+}
+
+.sc-article-information > .sm-doi-label {
+  grid-column-start: 1;
+  grid-column-end: 3;
+  grid-row-start: 9;
+  grid-row-end: 9;
+}
+
+.sc-article-information > .sm-elocation-id-label {
+  grid-column-start: 3;
+  grid-column-end: 5;
+  grid-row-start: 9;
+  grid-row-end: 9;
+}
+
+.sc-article-information > .sm-year-label {
+  grid-column-start: 5;
+  grid-column-end: 7;
+  grid-row-start: 9;
+  grid-row-end: 9;
+}
+
+.sc-article-information > .sm-volume-label {
+  grid-column-start: 7;
+  grid-column-end: 9;
+  grid-row-start: 9;
+  grid-row-end: 9;
+}
+
+.sc-article-information > .sm-doi {
+  grid-column-start: 1;
+  grid-column-end: 3;
+  grid-row-start: 10;
+  grid-row-end: 10;
+}
+
+.sc-article-information > .sm-elocation-id {
+  grid-column-start: 3;
+  grid-column-end: 5;
+  grid-row-start: 10;
+  grid-row-end: 10;
+}
+
+.sc-article-information > .sm-year {
+  grid-column-start: 5;
+  grid-column-end: 7;
+  grid-row-start: 10;
+  grid-row-end: 10;
+}
+
+.sc-article-information > .sm-volume {
+  grid-column-start: 7;
+  grid-column-end: 9;
+  grid-row-start: 10;
+  grid-row-end: 10;
+}
+
+.sc-article-information > .sm-publish-date-label {
+  grid-column-start: 1;
+  grid-column-end: 3;
+  grid-row-start: 11;
+  grid-row-end: 11;
+}
+
+.sc-article-information > .sm-publish-date {
+  grid-column-start: 1;
+  grid-column-end: 3;
+  grid-row-start: 12;
+  grid-row-end: 12;
+}
+
+.sc-article-information > .sm-license-type-label {
+  grid-column-start: 1;
+  grid-column-end: 3;
+  grid-row-start: 13;
+  grid-row-end: 13;
+}
+
+.sc-article-information > .sm-license-statement-label {
+  grid-column-start: 3;
+  grid-column-end: 5;
+  grid-row-start: 13;
+  grid-row-end: 13;
+}
+
+.sc-article-information > .sm-license-type {
+  grid-column-start: 1;
+  grid-column-end: 3;
+  grid-row-start: 14;
+  grid-row-end: 14;
+}
+
+.sc-article-information > .sm-license-statement {
+  grid-column-start: 3;
+  grid-column-end: 5;
+  grid-row-start: 14;
+  grid-row-end: 14;
+}
+
+.sc-article-information > .sm-permissions-label {
+  grid-column-start: 1;
+  grid-column-end: 3;
+  grid-row-start: 15;
+  grid-row-end: 15;
+}
+
+.sc-article-information > .sm-permissions {
+  grid-column-start: 1;
+  grid-column-end: 9;
+  grid-row-start: 16;
+  grid-row-end: 16;
 }
