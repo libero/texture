@@ -30,9 +30,14 @@ export default class ArticleLoader {
     if (validator) {
       let validationResult = validator.validate(xmlDom);
       if (!validationResult.ok) {
-        let err = new Error('Validation failed.');
-        err.detail = validationResult.errors;
-        throw err;
+        // FIXME: For now i've added a temp config key to disable strict behaviour, but this should be fixed up properly.
+        if (substanceGlobals.STRICT_VALIDATION !== undefined && substanceGlobals.STRICT_VALIDATION === false) {
+          console.warn(`Validation failed whilst loading the article, carrying on anyway...`);
+        } else {
+          let err = new Error('Validation failed.');
+          err.detail = validationResult.errors;
+          throw err;
+        }
       }
     }
 
@@ -48,7 +53,7 @@ export default class ArticleLoader {
       if (validator) {
         let validationResult = validator.validate(xmlDom);
         if (!validationResult.ok) {
-          // FIXME: For now i've added a temp condig key to disable strict behaviour, but this should be fixed up properly.
+          // FIXME: For now i've added a temp config key to disable strict behaviour, but this should be fixed up properly.
           if (substanceGlobals.STRICT_VALIDATION !== undefined && substanceGlobals.STRICT_VALIDATION === false) {
             console.warn(`Validation post transformation failed whilst loading the article, carrying on anyway...`);
           } else {

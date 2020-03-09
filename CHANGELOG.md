@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.14](https://github.com/libero/texture/compare/v0.0.13...v0.0.14) (2020-03-06)
+
+
+### Features
+
+* add initial jest unit test ([1577f8a](https://github.com/libero/texture/commit/1577f8ad0ab2d212090a851982bfc678806acaa2))
+
+
+### Bug Fixes
+
+* always display acknowledgements section ([cbfc102](https://github.com/libero/texture/commit/cbfc1024d799549894c8ad25910cfdcd7c3e25cf))
+* author and affiliation styling ([7864894](https://github.com/libero/texture/commit/7864894534fed6541cc3a89a7fab51cef3f6ff5a))
+* author information in article view missing bio ([e415f18](https://github.com/libero/texture/commit/e415f18c36214e7fbedba105a77c958e85370a58))
+* edit author option should not be displayed in edit menu ([c851861](https://github.com/libero/texture/commit/c8518617d2fc3ba58d12822ca3fc0d56c656ad18))
+* element spacing in related articles section ([3679b53](https://github.com/libero/texture/commit/3679b5396e322d9cb3e3637244dfc3f4b1519565))
+* footnotes should not display in article view ([0c5f58e](https://github.com/libero/texture/commit/0c5f58e5e37a82971cc856401d71dfd70d727c0d))
+* icons in article view have inconsistent sizes ([744a6e2](https://github.com/libero/texture/commit/744a6e27bd47f81a2c41b46e2272a871003fa04d))
+* labels on figure license are incorrect ([5927401](https://github.com/libero/texture/commit/59274012275312182a4875a7beb002975e676e7a))
+* should not display empty figure permission component ([227f098](https://github.com/libero/texture/commit/227f0983595d8f544983f1b4561e0a6d43e3fcc0))
+
 ### [0.0.13](https://github.com/libero/texture/compare/v0.0.12...v0.0.13) (2020-02-20)
 
 

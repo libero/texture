@@ -14,7 +14,9 @@ export default class FootnoteConverter {
 
   // NOTE: we don’t support custom labels at the moment, so we will ignore input from fn > label
   import(el, node, importer) {
-    let pEls = findAllChildren(el, 'p');
+    const type = el.attr('fn-type') || '';
+    const pEls = findAllChildren(el, 'p');
+    node.footnoteType = type;
     node.content = pEls.map(el => importer.convertElement(el).id);
   }
 
@@ -25,9 +27,12 @@ export default class FootnoteConverter {
     // or they are generated without persisting operations (e.g. think about undo/redo, or collab)
     // my suggestion would be to introduce volatile ops, they would be excluded from the DocumentChange, that is stored in the change history,
     // or used for collaborative editing.
-    let label = getLabel(node);
+    const label = getLabel(node);
     if (label) {
       el.append($$('label').text(label));
+    }
+    if (node.footnoteType) {
+      el.attr('fn-type', node.footnoteType);
     }
     el.append(node.resolve('content').map(p => exporter.convertNode(p)));
   }

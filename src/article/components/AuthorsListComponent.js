@@ -34,7 +34,7 @@ export default class AuthorsListComponent extends CustomSurface {
       .addClass('se-edit-button')
       .on('click', this._openEditDialog, this);
 
-    const list = $$(SortableContainerComponent)
+    const list = $$('div')
       .addClass('sc-authors-list')
       .on('rearrange', this._onListRearranged, this)
       .append(this._renderAuthors($$));

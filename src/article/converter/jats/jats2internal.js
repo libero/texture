@@ -21,6 +21,7 @@ export default function jats2internal(jats, doc, jatsImporter) {
   _populateAbstract(doc, jats, jatsImporter);
   _populateBody(doc, jats, jatsImporter);
   _populateFootnotes(doc, jats, jatsImporter);
+  _populateConflictOfInterests(doc, jats, jatsImporter);
   _populateReferences(doc, jats, jatsImporter);
   _populateAcknowledgements(doc, jats, jatsImporter);
 
@@ -102,7 +103,7 @@ function _populateContribs(doc, jats, importer, contribsPath, contribEls, groupI
         deceased: contribEl.getAttribute('deceased') === 'yes',
         group: groupId,
         contributorIds: _getContributorIds(contribEl, importer),
-        competingInterests: _getAuthorCompetingInterests(contribEl, importer),
+        conflictOfInterests: _getAuthorConflictOfInterests(contribEl, importer),
       });
       documentHelpers.append(doc, contribsPath, contrib.id);
     }
@@ -111,7 +112,7 @@ function _populateContribs(doc, jats, importer, contribsPath, contribEls, groupI
 
 function _populateAuthorNotes(doc, jats, jatsImporter) {
   const $$ = jats.createElement.bind(jats);
-  const fnEls = jats.findAll('article > front > article-meta > author-notes > fn');
+  const fnEls = jats.findAll('article > front > article-meta > author-notes > fn:not([fn-type=COI-statement])');
   const article = doc.get('article');
   article.authorNotes = fnEls.map(fnEl => {
     // there must be at least one paragraph
@@ -122,7 +123,7 @@ function _populateAuthorNotes(doc, jats, jatsImporter) {
   });
 }
 
-function _getAuthorCompetingInterests(el, importer) {
+function _getAuthorConflictOfInterests(el, importer) {
   const xrefs = el.findAll('xref[ref-type=fn]');
   const ids = xrefs.map(xref => xref.attr('rid'));
   return ids;
@@ -492,9 +493,25 @@ function _populateBody(doc, jats, jatsImporter) {
 
 function _populateFootnotes(doc, jats, jatsImporter) {
   const $$ = jats.createElement.bind(jats);
-  const fnEls = jats.findAll('article > back > fn-group > fn');
+  const fnEls = jats.findAll('article > back > fn-group > fn:not([fn-type=COI-statement])');
   const article = doc.get('article');
   article.footnotes = fnEls.map(fnEl => {
+    // there must be at least one paragraph
+    if (!fnEl.find('p')) {
+      fnEl.append($$('p'));
+    }
+    return jatsImporter.convertElement(fnEl).id;
+  });
+}
+
+function _populateConflictOfInterests(doc, jats, jatsImporter) {
+  const $$ = jats.createElement.bind(jats);
+  const fnEls = [
+    ...jats.findAll('article > front > article-meta > author-notes > fn[fn-type=COI-statement]'),
+    ...jats.findAll('article > back > fn-group > fn[fn-type=COI-statement]'),
+  ];
+  const article = doc.get('article');
+  article.conflictOfInterests = fnEls.map(fnEl => {
     // there must be at least one paragraph
     if (!fnEl.find('p')) {
       fnEl.append($$('p'));
