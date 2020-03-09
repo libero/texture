@@ -2,6 +2,7 @@
 import { CustomSurface } from 'substance';
 import { NodeComponent } from '../../kit';
 import { getLabel } from '../shared/nodeHelpers';
+import SortableContainerComponent from './SortableContainerComponent';
 
 export default class AuthorsListComponent extends CustomSurface {
   getInitialState() {
@@ -14,7 +15,6 @@ export default class AuthorsListComponent extends CustomSurface {
 
   didMount() {
     super.didMount();
-
     const appState = this.context.editorState;
     // FIXME: it is not good to rerender on every selection change.
     // Instead it should derive a state from the selection, and only rerender if the
@@ -34,8 +34,9 @@ export default class AuthorsListComponent extends CustomSurface {
       .addClass('se-edit-button')
       .on('click', this._openEditDialog, this);
 
-    const list = $$('div')
+    const list = $$(SortableContainerComponent)
       .addClass('sc-authors-list')
+      .on('rearrange', this._onListRearranged, this)
       .append(this._renderAuthors($$));
 
     el.append([list, editButton]);
@@ -46,17 +47,21 @@ export default class AuthorsListComponent extends CustomSurface {
     const sel = this.context.editorState.selection;
     const authors = this._getAuthors();
     const els = [];
-    authors.forEach((author, index) => {
+    authors.forEach(author => {
       const authorEl = $$(AuthorDisplay, { node: author }).ref(author.id);
       if (sel && sel.nodeId === author.id) {
         authorEl.addClass('sm-selected');
       }
       els.push(authorEl);
-      if (index < authors.length - 1) {
-        els.push(', ');
-      }
     });
     return els;
+  }
+
+  _onListRearranged(event) {
+    const {from, to} = event.detail;
+    const nodeIds = this.props.model.getValue();
+
+    this.context.api._moveEntity(nodeIds[from], to - from);
   }
 
   _getCustomResourceId() {

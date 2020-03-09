@@ -71,7 +71,7 @@
     "start": "node --require esm make dev -s -w -d data",
     "build": "npm run lib",
     "webpack:build": "node make.js build:schema && webpack --config config/webpack.config.dev.js",
-    "webpack:start": "webpack-dev-server --config config/webpack.config.dev.js",
+    "webpack:start": "node make.js build:schema &&  webpack-dev-server --config config/webpack.config.dev.js",
     "lib": "node --require esm make lib",
     "app": "node make run-app -w",
     "release": "standard-version",

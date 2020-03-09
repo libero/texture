@@ -33,7 +33,7 @@ export default class AffiliationManager {
         return this._updateLabels();
         // 3. xref targets have been changed
         // 4. refType of an xref has been changed (TODO: do we really need this?)
-      } else if (this._detectChangeAuthor(op)) {
+      } else if (this._detectChangeAuthor(op) || this._detectRearrangeAuthors(op)) {
         return this._updateLabels();
       }
     }
@@ -105,6 +105,10 @@ export default class AffiliationManager {
     } else {
       return false;
     }
+  }
+
+  _detectRearrangeAuthors(op) {
+    return op.path[1] === 'authors' && op.isUpdate();
   }
 
   _updateLabels(silent) {

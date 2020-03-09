@@ -13,12 +13,14 @@
 .sc-authors-list {
   cursor: default;
   flex-grow: 1;
+  display: flex;
 }
 
 .sc-authors-list .se-contrib {
   padding: var(--t-input-padding);
   margin: var(--t-negative-list-padding);
   cursor: default;
+  margin-right: var(--t-text-spacing);
 }
 
 .sc-authors-list .se-contrib.sm-empty {
