@@ -8,11 +8,11 @@ export default class Person extends DocumentNode {
   // }
 
   render(options = {}) {
-    let { prefix, suffix, givenNames, surname } = this;
+    const { prefix, suffix, givenNames, surname } = this;
     if (options.short) {
       givenNames = extractInitials(givenNames);
     }
-    let result = [];
+    const result = [];
     if (prefix) {
       result.push(prefix, ' ');
     }
@@ -40,5 +40,5 @@ Person.schema = {
   corresp: BOOLEAN,
   deceased: BOOLEAN,
   contributorIds: CONTAINER('contributor-identifier'),
-  competingInterests: CONTAINER('footnote'),
+  conflictOfInterests: MANY('conflict-of-interest'),
 };

@@ -13,9 +13,9 @@ export default class FootnoteComponent extends NodeComponent {
     }
 
     const footnote = this.props.node;
-    let label = getLabel(footnote) || '?';
+    const label = getLabel(footnote) || '?';
 
-    let el = $$('div')
+    const el = $$('div')
       .addClass('sc-footnote')
       .attr('data-id', footnote.id);
     el.append(
@@ -32,12 +32,12 @@ export default class FootnoteComponent extends NodeComponent {
   }
 
   _renderPreviewVersion($$) {
-    let footnote = this.props.node;
-    let el = $$('div')
+    const footnote = this.props.node;
+    const el = $$('div')
       .addClass('sc-footnote')
       .attr('data-id', footnote.id);
 
-    let label = getLabel(footnote) || '?';
+    const label = getLabel(footnote) || '?';
     el.append(
       $$(PreviewComponent, {
         id: footnote.id,

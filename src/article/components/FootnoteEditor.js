@@ -11,7 +11,7 @@ export default class FootnoteEditor extends ValueComponent {
 
   _renderFootnotes($$) {
     const model = this.props.model;
-    let items = model.getItems();
+    const items = model.getItems();
     return items.map(item => $$(FootnoteComponent, { node: item }).ref(item.id));
   }
 }
