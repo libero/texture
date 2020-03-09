@@ -1,10 +1,11 @@
-import { Component, domHelpers } from 'substance';
+import { Component } from 'substance';
 
 class SortableComponent extends Component {
   render($$) {
     return $$('div')
       .addClass('sc-sortable-item')
       .attr('draggable', true)
+      .attr('sort-index', this.props.sortIndex)
       .append($$('div').addClass('sc-sortable-item-handle'))
       .append(
         $$('div')
@@ -23,8 +24,8 @@ export default class SortableContainerComponent extends Component {
       .on('dragover', this._dragOver, this)
       .on('dragend', this._dragEnd, this);
 
-    const draggableChildren = this.props.children.map(child => {
-      return $$(SortableComponent).append(child);
+    const draggableChildren = this.props.children.map((child, index) => {
+      return $$(SortableComponent, {sortIndex: index}).append(child);
     });
 
     return sortableContainer.append(draggableChildren);
@@ -47,7 +48,12 @@ export default class SortableContainerComponent extends Component {
   _dragEnd(event) {
     event.preventDefault();
     this._dragOrigin.classList.remove('sc-draggable-shadow');
-    this.el.emit('sorted', {});
+    const originalPosition = this._dragOrigin.getAttribute('sort-index');
+    const newPosition = Array.from(this._dragOrigin.parentNode.children).indexOf(this._dragOrigin);
+
+    if (originalPosition !== newPosition) {
+      this.el.emit('rearrange', {from: parseInt(originalPosition), to: newPosition});
+    }
   }
 
   // Function responsible for sorting
