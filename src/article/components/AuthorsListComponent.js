@@ -39,7 +39,16 @@ export default class AuthorsListComponent extends CustomSurface {
       .on('rearrange', this._onListRearranged, this)
       .append(this._renderAuthors($$));
 
-    el.append([list, editButton]);
+    const addAuthorButton = $$(Button, {
+      icon: 'insert',
+      label: this.getLabel('add-author'),
+    })
+      .addClass('se-add-author')
+      .on('click', this._addAuthor);
+
+    const spacer = $$('div').addClass('spacer');
+
+    el.append([list, addAuthorButton, spacer, editButton]);
     return el;
   }
 
@@ -62,6 +71,10 @@ export default class AuthorsListComponent extends CustomSurface {
     const nodeIds = this.props.model.getValue();
 
     this.context.api._moveEntity(nodeIds[from], to - from);
+  }
+
+  _addAuthor() {
+    this.send('executeCommand', 'add-author');
   }
 
   _getCustomResourceId() {
