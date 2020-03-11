@@ -1,0 +1,13 @@
+.sc-authors-collection-editor .sc-author-card {
+  display: flex;
+}
+
+.sc-authors-collection-editor .sc-author-card .se-author-content {
+  flex-grow: 1;
+}
+
+.sc-authors-collection-editor .sc-author-card .sc-sortable-item-handle {
+  margin-left: 20px;
+}
+
+

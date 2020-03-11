@@ -2,21 +2,33 @@ import { Component } from 'substance';
 import autoScroll from 'dom-autoscroller';
 import dragula from 'dragula';
 
+const DEFAULT_HANDLE_CLASS = 'sc-sortable-item-handle';
+
 class SortableComponent extends Component {
   render($$) {
-    return $$('div')
+    const el = $$('div')
       .addClass('sc-sortable-item')
       .attr('sort-index', this.props.sortIndex)
-      .append($$('div').addClass('sc-sortable-item-handle'))
-      .append(
-        $$('div')
-          .addClass('sc-sortable-item-content')
-          .append(this.props.children),
-      );
+
+    if (this.props.useDefaultHandle) {
+      el.append($$('div').addClass('sc-sortable-item-handle'));
+    }
+
+    el.append(
+      $$('div')
+        .addClass('sc-sortable-item-content')
+        .append(this.props.children),
+    );
+
+    return el;
   }
 }
 
 export default class SortableContainerComponent extends Component {
+
+  get _handleCssClass() {
+    return this.props.handleCss || DEFAULT_HANDLE_CLASS;
+  }
 
   get direction () {
     return this.props.direction === SortableContainerComponent.HORIZONTAL
@@ -30,11 +42,11 @@ export default class SortableContainerComponent extends Component {
       containers: [this.el.el],
       revertOnSpill: true,
       mirrorContainer: this.el.el,
-      accepts: function (el, target, source, sibling) {
+      accepts: (el, target, source) => {
         return target === source;
       },
-      moves: function (el, container, handle) {
-        return handle.classList.contains('sc-sortable-item-handle');
+      moves: (el, container, handle) => {
+        return handle.classList.contains(this._handleCssClass);
       },
       direction: this.direction,
     });
@@ -66,9 +78,11 @@ export default class SortableContainerComponent extends Component {
 
   render($$) {
     const sortableContainer = $$('div').addClass('sc-sortable-container');
-
     const draggableChildren = this.props.children.map((child, index) => {
-      return $$(SortableComponent, {sortIndex: index}).append(child);
+      return $$(SortableComponent, {
+        sortIndex: index,
+        useDefaultHandle: !this.props.handleCss
+      }).append(child);
     });
 
     return sortableContainer.append(draggableChildren);

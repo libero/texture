@@ -8,7 +8,10 @@ export default class AuthorsSectionComponent extends Component {
   render($$) {
     const model = this.props.model;
     let items = model.getItems();
-    let el = $$(SortableContainerComponent, {direction: SortableContainerComponent.VERTICAL})
+    let el = $$(SortableContainerComponent, {
+      direction: SortableContainerComponent.VERTICAL,
+      handleCss: 'sc-sortable-item-handle'
+    })
       .addClass('sc-authors-collection-editor')
       .on('rearrange', this._onListRearranged, this);
 
@@ -27,16 +30,23 @@ export default class AuthorsSectionComponent extends Component {
   }
 
   _renderCardComponent($$, person) {
+    const cardContent = $$('div')
+      .addClass('sc-author-card')
+      .append(this._renderPersonComponentEl($$, person))
+      .append($$('div').addClass('sc-sortable-item-handle'));
+
     return $$(CardComponent, {
       node: person,
       label: person.type,
-    }).append(this._renderPersonComponentEl($$, person));
+    }).append(cardContent);
   }
 
   _renderPersonComponentEl($$, person) {
     return $$(PersonComponent, {
       node: person,
       mode: METADATA_MODE,
-    }).ref(person.id)
+    })
+      .addClass('se-author-content')
+      .ref(person.id)
   }
 }
