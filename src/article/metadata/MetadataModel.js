@@ -1,6 +1,7 @@
 import { createValueModel } from '../../kit';
 import ArticleInformationSectionModel from './ArticleInformationSectionModel';
 import AbstractsSectionModel from './AbstractsSectionModel';
+import AuthorsSectionModel from './AuthorsSectionModel';
 
 /**
  * This is an artificial Model used to control the content displayed in the Metadata view.
@@ -11,7 +12,7 @@ export default class MetadataModel {
     this._sections = [
       { name: 'article-information', model: new ArticleInformationSectionModel(api) },
       { name: 'abstracts', model: new AbstractsSectionModel(api) },
-      { name: 'authors', model: createValueModel(api, ['metadata', 'authors']) },
+      { name: 'authors', model: new AuthorsSectionModel(api) },
       { name: 'editors', model: createValueModel(api, ['metadata', 'editors']) },
       { name: 'groups', model: createValueModel(api, ['metadata', 'groups']) },
       { name: 'affiliations', model: createValueModel(api, ['metadata', 'affiliations']) },
