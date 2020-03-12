@@ -3,8 +3,18 @@ import CardComponent from './CardComponent';
 import { METADATA_MODE } from '../ArticleConstants';
 import PersonComponent from '../components/PersonComponent';
 import SortableContainerComponent from '../components/SortableContainerComponent';
+import {debounce} from 'lodash';
 
 export default class AuthorsSectionComponent extends Component {
+
+  didMount() {
+    let path = this.props.model.getPath();
+    this.context.editorState.addObserver(['document'], debounce(this.rerender.bind(this), 100), this, {
+      stage: 'render',
+      document: { path },
+    });
+  }
+
   render($$) {
     const model = this.props.model;
     let items = model.getItems();

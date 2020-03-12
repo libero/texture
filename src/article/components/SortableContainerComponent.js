@@ -34,11 +34,17 @@ export default class SortableContainerComponent extends Component {
     return this.props.direction || SortableContainerComponent.HORIZONTAL;
   }
 
+  dispose() {
+    super.dispose();
+    this.scroller.destroy(true);
+    this.drake.destroy();
+  }
+
   didMount() {
     super.didMount();
     const container = this.getScrollableContainer(this.el.el);
 
-    this.drake = this.drake || dragula({
+    this.drake = dragula({
       containers: [this.el.el],
       revertOnSpill: true,
       mirrorContainer: this.el.el,
