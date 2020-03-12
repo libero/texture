@@ -17,6 +17,7 @@ import {
   AddSubjectCommand,
 } from './MetadataEntityCommands';
 import CustomAbstractComponent from './CustomAbstractComponent';
+import AuthorsSectionComponent from './AuthorsSectionComponent';
 
 export default {
   name: 'metadata',
@@ -118,6 +119,7 @@ export default {
 
     config.addComponent('article-metadata', ArticleMetadataComponent);
     config.addComponent('article-information', ArticleInformationSectionComponent);
+    config.addComponent('authors-section', AuthorsSectionComponent);
     config.addComponent(CustomAbstract.type, CustomAbstractComponent);
     config.addComponent('@abstracts', AbstractsSectionComponent);
 

@@ -9,8 +9,11 @@
   "author": "libero-npm@elifesciences.org",
   "dependencies": {
     "debug": "4.1.1",
+    "dom-autoscroller": "^2.3.4",
+    "dragula": "^3.7.2",
     "fs-extra": "7.0.1",
     "katex": "0.10.0",
+    "lodash": "^4.17.15",
     "substance": "1.0.2",
     "yauzl": "2.10.0",
     "yazl": "2.5.1"
