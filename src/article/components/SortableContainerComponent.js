@@ -57,7 +57,7 @@ export default class SortableContainerComponent extends Component {
       direction: this.getListOrientation(),
     });
 
-    this.drake.on('drop', this._dragEnd.bind(this));
+    this.drake.on('dragend', this._dragEnd.bind(this));
 
     this.scroller = autoScroll([
       container
@@ -94,13 +94,9 @@ export default class SortableContainerComponent extends Component {
     return sortableContainer.append(draggableChildren);
   }
 
-  _dragEnd(el, target, source, sibling) {
+  _dragEnd(el) {
     const originalPosition = parseInt(el.getAttribute('sort-index'));
-
-    const newPosition = sibling
-      ? parseInt(sibling.getAttribute('sort-index'))
-      : el.parentNode.children.length - 1;
-
+    const newPosition = Array.from(el.parentNode.children).indexOf(el);
     if (originalPosition !== newPosition) {
       this.el.emit('rearrange', {from: originalPosition, to: newPosition});
     }
