@@ -31,6 +31,8 @@ export default class ArticleMetadataComponent extends DefaultNodeComponent {
       'keywords',
       'subjects',
       'articleType',
+      'issn',
+      'publisherName'
     ]);
     const api = this.context.api;
     const node = this.props.node;
