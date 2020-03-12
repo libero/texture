@@ -3,7 +3,7 @@ import CardComponent from './CardComponent';
 import { METADATA_MODE } from '../ArticleConstants';
 import PersonComponent from '../components/PersonComponent';
 import SortableContainerComponent from '../components/SortableContainerComponent';
-import {debounce} from 'lodash';
+import debounce from 'lodash/debounce';
 
 export default class AuthorsSectionComponent extends Component {
 
