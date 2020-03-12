@@ -26,8 +26,8 @@ export default class CardComponent extends Component {
           .append(label),
       );
     el.append(children);
-    // el.on('mousedown', this._onMousedown);
-    // el.on('click', this._onClick);
+    el.on('mousedown', this._onMousedown);
+    el.on('click', this._onClick);
     return el;
   }
 
@@ -54,16 +54,15 @@ export default class CardComponent extends Component {
   }
 
   _onMousedown(e) {
-    // Note: stopping propagation so that no-one else is doing somthing undesired
+    // Note: stopping propagation so that no-one else is doing something undesired
     // and selecting the card on right-mousedown
-    e.stopPropagation();
     if (e.button === 2) {
       this._toggleCardSelection();
     }
   }
 
   _onClick(e) {
-    // domHelpers.stopAndPrevent(e);
+    domHelpers.stopAndPrevent(e);
     this._toggleCardSelection();
   }
 }

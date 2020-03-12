@@ -30,8 +30,8 @@ export default class SortableContainerComponent extends Component {
     return this.props.handleCss || DEFAULT_HANDLE_CLASS;
   }
 
-  get direction () {
-    return this.props.direction === SortableContainerComponent.HORIZONTAL
+  getListOrientation () {
+    return this.props.direction || SortableContainerComponent.HORIZONTAL;
   }
 
   didMount() {
@@ -48,7 +48,7 @@ export default class SortableContainerComponent extends Component {
       moves: (el, container, handle) => {
         return handle.classList.contains(this._handleCssClass);
       },
-      direction: this.direction,
+      direction: this.getListOrientation(),
     });
 
     this.drake.on('drop', this._dragEnd.bind(this));
