@@ -1,3 +1,4 @@
 @import './_texture.css';
 @import '../kit/styles/_index.css';
 @import '../article/styles/_index.css';
+@import '../../node_modules/dragula/dist/dragula.css';

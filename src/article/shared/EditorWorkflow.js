@@ -97,7 +97,10 @@ export default class EditorWorkflow extends Component {
   render($$) {
     let el = $$('div').addClass(this._getClassNames());
     // ATTENTION: don't let mousedowns and clicks pass, otherwise the parent will null the selection
-    el.on('mousedown', this._onMousedown).on('click', this._onClick);
+    // Actually it's not a big problem to remove focus when clicking away from the edit element
+    // Removing mousedown only for now to make drag&drop work
+    
+    el.on('click', this._onClick);
     el.append(this._renderContent($$));
     el.append(this._renderKeyTrap($$));
     return el;
@@ -171,9 +174,5 @@ export default class EditorWorkflow extends Component {
       e.preventDefault();
     }
     return handled;
-  }
-
-  _onMousedown(e) {
-    e.stopPropagation();
   }
 }

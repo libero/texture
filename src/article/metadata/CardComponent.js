@@ -54,9 +54,8 @@ export default class CardComponent extends Component {
   }
 
   _onMousedown(e) {
-    // Note: stopping propagation so that no-one else is doing somthing undesired
+    // Note: stopping propagation so that no-one else is doing something undesired
     // and selecting the card on right-mousedown
-    e.stopPropagation();
     if (e.button === 2) {
       this._toggleCardSelection();
     }
