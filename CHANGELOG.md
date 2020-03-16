@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.15](https://github.com/libero/texture/compare/v0.0.14...v0.0.15) (2020-03-16)
+
+
+### Features
+
+* add author cta ([f69b358](https://github.com/libero/texture/commit/f69b35869b37b0c5685861704a719bf1a945a29e))
+* hide journal information fields ([81b23b3](https://github.com/libero/texture/commit/81b23b3f7a7da1e1952c88f67248e0a0f098db98))
+* reorder authors ([#36](https://github.com/libero/texture/issues/36)) ([0b5b0f3](https://github.com/libero/texture/commit/0b5b0f3b1a3eed063ef9f06bb818fca7f106f623))
+
+
+### Bug Fixes
+
+* author information section layout does not match design ([909a649](https://github.com/libero/texture/commit/909a6490b4bc7e2762beff05a92ae3bbe207c7d7))
+* styles of select and keyword elements ([#35](https://github.com/libero/texture/issues/35)) ([c1ab46d](https://github.com/libero/texture/commit/c1ab46dd49724dcbfb8b9425eb08d037b35fb45a))
+
 ### [0.0.14](https://github.com/libero/texture/compare/v0.0.13...v0.0.14) (2020-03-06)
 
 
