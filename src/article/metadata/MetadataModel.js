@@ -10,7 +10,7 @@ export default class MetadataModel {
   constructor(api) {
     this._api = api;
     this._sections = [
-      { name: 'article-information', model: new ArticleInformationSectionModel(api) },
+      // { name: 'article-information', model: new ArticleInformationSectionModel(api) },
       { name: 'abstracts', model: new AbstractsSectionModel(api) },
       { name: 'authors', model: new AuthorsSectionModel(api) },
       { name: 'editors', model: createValueModel(api, ['metadata', 'editors']) },
