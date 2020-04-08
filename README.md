@@ -18,7 +18,7 @@ Feature requests can be made via the GitHub issues using a Feature request templ
 Clone the repository.
 
 ```bash
-$ git clone https://github.com/substance/texture.git
+$ git clone https://github.com/libero/texture.git
 ```
 
 Navigate to the source directory.
