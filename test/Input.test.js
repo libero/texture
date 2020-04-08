@@ -1,9 +1,10 @@
 import { test } from 'substance-test'
 import setupTestApp from './shared/setupTestApp'
-import { openMetadataEditor, createTestVfs } from './shared/integrationTestHelpers'
+import { createTestVfs, startEditMetadata } from './shared/integrationTestHelpers'
+import { DEFAULT_JATS_SCHEMA_ID, DEFAULT_JATS_DTD } from 'substance-texture'
 
 const AUTHOR_AND_GROUP = `<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE article PUBLIC "-//NLM//DTD JATS (Z39.96) Journal Archiving DTD v1.0 20120330//EN" "JATS-journalarchiving.dtd">
+<!DOCTYPE article PUBLIC "${DEFAULT_JATS_SCHEMA_ID}" "${DEFAULT_JATS_DTD}">
 <article xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ali="http://www.niso.org/schemas/ali/1.0">
   <front>
     <article-meta>
@@ -37,11 +38,11 @@ const AUTHOR_AND_GROUP = `<?xml version="1.0" encoding="UTF-8"?>
 
 // Note: using Author + Group here
 test('Input: SinlgeRelationship dropdown', t => {
-  let { app } = setupTestApp(t, {
+  let { editor } = setupTestApp(t, {
     vfs: createTestVfs(AUTHOR_AND_GROUP),
     archiveId: 'test'
   })
-  let metadataEditor = openMetadataEditor(app)
+  let metadataEditor = startEditMetadata(editor)
   let selectInput = metadataEditor.find('.sm-person .sm-group .sc-single-relationship .sc-multi-select-input')
   t.ok(selectInput.el.is('.sm-collapsed'), 'the dropdown should be collapsed in the beginning')
   // click on the input to open the dropdown
@@ -63,7 +64,7 @@ test('Input: SinlgeRelationship dropdown', t => {
 })
 
 const AUTHOR_AND_TWO_AFFS = `<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE article PUBLIC "-//NLM//DTD JATS (Z39.96) Journal Archiving DTD v1.0 20120330//EN" "JATS-journalarchiving.dtd">
+<!DOCTYPE article PUBLIC "${DEFAULT_JATS_SCHEMA_ID}" "${DEFAULT_JATS_DTD}">
 <article xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ali="http://www.niso.org/schemas/ali/1.0">
   <front>
     <article-meta>
@@ -103,11 +104,11 @@ const AUTHOR_AND_TWO_AFFS = `<?xml version="1.0" encoding="UTF-8"?>
 `
 
 test('Input: ManyRelationship dropdown', t => {
-  let { app } = setupTestApp(t, {
+  let { editor } = setupTestApp(t, {
     vfs: createTestVfs(AUTHOR_AND_TWO_AFFS),
     archiveId: 'test'
   })
-  let metadataEditor = openMetadataEditor(app)
+  let metadataEditor = startEditMetadata(editor)
   let selectInput = metadataEditor.find('.sm-person .sm-affiliations .sc-many-relationship .sc-multi-select-input')
   t.ok(selectInput.el.is('.sm-collapsed'), 'the dropdown should be collapsed in the beginning')
   // click on the input to open the dropdown

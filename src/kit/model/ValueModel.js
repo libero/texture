@@ -1,61 +1,68 @@
-import { isNil } from 'substance'
-import { throwMethodIsAbstract } from '../shared'
+import { isNil, getKeyForPath } from 'substance';
+import { throwMethodIsAbstract } from '../shared';
 
 export default class ValueModel {
-  constructor (api, path) {
-    this._api = api
-    this._path = path
+  constructor(api, path) {
+    this._api = api;
+    this._path = path;
   }
 
-  get id () {
-    return this._path.join('.')
+  get id() {
+    return getKeyForPath(this._path);
   }
 
-  get type () {
-    throwMethodIsAbstract()
+  get type() {
+    throwMethodIsAbstract();
   }
 
-  getPath () {
-    return this._path
+  getPath() {
+    return this._path;
   }
 
   // EXPERIMENTAL: a third kind of path, which is [<type>, <prop-name>]
-  _getPropertySelector () {
+  _getPropertySelector() {
     if (!this._selector) {
-      let doc = this._api.getDocument()
-      let node = doc.get(this._path[0])
-      this._selector = [node.type].concat(this._path.slice(1))
+      let doc = this._api.getDocument();
+      let node = doc.get(this._path[0]);
+      this._selector = [node.type].concat(this._path.slice(1));
     }
-    return this._selector
+    return this._selector;
   }
 
-  hasTargetType (name) {
-    return false
+  hasTargetType(name) {
+    return false;
   }
 
-  getValue () {
-    return this._api.getDocument().get(this._path)
+  getValue() {
+    return this._api.getDocument().get(this._path);
   }
 
-  setValue (val) {
-    this._api.getEditorSession().transaction(tx => {
-      tx.set(this._path, val)
-    })
+  setValue(val) {
+    // TODO this should go into API
+    let api = this._api;
+    api.getEditorSession().transaction(tx => {
+      tx.set(this._path, val);
+      tx.setSelection(api._createValueSelection(this._path));
+    });
   }
 
-  getSchema () {
-    return this._api.getDocument().getProperty(this._path)
+  getSchema() {
+    return this._api.getDocument().getProperty(this._path);
   }
 
-  isEmpty () {
-    return isNil(this.getValue())
+  isEmpty() {
+    return isNil(this.getValue());
   }
 
-  _resolveId (id) {
-    return this._api.getDocument().get(id)
+  _resolveId(id) {
+    return this._api.getDocument().get(id);
   }
 
-  get _value () { return this.getValue() }
+  get _value() {
+    return this.getValue();
+  }
 
-  get _isValue () { return true }
+  get _isValue() {
+    return true;
+  }
 }

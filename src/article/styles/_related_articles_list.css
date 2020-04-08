@@ -1,0 +1,19 @@
+.sm-related-articles > .sc-related-articles-list > :first-child {
+  margin-top: var(--t-default-spacing);
+}
+
+.sc-card > .sc-related-article {
+  padding-top: 0px;
+}
+
+.sc-card > .sc-related-article > .sc-form-row:first-child {
+  margin-top: 0px;
+}
+
+.sc-card > .sc-related-article > .sc-form-row:last-child {
+  margin-bottom: 0px;
+}
+
+.sc-card * .se-button {
+  font-size: var(--t-icon-font-size);
+}

@@ -1,13 +1,15 @@
-/* global FileReader, Buffer */
-import { platform } from 'substance'
-import readArchive from './readArchive'
-import writeArchive from './writeArchive'
-import cloneArchive from './cloneArchive'
+/* global Buffer */
+import { platform } from 'substance';
+import readArchive from './readArchive';
+import writeArchive from './writeArchive';
+import cloneArchive from './cloneArchive';
+import _require from './_require';
 
 // FIXME: this file should only get bundled in commonjs version
-let path
-if (platform.inNodeJS) {
-  path = require('path')
+let fs, path;
+if (platform.inNodeJS || platform.inElectron) {
+  fs = _require('fs');
+  path = _require('path');
 }
 
 /*
@@ -17,82 +19,79 @@ if (platform.inNodeJS) {
   folders.
 */
 export default class FSStorage {
-  constructor (rootDir) {
-    this._rootDir = rootDir
+  constructor(rootDir) {
+    this._rootDir = rootDir;
   }
 
-  read (archiveDir, cb) {
-    archiveDir = this._normalizeArchiveDir(archiveDir)
+  read(archiveDir, cb) {
+    archiveDir = this._normalizeArchiveDir(archiveDir);
     readArchive(archiveDir, { noBinaryContent: true, ignoreDotFiles: true })
       .then(rawArchive => {
         // Turn binaries into urls
         Object.keys(rawArchive.resources).forEach(recordPath => {
-          let record = rawArchive.resources[recordPath]
+          let record = rawArchive.resources[recordPath];
           if (record._binary) {
-            delete record._binary
-            record.encoding = 'url'
-            record.data = path.join(archiveDir, record.path)
+            delete record._binary;
+            record.encoding = 'url';
+            record.data = path.join(archiveDir, record.path);
           }
-        })
-        cb(null, rawArchive)
+        });
+        cb(null, rawArchive);
       })
-      .catch(cb)
+      .catch(cb);
   }
 
-  write (archiveDir, rawArchive, cb) {
-    archiveDir = this._normalizeArchiveDir(archiveDir)
+  write(archiveDir, rawArchive, cb) {
+    archiveDir = this._normalizeArchiveDir(archiveDir);
     _convertBlobs(rawArchive)
       .then(() => {
-        return writeArchive(archiveDir, rawArchive)
+        return writeArchive(archiveDir, rawArchive);
       })
-      .then((version) => {
-        cb(null, JSON.stringify({ version }))
+      .then(version => {
+        cb(null, JSON.stringify({ version }));
       })
-      .catch(cb)
+      .catch(cb);
   }
 
-  clone (archiveDir, newArchiveDir, cb) {
-    archiveDir = this._normalizeArchiveDir(archiveDir)
-    newArchiveDir = this._normalizeArchiveDir(newArchiveDir)
+  clone(archiveDir, newArchiveDir, cb) {
+    archiveDir = this._normalizeArchiveDir(archiveDir);
+    newArchiveDir = this._normalizeArchiveDir(newArchiveDir);
     cloneArchive(archiveDir, newArchiveDir)
       .then(success => {
-        if (success) cb()
-        else cb(new Error('Could not clone archive'))
+        if (success) cb();
+        else cb(new Error('Could not clone archive'));
       })
-      .catch(cb)
+      .catch(cb);
   }
 
-  _normalizeArchiveDir (archiveDir) {
+  _normalizeArchiveDir(archiveDir) {
     if (this._rootDir) {
-      archiveDir = path.join(this._rootDir, archiveDir)
+      archiveDir = path.join(this._rootDir, archiveDir);
     }
-    return archiveDir
+    return archiveDir;
   }
 }
 
 /*
   Convert all blobs to array buffers
 */
-async function _convertBlobs (rawArchive) {
-  let resources = rawArchive.resources
-  let paths = Object.keys(resources)
+async function _convertBlobs(rawArchive) {
+  let resources = rawArchive.resources;
+  let paths = Object.keys(resources);
   for (var i = 0; i < paths.length; i++) {
-    let record = resources[paths[i]]
+    let record = resources[paths[i]];
     if (record.encoding === 'blob') {
-      record.data = await _blobToArrayBuffer(record.data)
+      record.data = await _blobToArrayBuffer(record.data);
     }
   }
 }
 
-function _blobToArrayBuffer (blob) {
-  return new Promise(resolve => {
-    let reader = new FileReader()
-    reader.onload = function () {
-      if (reader.readyState === 2) {
-        var buffer = Buffer.from(reader.result)
-        resolve(buffer)
-      }
-    }
-    reader.readAsArrayBuffer(blob)
-  })
+function _blobToArrayBuffer(blob) {
+  return new Promise((resolve, reject) => {
+    // TODO: is there other way to get buffer out of Blob without browser APIs?
+    fs.readFile(blob.path, (err, buffer) => {
+      if (err) return reject(err);
+      resolve(buffer);
+    });
+  });
 }

@@ -7,8 +7,13 @@ node_modules
 .lock-wscript
 .test
 .npm
+.idea
 .DS_Store
 package-lock.json
 /tmp
 /coverage
 /.nyc_output
+
+#IDEs
+/.vs_code
+/.idea

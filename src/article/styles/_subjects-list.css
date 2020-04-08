@@ -1,0 +1,16 @@
+.sc-subjects-list {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  grid-template-rows: 1;
+  grid-column-gap: var(--t-default-spacing);
+}
+
+.sc-subjects-list > .sc-dropdown-editor {
+  grid-column-end: span 3;
+  width: 100%;
+  margin-right: 0px;
+}
+
+.sc-subjects-list > .sc-dropdown-editor > select {
+  width: 100%;
+}

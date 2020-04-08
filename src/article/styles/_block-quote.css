@@ -1,0 +1,10 @@
+.sc-block-quote {
+  /* TODO: use variables */
+  border-left: 3px solid #444;
+  padding-left: var(--t-default-spacing);
+}
+
+.sc-block-quote .sc-text {
+  padding-top: var(--t-default-spacing);
+  font-size: var(--t-small-font-size);
+}

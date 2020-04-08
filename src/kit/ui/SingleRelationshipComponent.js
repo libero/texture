@@ -1,17 +1,17 @@
-import ManyRelationshipComponent from './ManyRelationshipComponent'
+import ManyRelationshipComponent from './ManyRelationshipComponent';
 
 export default class SingleRelationshipComponent extends ManyRelationshipComponent {
-  _getClassNames () {
-    return 'sc-single-relationship'
+  _getClassNames() {
+    return 'sc-single-relationship';
   }
 
-  _getSelectedOptions (options) {
-    let targetId = this.props.model.getValue()
-    if (!targetId) return []
+  _getSelectedOptions(options) {
+    let targetId = this.props.model.getValue();
+    if (!targetId) return [];
     let selectedOption = options.find(item => {
-      if (item) return item.id === targetId
-    })
-    let selected = selectedOption ? [selectedOption] : []
-    return selected
+      if (item) return item.id === targetId;
+    });
+    let selected = selectedOption ? [selectedOption] : [];
+    return selected;
   }
 }

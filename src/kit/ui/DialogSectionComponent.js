@@ -1,4 +1,4 @@
-import { Component } from 'substance'
+import { Component } from 'substance';
 
 /*
   This is an eperimental wrap component for rendering a section in dialogs
@@ -10,27 +10,35 @@ import { Component } from 'substance'
   ```
 */
 export default class DialogSectionComponent extends Component {
-  render ($$) {
-    const label = this.props.label
-    const description = this.props.description
-    const children = this.props.children
+  render($$) {
+    const label = this.props.label;
+    const description = this.props.description;
+    const children = this.props.children;
 
-    const el = $$('div').addClass('sc-dialog-section')
+    const el = $$('div').addClass('sc-dialog-section');
 
     if (label) {
-      const sectionTitleEl = $$('div').addClass('se-dialog-section-title').append(
-        $$('div').addClass('se-label').append(label)
-      )
+      const sectionTitleEl = $$('div')
+        .addClass('se-dialog-section-title')
+        .append(
+          $$('div')
+            .addClass('se-label')
+            .append(label),
+        );
       if (description) {
         sectionTitleEl.append(
-          $$('div').addClass('se-description').append(description)
-        )
+          $$('div')
+            .addClass('se-description')
+            .append(description),
+        );
       }
-      el.append(sectionTitleEl)
+      el.append(sectionTitleEl);
     }
     el.append(
-      $$('div').addClass('se-dialog-section-content').append(children)
-    )
-    return el
+      $$('div')
+        .addClass('se-dialog-section-content')
+        .append(children),
+    );
+    return el;
   }
 }

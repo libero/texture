@@ -1,30 +1,28 @@
-import ValueComponent from './ValueComponent'
-import CheckboxInput from './CheckboxInput'
+import ValueComponent from './ValueComponent';
+import CheckboxInput from './CheckboxInput';
 
 export default class BooleanComponent extends ValueComponent {
-  getActionHandlers () {
+  getActionHandlers() {
     return {
-      toggleValue: this._toggleValue
-    }
+      toggleValue: this._toggleValue,
+    };
   }
 
-  render ($$) {
-    const model = this.props.model
-    const value = model.getValue()
-    let el = $$('div').addClass('sc-boolean')
+  render($$) {
+    const model = this.props.model;
+    const value = model.getValue();
+    let el = $$('div').addClass('sc-boolean');
     if (!this.context.editable) {
-      el.addclass('sm-readonly')
+      el.addclass('sm-readonly');
     }
-    el.append(
-      $$(CheckboxInput, { value })
-    )
-    return el
+    el.append($$(CheckboxInput, { value, disabled: this.props.disabled }));
+    return el;
   }
 
-  _toggleValue () {
+  _toggleValue() {
     if (this.context.editable) {
-      const model = this.props.model
-      this.props.model.setValue(!model.getValue())
+      const model = this.props.model;
+      this.props.model.setValue(!model.getValue());
     }
   }
 }

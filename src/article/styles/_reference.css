@@ -1,0 +1,46 @@
+.sc-reference {
+  display: flex;
+  flex: 1 1 0;
+  cursor: default;
+}
+
+/* HACK: this is a quick-fix. Without references were broken when displayed in Metadata view */
+.sc-reference.sm-metadata {
+  display: block;
+}
+
+.sc-reference > .se-label {
+  flex-basis: var(--t-default-spacing);
+  flex-grow: 0;
+  flex-shrink: 0;
+  margin: 0 var(--t-default-spacing);
+  font-weight: var(--t-bold-font-weight);
+  text-align: center;
+}
+
+.sc-reference > .se-text {
+  flex-grow: 1;
+  margin-right: 10px;
+}
+
+.sc-reference > .se-text i {
+  font-style: italic;
+}
+
+.sc-reference > .se-text b {
+  font-weight: bold;
+}
+
+.sc-reference > .se-icon {
+  flex-basis: var(--t-default-spacing);
+  flex-grow: 0;
+  flex-shrink: 0;
+  margin: 4px 0 0 var(--t-half-spacing);
+  font-weight: var(--t-bold-font-weight);
+  text-align: center;
+  font-size: var(--t-icon-font-size);
+}
+
+.sc-reference > .fa-edit {
+  padding-top: 1px;
+}

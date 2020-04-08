@@ -1,0 +1,83 @@
+.sc-card {
+  position: relative;
+  max-width: 800px;
+  box-shadow: var(--t-default-box-shadow);
+  margin: var(--t-double-spacing) 0;
+  font-size: var(--t-small-font-size);
+}
+
+.sc-card.sm-selected {
+  outline: var(--t-input-focus-border);
+}
+
+.sc-card > .se-label {
+  position: absolute;
+  top: -10px;
+  left: var(--t-double-spacing);
+  padding: 0px var(--t-default-spacing);
+  background: var(--t-background-color);
+  color: var(--t-light-text-color);
+  cursor: default;
+}
+
+.sc-card > .sc-header {
+  display: flex;
+  flex-direction: row-reverse;
+  padding: var(--t-half-spacing);
+}
+
+.sc-card > .se-button {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+}
+
+.sc-card.sm-selected > .se-label {
+  background: var(--t-focus-color);
+  color: var(--t-inverted-text-color);
+}
+
+.sc-card .sc-form-row {
+  margin: var(--t-default-spacing) 0;
+}
+
+.sc-card > * {
+  padding: var(--t-default-spacing);
+}
+
+.sc-card > * > .se-header {
+  font-size: var(--t-text-font-size);
+  margin-bottom: var(--t-default-spacing);
+  margin-top: 0px;
+  cursor: default;
+}
+
+.sc-card > * > .se-header > * > i {
+  font-style: italic;
+}
+
+.sc-card > * > .se-header > * > b {
+  font-weight: bold;
+}
+
+.sc-card > * > .se-header > * > a {
+  color: var(--t-action-color);
+  text-decoration: none;
+}
+
+.sc-card > * > .se-footer {
+  display: flex;
+  justify-content: space-between;
+  margin: 0;
+}
+
+.sc-card > * > .se-footer > .se-control {
+  font-size: 12px;
+  color: var(--t-action-color);
+  cursor: pointer;
+  margin-bottom: 0px;
+}
+
+.sc-card > * > .se-footer > .se-control > .se-icon {
+  margin-right: 10px;
+}

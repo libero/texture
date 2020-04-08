@@ -1,0 +1,39 @@
+import { findAllChildren } from '../util/domHelpers';
+import { getLabel } from '../../shared/nodeHelpers';
+
+// TODO: at some point we want to retain the label and determine if the label should be treated as custom
+// or be generated.
+export default class FootnoteConverter {
+  get type() {
+    return 'footnote';
+  }
+
+  get tagName() {
+    return 'fn';
+  }
+
+  // NOTE: we don’t support custom labels at the moment, so we will ignore input from fn > label
+  import(el, node, importer) {
+    const type = el.attr('fn-type') || '';
+    const pEls = findAllChildren(el, 'p');
+    node.footnoteType = type;
+    node.content = pEls.map(el => importer.convertElement(el).id);
+  }
+
+  export(node, el, exporter) {
+    const $$ = exporter.$$;
+    // We gonna need to find another way for node states. I.e. for labels we will have
+    // a hybrid scenario where the labels are either edited manually, and thus we need to record ops,
+    // or they are generated without persisting operations (e.g. think about undo/redo, or collab)
+    // my suggestion would be to introduce volatile ops, they would be excluded from the DocumentChange, that is stored in the change history,
+    // or used for collaborative editing.
+    const label = getLabel(node);
+    if (label) {
+      el.append($$('label').text(label));
+    }
+    if (node.footnoteType) {
+      el.attr('fn-type', node.footnoteType);
+    }
+    el.append(node.resolve('content').map(p => exporter.convertNode(p)));
+  }
+}

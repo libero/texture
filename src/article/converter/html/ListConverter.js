@@ -1,57 +1,59 @@
-import { isString, domHelpers, renderListNode } from 'substance'
+import { isString, domHelpers, renderListNode } from 'substance';
 
-export default class ListHTMLConverter {
-  get type () { return 'list' }
-
-  matchElement (el) {
-    return el.is('ul') || el.is('ol')
+export default class ListConverter {
+  get type() {
+    return 'list';
   }
 
-  import (el, node, converter) {
-    this._santizeNestedLists(el)
+  matchElement(el) {
+    return el.is('ul') || el.is('ol');
+  }
 
-    let items = []
-    let config = []
+  import(el, node, converter) {
+    this._santizeNestedLists(el);
+
+    let items = [];
+    let config = [];
     domHelpers.walk(el, (el, level) => {
-      if (!el.isElementNode()) return
+      if (!el.isElementNode()) return;
       if (el.is('li')) {
-        items.push({ el, level })
+        items.push({ el, level });
       } else if (!config[level]) {
-        if (el.is('ul')) config[level] = 'bullet'
-        else if (el.is('ol')) config[level] = 'order'
+        if (el.is('ul')) config[level] = 'bullet';
+        else if (el.is('ol')) config[level] = 'order';
       }
-    })
-    this._createListItems(converter, node, items, config)
+    });
+    this._createListItems(converter, node, items, config);
   }
 
-  _createListItems (converter, node, items, levelTypes) {
+  _createListItems(converter, node, items, levelTypes) {
     node.items = items.map(d => {
-      let listItem = converter.convertElement(d.el)
-      listItem.level = d.level
-      return listItem.id
-    })
-    node.listType = levelTypes.join(',')
+      let listItem = converter.convertElement(d.el);
+      listItem.level = d.level;
+      return listItem.id;
+    });
+    node.listType = levelTypes.join(',');
   }
 
-  export (node, el, converter) {
-    let $$ = converter.$$
-    let _createElement = function (arg) {
+  export(node, el, converter) {
+    let $$ = converter.$$;
+    let _createElement = function(arg) {
       if (isString(arg)) {
-        return $$(arg)
+        return $$(arg);
       } else {
-        let item = arg
-        let path = item.getPath()
-        return $$('li').append(converter.annotatedText(path))
+        let item = arg;
+        let path = item.getPath();
+        return $$('li').append(converter.annotatedText(path));
       }
-    }
-    let _el = renderListNode(node, _createElement)
-    el.tagName = _el.tagName
-    el.attr(_el.getAttributes())
-    el.append(_el.getChildNodes())
-    return el
+    };
+    let _el = renderListNode(node, _createElement);
+    el.tagName = _el.tagName;
+    el.attr(_el.getAttributes());
+    el.append(_el.getChildNodes());
+    return el;
   }
 
-  _santizeNestedLists (root) {
+  _santizeNestedLists(root) {
     // pulling out uls from <li> to simplify the problem
     /*
       E.g.
@@ -59,14 +61,14 @@ export default class ListHTMLConverter {
       Is turned into:
       `<ul><li>Foo:</li><ul>...</ul></ul>`
     */
-    let nestedLists = root.findAll('ol,ul')
-    nestedLists.forEach((el) => {
+    let nestedLists = root.findAll('ol,ul');
+    nestedLists.forEach(el => {
       while (!el.parentNode.is('ol,ul')) {
-        let parent = el.parentNode
-        let grandParent = parent.parentNode
-        let pos = grandParent.getChildIndex(parent)
-        grandParent.insertAt(pos + 1, el)
+        let parent = el.parentNode;
+        let grandParent = parent.parentNode;
+        let pos = grandParent.getChildIndex(parent);
+        grandParent.insertAt(pos + 1, el);
       }
-    })
+    });
   }
 }

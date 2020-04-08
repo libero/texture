@@ -1,61 +1,64 @@
-import { Document, documentHelpers, EditingInterface } from 'substance'
-import TextureEditing from './TextureEditing'
+import { Document, documentHelpers, EditingInterface } from 'substance';
+import ArticleEditingImpl from './shared/ArticleEditingImpl';
+import { DEFAULT_JATS_SCHEMA_ID } from './ArticleConstants';
 
 export default class InternalArticleDocument extends Document {
-  getRootNode () {
-    return this.get('article')
+  getRootNode() {
+    return this.get('article');
   }
 
-  getXRefs () {
-    let articleEl = this.get('article')
-    return articleEl.findAll('xref')
+  createEditingInterface() {
+    return new EditingInterface(this, { editing: new ArticleEditingImpl() });
   }
 
-  getTitle () {
-    return this.get(['article', 'title'])
+  find(selector) {
+    return this.getRootNode().find(selector);
   }
 
-  createEditingInterface () {
-    return new EditingInterface(this, { editing: new TextureEditing() })
+  findAll(selector) {
+    return this.getRootNode().findAll(selector);
   }
 
-  find (selector) {
-    return this.getRootNode().find(selector)
+  getTitle() {
+    this.resolve(['article', 'title']);
   }
 
-  findAll (selector) {
-    return this.getRootNode().findAll(selector)
-  }
-
-  invert (change) {
-    let inverted = change.invert()
-    let info = inverted.info || {}
+  invert(change) {
+    let inverted = change.invert();
+    let info = inverted.info || {};
     switch (change.info.action) {
       case 'insertRows': {
-        info.action = 'deleteRows'
-        break
+        info.action = 'deleteRows';
+        break;
       }
       case 'deleteRows': {
-        info.action = 'insertRows'
-        break
+        info.action = 'insertRows';
+        break;
       }
       case 'insertCols': {
-        info.action = 'deleteCols'
-        break
+        info.action = 'deleteCols';
+        break;
       }
       case 'deleteCols': {
-        info.action = 'insertCols'
-        break
+        info.action = 'insertCols';
+        break;
       }
       default:
-        //
+      //
     }
-    inverted.info = info
-    return inverted
+    inverted.info = info;
+    return inverted;
   }
 
-  static createEmptyArticle (schema) {
-    let doc = new InternalArticleDocument(schema)
+  // Overridden to retain the original docType
+  newInstance() {
+    let doc = super.newInstance();
+    doc.docType = this.docType;
+    return doc;
+  }
+
+  static createEmptyArticle(schema) {
+    let doc = new InternalArticleDocument(schema);
     documentHelpers.createNodeFromJson(doc, {
       type: 'article',
       id: 'article',
@@ -64,19 +67,20 @@ export default class InternalArticleDocument extends Document {
         id: 'metadata',
         permission: {
           type: 'permission',
-          id: 'permission'
-        }
+          id: 'permission',
+        },
       },
       abstract: {
         type: 'abstract',
         id: 'abstract',
-        content: [{ type: 'paragraph' }]
+        content: [{ type: 'paragraph' }],
       },
       body: {
         type: 'body',
-        id: 'body'
-      }
-    })
-    return doc
+        id: 'body',
+      },
+    });
+    doc.docType = DEFAULT_JATS_SCHEMA_ID;
+    return doc;
   }
 }

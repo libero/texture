@@ -1,11 +1,13 @@
-import { isNil } from 'substance'
-import ValueModel from './ValueModel'
+import { isNil } from 'substance';
+import ValueModel from './ValueModel';
 
 export default class StringModel extends ValueModel {
-  get type () { return 'string' }
+  get type() {
+    return 'string';
+  }
 
-  isEmpty () {
-    let value = this.getValue()
-    return isNil(value) || value.length === 0
+  isEmpty() {
+    let value = this.getValue();
+    return isNil(value) || value.length === 0;
   }
 }

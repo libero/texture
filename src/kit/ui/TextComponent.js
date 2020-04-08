@@ -1,7 +1,7 @@
-import StringComponent from './StringComponent'
+import StringComponent from './StringComponent';
 
 export default class TextComponent extends StringComponent {
-  getClassNames () {
-    return 'sc-text'
+  getClassNames() {
+    return 'sc-text';
   }
 }

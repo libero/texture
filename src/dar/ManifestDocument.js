@@ -1,50 +1,146 @@
-import { XMLDocument } from 'substance'
-import ManifestSchema from './ManifestSchema'
+import {
+  Document,
+  DocumentNode,
+  CHILDREN,
+  STRING,
+  DocumentSchema,
+  documentHelpers,
+  DefaultDOMElement,
+} from 'substance';
 
-export default class ManifestDocument extends XMLDocument {
-  getRootNode () {
-    if (!this.root) {
-      let nodes = this.getNodes()
-      let ids = Object.keys(nodes)
-      for (var i = 0; i < ids.length; i++) {
-        let node = nodes[ids[i]]
-        if (node.type === 'dar') {
-          this.root = node
-        }
-      }
-    }
-    return this.root
+export default class ManifestDocument extends Document {
+  constructor() {
+    super(DARSchema);
   }
 
-  getDocTypeParams () {
-    return ManifestSchema.getDocTypeParams()
+  getDocumentNodes() {
+    return this.get('dar').resolve('documents');
   }
 
-  getXMLSchema () {
-    return ManifestSchema
+  getAssetNodes() {
+    return this.get('dar').resolve('assets');
   }
 
-  getDocumentNodes () {
-    return this.findAll('documents > document')
+  getAssetByPath(path) {
+    return this.getAssetNodes().find(asset => asset.path === path);
   }
 
-  getAssetNodes () {
-    return this.findAll('assets > asset')
+  getDocumentEntries() {
+    return this.getDocumentNodes().map(_getEntryFromDocumentNode);
   }
 
-  getDocumentEntries () {
-    let documents = this.findAll('documents > document')
-    return documents.map(_getEntryFromDocumentNode)
-  }
-
-  getDocumentEntry (id) {
-    let entryNode = this.get(id)
+  getDocumentEntry(id) {
+    let entryNode = this.get(id);
     if (entryNode && entryNode.type === 'document') {
-      return _getEntryFromDocumentNode(entryNode)
+      return _getEntryFromDocumentNode(entryNode);
     }
+  }
+
+  static createEmptyManifest() {
+    let doc = new ManifestDocument();
+    documentHelpers.createNodeFromJson(doc, {
+      type: 'dar',
+      id: 'dar',
+      documents: [],
+      assets: [],
+    });
+    return doc;
+  }
+
+  static fromXML(xmlStr) {
+    let xmlDom = DefaultDOMElement.parseXML(xmlStr);
+
+    let manifest = ManifestDocument.createEmptyManifest();
+    let documentEls = xmlDom.findAll('documents > document');
+    for (let el of documentEls) {
+      let documentNode = manifest.create({
+        type: 'document',
+        id: el.attr('id'),
+        documentType: el.attr('type'),
+        path: el.attr('path'),
+      });
+      documentHelpers.append(manifest, ['dar', 'documents'], documentNode.id);
+    }
+    let assetEls = xmlDom.findAll('assets > asset');
+    for (let el of assetEls) {
+      let assetNode = manifest.create({
+        type: 'asset',
+        id: el.attr('id'),
+        assetType: el.attr('type'),
+        path: el.attr('path'),
+        sync: el.attr('sync') === 'true',
+      });
+      documentHelpers.append(manifest, ['dar', 'assets'], assetNode.id);
+    }
+
+    return manifest;
+  }
+
+  toXML() {
+    let dar = this.get('dar');
+    let xmlDom = DefaultDOMElement.createDocument('xml');
+    let $$ = xmlDom.createElement.bind(xmlDom);
+    xmlDom.append(
+      $$('dar').append(
+        $$('documents').append(
+          dar.resolve('documents').map(node => {
+            return $$('document').attr({
+              id: node.id,
+              type: node.documentType,
+              name: node.name,
+              path: node.path,
+            });
+          }),
+        ),
+        $$('assets').append(
+          dar.resolve('assets').map(node => {
+            return $$('asset').attr({
+              id: node.id,
+              type: node.assetType,
+              path: node.path,
+              sync: node.sync ? 'true' : undefined,
+            });
+          }),
+        ),
+      ),
+    );
+    return xmlDom;
   }
 }
 
-function _getEntryFromDocumentNode (documentNode) {
-  return Object.assign({ id: documentNode.id }, documentNode.getAttributes())
+function _getEntryFromDocumentNode(documentNode) {
+  return {
+    id: documentNode.id,
+    path: documentNode.path,
+    type: documentNode.documentType,
+    name: documentNode.name,
+  };
 }
+
+class DAR extends DocumentNode {}
+DAR.schema = {
+  type: 'dar',
+  documents: CHILDREN('document'),
+  assets: CHILDREN('asset'),
+};
+
+class DARDocument extends DocumentNode {}
+DARDocument.schema = {
+  type: 'document',
+  name: STRING,
+  documentType: STRING,
+  path: STRING,
+};
+
+class DARAsset extends DocumentNode {}
+DARAsset.schema = {
+  type: 'asset',
+  name: STRING,
+  assetType: STRING,
+  path: STRING,
+};
+
+const DARSchema = new DocumentSchema({
+  DocumentClass: ManifestDocument,
+  nodes: [DAR, DARDocument, DARAsset],
+});

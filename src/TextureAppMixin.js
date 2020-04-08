@@ -1,37 +1,34 @@
-import Texture from './Texture'
-import TextureArchive from './TextureArchive'
-import { JATSImportDialog } from './article'
+import Texture from './Texture';
+import TextureArchive from './TextureArchive';
 
-export default function TextureAppMixin (ParentAppChrome) {
+export default function TextureAppMixin(ParentAppChrome) {
   return class TextureApp extends ParentAppChrome {
-    render ($$) {
-      let el = $$('div').addClass('sc-app')
-      let { archive, error } = this.state
+    render($$) {
+      let el = $$('div').addClass('sc-app');
+      let { archive, error } = this.state;
       if (archive) {
-        const Texture = this._getAppClass()
-        el.append(
-          $$(Texture, { archive }).ref('texture')
-        )
+        const config = this._config;
+        const Texture = this._getAppClass();
+        el.append($$(Texture, { config, archive }).ref('texture'));
       } else if (error) {
-        if (error.type === 'jats-import-error') {
-          el.append(
-            $$(JATSImportDialog, { errors: error.detail._errors })
-          )
+        let ErrorRenderer = this.getComponent(error.type);
+        if (ErrorRenderer) {
+          el.append($$(ErrorRenderer, { error }));
         } else {
-          el.append('ERROR:', error.message)
+          el.append('ERROR:', error.message);
         }
       } else {
         // LOADING...
       }
-      return el
+      return el;
     }
 
-    _getAppClass () {
-      return Texture
+    _getAppClass() {
+      return Texture;
     }
 
-    _getArchiveClass () {
-      return TextureArchive
+    _getArchiveClass() {
+      return TextureArchive;
     }
-  }
+  };
 }

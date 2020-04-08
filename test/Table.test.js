@@ -2,18 +2,17 @@ import { parseKeyCombo, DefaultDOMElement, getRangeFromMatrix, isArray, flattenO
 import { test } from 'substance-test'
 import {
   TableComponent, tableHelpers
-} from '../index'
+} from 'substance-texture'
 import { getMountPoint, DOMEvent, ClipboardEventData } from './shared/testHelpers'
 import setupTestArticleSession from './shared/setupTestArticleSession'
 import {
   openManuscriptEditor, loadBodyFixture, getDocument, setSelection, getApi,
   getEditorSession, annotate, getSelection, setCursor, openContextMenuAndFindTool,
-  openMenuAndFindTool, PseudoFileEvent, selectNode, clickUndo
+  openMenuAndFindTool, PseudoFileEvent, selectNode, clickUndo, createSurfaceEvent
 } from './shared/integrationTestHelpers'
 import setupTestApp from './shared/setupTestApp'
 
 // TODO: test SHIFT selection handling
-// TODO: find out why TableRow.getCellAt is not covered
 // TODO: test merge and unmerge cells for selection with mixed cells
 // TODO: test toggling cell heading for selection with mixed cells
 // TODO: test pasting with resize with content containing merged cells and headings
@@ -314,7 +313,7 @@ test('Table: leaving a cell with ENTER', t => {
   setCursor(editor, cell.getPath(), 0)
   let cellComp = _getCellComponentById(tableComp, cell.id)
   let cellEditor = cellComp.find('.sc-table-cell-editor')
-  cellEditor.onKeyDown(_createSurfaceEvent(cellEditor, ENTER))
+  cellEditor.onKeyDown(createSurfaceEvent(cellEditor, ENTER))
   let sel = getSelection(editor)
   let expectedCellId = table.getCell(1, 0).id
   t.deepEqual({
@@ -364,7 +363,7 @@ test('Table: leaving a cell with TAB', t => {
   setCursor(editor, cell.getPath(), 0)
   let cellComp = _getCellComponentById(tableComp, cell.id)
   let cellEditor = cellComp.find('.sc-table-cell-editor')
-  cellEditor.onKeyDown(_createSurfaceEvent(cellEditor, TAB))
+  cellEditor.onKeyDown(createSurfaceEvent(cellEditor, TAB))
   let sel = getSelection(editor)
   let expectedCellId = table.getCell(0, 1).id
   t.deepEqual({
@@ -412,7 +411,7 @@ test('Table: ESCAPE from a cell', t => {
   setCursor(editor, matrix[1][0].getPath(), 0)
   let cell = _getCellComponent(tableComp, 1, 0)
   let cellEditor = cell.find('.sc-table-cell-editor')
-  cellEditor.onKeyDown(_createSurfaceEvent(cellEditor, ESCAPE))
+  cellEditor.onKeyDown(createSurfaceEvent(cellEditor, ESCAPE))
   let sel = getSelection(editor)
   let expectedCellId = matrix[1][0].id
   t.deepEqual({
@@ -464,7 +463,7 @@ test('Table: inserting line break in a cell', t => {
   setCursor(editor, cell.getPath(), 1)
   let cellComp = _getCellComponentById(tableComp, cell.id)
   let cellEditor = cellComp.find('.sc-table-cell-editor')
-  cellEditor.onKeyDown(_createSurfaceEvent(cellEditor, SHIFT_ENTER))
+  cellEditor.onKeyDown(createSurfaceEvent(cellEditor, SHIFT_ENTER))
   t.equal(cell.content, 'x\nxx', 'a line break should have been inserted')
   t.end()
 })
@@ -1085,18 +1084,13 @@ for (let i = 0, count = 1; i < 10; i++) {
 // not unit testing the TableComponent testing the TableComponent used in the ManuscriptEditor
 function _setupEditorWithOneTable (t) {
   let table
-  let res = setupTestArticleSession({
+  let { context, editorSession, doc } = setupTestArticleSession({
     seed: doc => {
       table = tableHelpers.createTableFromTabularData(doc, TABLE_DATA, 't')
       doc.find('body').append(table)
     }
   })
-  return {
-    context: res.context,
-    editorSession: res.editorSession,
-    doc: res.doc,
-    table
-  }
+  return { context, editorSession, doc, table }
 }
 
 function _getCellRange (matrix, startRow, startCol, endRow, endCol) {
@@ -1104,8 +1098,4 @@ function _getCellRange (matrix, startRow, startCol, endRow, endCol) {
   if (!isArray(range)) range = [range]
   else range = flattenOften(range, 2)
   return range
-}
-
-function _createSurfaceEvent (surface, eventData) {
-  return new DOMEvent(Object.assign({ target: surface.getNativeElement() }, eventData))
 }

@@ -1,47 +1,54 @@
-import { documentHelpers } from 'substance'
-import ValueModel from './ValueModel'
-import { isCollectionEmpty } from './modelHelpers'
+import { documentHelpers } from 'substance';
+import ValueModel from './ValueModel';
+import { isCollectionEmpty } from './modelHelpers';
 
 export default class CollectionModel extends ValueModel {
-  constructor (api, path, targetTypes) {
-    super(api, path)
+  constructor(api, path, targetTypes) {
+    super(api, path);
 
-    this._targetTypes = new Set(targetTypes)
+    this._targetTypes = targetTypes;
   }
 
-  get type () { return 'collection' }
-
-  get isCollection () {
-    return true
+  get type() {
+    return 'collection';
   }
 
-  getItems () {
-    const doc = this._api.getDocument()
-    return documentHelpers.getNodesForIds(doc, this.getValue())
+  get isCollection() {
+    return true;
   }
 
-  addItem (item) {
-    this._api._appendChild(this._path, item)
+  getItems() {
+    const doc = this._api.getDocument();
+    return documentHelpers.getNodesForIds(doc, this.getValue());
   }
 
-  get length () { return this.getValue().length }
-
-  // TODO: this is not used ATM
-  // we should either remove both addItem() and removeItem()
-  // or use it consistently
-  // removeItem (item) {
-  //   this._api._removeChild(this._path, item)
-  // }
-
-  getValue () {
-    return super.getValue() || []
+  addItem(item) {
+    // TODO: instead of requiring a bunch of low-level API
+    // methods we should instead introduce a Collection API
+    // where these low-level things are implemented
+    // TODO: things brings me then to the point, questioning
+    // the benefit of a general CollectionModel. Probably this
+    // should be moved into Article API land.
+    this._api._appendChild(this._path, item);
   }
 
-  isEmpty () {
-    return isCollectionEmpty(this._api, this._path)
+  removeItem(item) {
+    this._api._removeChild(this._path, item.id);
   }
 
-  hasTargetType (type) {
-    return this._targetTypes.has(type)
+  get length() {
+    return this.getValue().length;
+  }
+
+  getValue() {
+    return super.getValue() || [];
+  }
+
+  isEmpty() {
+    return isCollectionEmpty(this._api, this._path);
+  }
+
+  hasTargetType(type) {
+    return this._targetTypes.has(type);
   }
 }

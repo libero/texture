@@ -1,34 +1,35 @@
 import { test } from 'substance-test'
+import { parseKeyCombo } from 'substance'
 import {
   setCursor, openManuscriptEditor, PseudoFileEvent, getEditorSession,
   loadBodyFixture, getDocument, setSelection, LOREM_IPSUM,
   openContextMenuAndFindTool, openMenuAndFindTool, clickUndo,
-  isToolEnabled, createKeyEvent, selectNode, getSelection
+  isToolEnabled, selectNode, getSelection, selectRange,
+  deleteSelection, createSurfaceEvent, canSwitchTextTypeTo, switchTextType, ensureValidJATS, insertText, executeCommand, getModalEditorSession
 } from './shared/integrationTestHelpers'
 import setupTestApp from './shared/setupTestApp'
-import { doesNotThrowInNodejs } from './shared/testHelpers'
+import { doesNotThrowInNodejs, DOMEvent, ClipboardEventData } from './shared/testHelpers'
 
-// TODO: test editing of supplementary file description
 // TODO: test open link in EditExtLinkTool
-// TODO: test IncreaseHeadingLevel
 // TODO: test save button
-// TODO: find out why Footnote.getTemplate() is not covered -> insert footnote?
-// TODO: test changin level of list item
-// TODO: BreakComponent not used
 // TODO: test error case for loading in GraphicComponent and InlineGraphicCOmponent
 // TODO: test automatic label generation for block-formulas
+// TODO: add a test using AddSupplementaryFileWorkflow
+// TODO: test removing an author via metadata modal
 
 const EMPTY_P = `<p id="p1"></p>`
 
 test('ManuscriptEditor: add inline graphic', t => {
-  let { app } = setupTestApp(t, LOREM_IPSUM)
+  let { app, archive } = setupTestApp(t, LOREM_IPSUM)
   let editor = openManuscriptEditor(app)
   setCursor(editor, 'p-2.content', 3)
   let insertInlineGraphicTool = openMenuAndFindTool(editor, 'insert', '.sc-insert-inline-graphic-tool')
   // Trigger onFileSelect() directly
-  insertInlineGraphicTool.onFileSelect(new PseudoFileEvent())
+  insertInlineGraphicTool.onFileSelect(new PseudoFileEvent('test.png'))
   let inlineGraphic = editor.find('[data-id=p-2] .sc-inline-node.sm-inline-graphic')
   t.notNil(inlineGraphic, 'there should be an inline-graphic now')
+  ensureValidJATS(t, app)
+  t.ok(archive.hasAsset('test.png'), 'the archive should contain the new asset')
   t.end()
 })
 
@@ -48,24 +49,25 @@ const PARAGRAPH_WITH_INLINE_FORMULA = `<p id="p1">abc <inline-formula id="if-1" 
 test('ManuscriptEditor: edit inline formula', t => {
   let { app } = setupTestApp(t, { archiveId: 'blank' })
   let editor = openManuscriptEditor(app)
-  let doc = getDocument(editor)
-  const formulaContent = '\\sqrt(13)'
-  const changedFormulaContent = '\\sqrt(14)'
-  const getFormulaInput = () => editor.find('.sc-edit-math-tool .sc-input')
   loadBodyFixture(editor, PARAGRAPH_WITH_INLINE_FORMULA)
+
+  const getInlineFormulaEditor = () => editor.find('.sc-inline-formula-editor')
+
+  let doc = getDocument(editor)
+  let inlineFormulaNode = doc.get('if-1')
+  let originalContent = inlineFormulaNode.content
+
   // Set selection to open prompt editor
   setSelection(editor, 'p1.content', 4, 5)
-  const formulaInput = getFormulaInput()
-  t.notNil(formulaInput, 'there should be a math input inside popup')
-  t.equal(formulaInput.val(), formulaContent, 'should equal to: ' + formulaContent)
-  // Change the value
-  formulaInput.val(changedFormulaContent)
-  formulaInput._onChange()
-  // Change selection to close editor
+  t.ok(Boolean(getInlineFormulaEditor()), 'the inline formula editor should be shown')
+
+  setCursor(editor, `${inlineFormulaNode.id}.content`, inlineFormulaNode.content.length)
+  insertText(editor, '+1')
+  t.equal(inlineFormulaNode.content, originalContent + '+1', 'content should have been updated')
+
+  // setting the selection somewhere else should close the editor
   setSelection(editor, 'p1.content', 2)
-  t.isNil(getFormulaInput(), 'there should be no math input now')
-  let inlineFormulaNode = doc.get('if-1')
-  t.equal(inlineFormulaNode.content, changedFormulaContent, 'should equal to: ' + changedFormulaContent)
+  t.notOk(Boolean(getInlineFormulaEditor()), 'the inline formula editor should be hidden now')
   t.end()
 })
 
@@ -87,37 +89,33 @@ const PARAGRAPH_AND_BLOCK_FORMULA = `<p id="p1">abcdef</p>
 </disp-formula>
 `
 
-test('ManuscriptEditor: edit block formula', t => {
+test('ManuscriptEditor: edit a formula', t => {
   let { app } = setupTestApp(t, { archiveId: 'blank' })
   let editor = openManuscriptEditor(app)
-  let doc = getDocument(editor)
-  const formulaContent = '\\sqrt(13)'
-  const formulaContentV2 = '\\sqrt(14)'
-  const formulaContentV3 = '\\sqrt(14)'
-  const selectFormula = () => {
-    selectNode(editor, 'df-1')
-  }
-  const getFormulaInput = () => editor.find('.sc-edit-math-tool .sc-text-area')
   loadBodyFixture(editor, PARAGRAPH_AND_BLOCK_FORMULA)
+
+  const getFormulaComponent = () => editor.find('.sc-block-formula')
+  const getFormulaEditor = () => editor.find('.sc-block-formula-editor')
+
+  let doc = getDocument(editor)
+  let node = doc.get('df-1')
+  let originalContent = node.content
+  let blockFormulaComp = getFormulaComponent()
+
   // Set selection to open prompt editor
-  selectFormula()
-  let formulaInput = getFormulaInput()
-  t.notNil(formulaInput, 'there should be an input inside popup')
-  t.equal(formulaInput.val(), formulaContent, 'input should show formula')
-  // Change the value
-  formulaInput.val(formulaContentV2)
-  formulaInput._onChange()
-  // Change selection to close editor
+  selectNode(editor, 'df-1')
+  t.ok(Boolean(getFormulaEditor()), 'the formula editor should be shown')
+
+  setCursor(editor, `${node.id}.content`, node.content.length)
+  insertText(editor, '+1')
+  t.equal(node.content, originalContent + '+1', 'content should have been updated')
+
+  insertText(editor, '^')
+  t.ok(blockFormulaComp.el.hasClass('sm-error'), 'formula should show an error now')
+
+  // setting the selection somewhere else should close the editor
   setSelection(editor, 'p1.content', 2)
-  t.isNil(getFormulaInput(), 'there should be no math input now')
-  let blockFormulaNode = doc.get('df-1')
-  t.equal(blockFormulaNode.content, formulaContentV2, 'formula should have been updated')
-  // Submitting a change via CommandOrControl+Enter
-  selectFormula()
-  formulaInput = getFormulaInput()
-  formulaInput.val(formulaContentV3)
-  formulaInput.emit('keyevent', createKeyEvent('CommandOrControl+Enter'))
-  t.equal(blockFormulaNode.content, formulaContentV3, 'formula should have been updated')
+  t.notOk(Boolean(getFormulaEditor()), 'the formula editor should be hidden now')
   t.end()
 })
 
@@ -178,11 +176,100 @@ test('ManuscriptEditor: Switch paragraph to heading', t => {
   loadBodyFixture(editor, ONE_PARAGRAPH)
   setCursor(editor, 'p1.content', 0)
 
-  t.ok(_canSwitchTo(editor, 'heading1'), 'switch to heading1 should be possible')
-  _switchTo(editor, 'heading1')
+  t.ok(canSwitchTextTypeTo(editor, 'heading1'), 'switch to heading1 should be possible')
+  switchTextType(editor, 'heading1')
   // ATTENTION: we do not change id, which might be confusing for others
   let h1El = editor.find('.sc-surface.sm-body > h1')
   t.notNil(h1El, 'there should be a <h1> element now')
+  t.end()
+})
+
+test('ManuscriptEditor: Switch to heading', t => {
+  let { app } = setupTestApp(t, { archiveId: 'blank' })
+  let editor = openManuscriptEditor(app)
+  const _isHeadingDisplayed = (level) => {
+    return Boolean(editor.find(`.sc-surface.sm-body > h${level}`))
+  }
+  loadBodyFixture(editor, ONE_PARAGRAPH)
+  setCursor(editor, 'p1.content', 0)
+  switchTextType(editor, 'heading1')
+  t.ok(_isHeadingDisplayed(1), 'heading level 1 should be displayed')
+  switchTextType(editor, 'heading2')
+  t.ok(_isHeadingDisplayed(2), 'heading level 2 should be displayed')
+  switchTextType(editor, 'heading3')
+  t.ok(_isHeadingDisplayed(3), 'heading level 3 should be displayed')
+  t.end()
+})
+
+const TAB = parseKeyCombo('Tab')
+const SHIFT_TAB = parseKeyCombo('Shift+Tab')
+
+test('ManuscriptEditor: increasing and decreasing heading level using TAB', t => {
+  let { app } = setupTestApp(t, { archiveId: 'blank' })
+  let editor = openManuscriptEditor(app)
+  let doc = getDocument(editor)
+  loadBodyFixture(editor, ONE_PARAGRAPH)
+  let bodySurface = _getBodySurface(editor)
+
+  function _indent () {
+    bodySurface.onKeyDown(createSurfaceEvent(bodySurface, TAB))
+  }
+
+  function _dedent () {
+    bodySurface.onKeyDown(createSurfaceEvent(bodySurface, SHIFT_TAB))
+  }
+
+  setCursor(editor, 'p1.content', 0)
+  switchTextType(editor, 'heading1')
+
+  let heading = doc.get('body').getNodeAt(0)
+
+  t.comment('increasing level')
+  _indent()
+  t.equal(heading.level, 2, 'heading level should have been increased')
+  _indent()
+  t.equal(heading.level, 3, 'heading level should have been increased')
+  _indent()
+  t.equal(heading.level, 3, 'heading level should not be increased higher than level 3')
+
+  t.comment('decreasing level')
+  _dedent()
+  t.equal(heading.level, 2, 'heading level should have been decreased')
+  _dedent()
+  t.equal(heading.level, 1, 'heading level should have been decreased')
+  _dedent()
+  t.equal(heading.level, 1, 'heading level should no be decreased lower than level 1')
+
+  t.end()
+})
+
+test('ManuscriptEditor: increasing and decreasing heading level via tool', t => {
+  let { app } = setupTestApp(t, { archiveId: 'blank' })
+  let editor = openManuscriptEditor(app)
+  let doc = getDocument(editor)
+  loadBodyFixture(editor, ONE_PARAGRAPH)
+  function _indent () {
+    openMenuAndFindTool(editor, 'context-tools', '.sm-increase-heading-level').click()
+  }
+  function _dedent () {
+    openMenuAndFindTool(editor, 'context-tools', '.sm-decrease-heading-level').click()
+  }
+
+  setCursor(editor, 'p1.content', 0)
+  switchTextType(editor, 'heading1')
+  let heading = doc.get('body').getNodeAt(0)
+  t.comment('increasing level')
+  _indent()
+  t.equal(heading.level, 2, 'heading level should have been increased')
+  _indent()
+  t.equal(heading.level, 3, 'heading level should have been increased')
+
+  t.comment('decreasing level')
+  _dedent()
+  t.equal(heading.level, 2, 'heading level should have been decreased')
+  _dedent()
+  t.equal(heading.level, 1, 'heading level should have been decreased')
+
   t.end()
 })
 
@@ -192,11 +279,44 @@ test('ManuscriptEditor: Switch paragraph to preformat', t => {
   loadBodyFixture(editor, ONE_PARAGRAPH)
   setCursor(editor, 'p1.content', 0)
 
-  t.ok(_canSwitchTo(editor, 'preformat'), 'switch to preformat should be possible')
-  _switchTo(editor, 'preformat')
+  t.ok(canSwitchTextTypeTo(editor, 'preformat'), 'switch to preformat should be possible')
+  switchTextType(editor, 'preformat')
 
   let preformatEl = editor.find('.sc-surface.sm-body > .sc-text-node.sm-preformat')
   t.notNil(preformatEl, 'there should be a div with preformat component class now')
+  t.end()
+})
+
+const SHIFT_ENTER = parseKeyCombo('Shift+Enter')
+const PREFORMAT = `<preformat id="preformat" preformat-type="code"><![CDATA[for (let i=0; i<5; i++) {
+  console.log(i)
+}]]></preformat>`
+
+test('ManuscriptEditor: insert a line-break into preformat', t => {
+  let { app } = setupTestApp(t, { archiveId: 'blank' })
+  let editor = openManuscriptEditor(app)
+  loadBodyFixture(editor, PREFORMAT)
+  let doc = getDocument(editor)
+  let preformat = doc.get('preformat')
+  let origLineCount = _getLineCount(preformat.getText())
+  let bodySurface = _getBodySurface(editor)
+  setCursor(editor, 'preformat.content', 0)
+  bodySurface.onKeyDown(createSurfaceEvent(bodySurface, SHIFT_ENTER))
+  t.equal(_getLineCount(preformat.getText()), origLineCount + 1, 'there should be a new line inserted')
+  t.end()
+})
+
+test('ManuscriptEditor: insert a line-break into heading', t => {
+  let { app } = setupTestApp(t, LOREM_IPSUM)
+  let editor = openManuscriptEditor(app)
+  let doc = getDocument(editor)
+  let heading = doc.get('sec-1')
+  let bodySurface = _getBodySurface(editor)
+
+  setCursor(editor, 'sec-1.content', 1)
+  bodySurface.onKeyDown(createSurfaceEvent(bodySurface, SHIFT_ENTER))
+  let annos = heading.getAnnotations()
+  t.deepEqual(['break'], annos.map(a => a.type), 'there should be a line-break inserted')
   t.end()
 })
 
@@ -295,7 +415,64 @@ test('ManuscriptEditor: changing the list style', t => {
   t.end()
 })
 
-const P_WITH_EXTERNAL_LINK = `<p id="p1">This is a <ext-link xmlns:xlink="http://www.w3.org/1999/xlink" id="link" xlink:href="substance.io">link</ext-link></p>`
+test('ManuscriptEditor: increasing and decreasing level of list items using TAB', t => {
+  let { app } = setupTestApp(t, { archiveId: 'blank' })
+  let editor = openManuscriptEditor(app)
+  let doc = getDocument(editor)
+  loadBodyFixture(editor, TINY_LIST)
+  let bodySurface = _getBodySurface(editor)
+  function _indent () {
+    bodySurface.onKeyDown(createSurfaceEvent(bodySurface, TAB))
+  }
+  function _dedent () {
+    bodySurface.onKeyDown(createSurfaceEvent(bodySurface, SHIFT_TAB))
+  }
+
+  setCursor(editor, 'li1-2.content', 0)
+  let item = doc.get('li1-2')
+  t.comment('increasing item level')
+  _indent()
+  t.equal(item.level, 3, 'level should have been increased')
+  _indent()
+  t.equal(item.level, 3, 'level should not be increased higher than level 3')
+  t.comment('decreasing item level')
+  _dedent()
+  t.equal(item.level, 2, 'level should have been decreased')
+  _dedent()
+  t.equal(item.level, 1, 'level should have been decreased')
+  _dedent()
+  t.equal(item.level, 1, 'level should not be decreased lower than level 1')
+
+  t.end()
+})
+
+test('ManuscriptEditor: increasing and decreasing level of list items via tool', t => {
+  let { app } = setupTestApp(t, { archiveId: 'blank' })
+  let editor = openManuscriptEditor(app)
+  let doc = getDocument(editor)
+  loadBodyFixture(editor, TINY_LIST)
+  function _indent () {
+    openMenuAndFindTool(editor, 'context-tools', '.sm-indent-list').click()
+  }
+  function _dedent () {
+    openMenuAndFindTool(editor, 'context-tools', '.sm-dedent-list').click()
+  }
+
+  setCursor(editor, 'li1-2.content', 0)
+  let item = doc.get('li1-2')
+  t.comment('increasing item level')
+  _indent()
+  t.equal(item.level, 3, 'level should have been increased')
+  t.comment('decreasing item level')
+  _dedent()
+  t.equal(item.level, 2, 'level should have been decreased')
+  _dedent()
+  t.equal(item.level, 1, 'level should have been decreased')
+
+  t.end()
+})
+
+const P_WITH_EXTERNAL_LINK = `<p id="p1">This is a <ext-link xmlns:xlink="http://www.w3.org/1999/xlink" id="link" xlink:href="test">link</ext-link></p>`
 
 test('ManuscriptEditor: editing an external link', t => {
   let { app } = setupTestApp(t, { archiveId: 'blank' })
@@ -303,19 +480,17 @@ test('ManuscriptEditor: editing an external link', t => {
   let doc = getDocument(editor)
   loadBodyFixture(editor, P_WITH_EXTERNAL_LINK)
 
-  function _getUrlInput () { return editor.find('.sc-edit-external-link-tool > input') }
-  function _getUrlInputValue () { return _getUrlInput().el.val() }
-  function _setUrlInputValue (val) { return _getUrlInput().el.val(val) }
+  function _getHrefEditor () { return editor.find('.sc-external-link-editor .se-href') }
 
   let link = doc.get('link')
   setCursor(editor, 'p1.content', link.start.offset + 1)
-
-  t.equal(_getUrlInputValue(), link.href, 'url input field should show current href value')
-  _setUrlInputValue('foo')
-  t.doesNotThrow(() => {
-    _getUrlInput()._onChange()
-  }, 'triggering href update should not throw')
-  t.equal(link.href, 'foo', '.. and the link should have been updated')
+  // there should now be the popup open
+  // now put a cursor there and type
+  let hrefEditor = _getHrefEditor()
+  t.ok(Boolean(hrefEditor), 'href editor should be shown')
+  setCursor(editor, `${link.id}.href`, 0)
+  insertText(editor, 'foo')
+  t.equal(link.href, 'footest', 'the link should have been updated')
   t.end()
 })
 
@@ -333,6 +508,38 @@ test('ManuscriptEditor: inserting a table figure', t => {
   let legendEditor = tableFigure.find('.sc-container-editor.se-legend')
   t.notNil(legendEditor, 'the legend should be editable')
   t.notNil(legendEditor.find('.sc-paragraph'), 'there should be a paragraph inside the legend editor')
+  t.end()
+})
+
+const TABLE_WITH_FOOTNOTE = `
+  <table-wrap id="table1">
+    <table>
+      <tbody>
+        <tr id="t1_5">
+          <td id="t1_5_1">Table footnote<xref id="t1-xref-1" ref-type="table-fn" rid="tfn1">*</xref></td>
+        </tr>
+      </tbody>
+    </table>
+    <table-wrap-foot>
+      <fn-group>
+        <fn id="tfn1">
+          <label>*</label>
+          <p id="tfn1-p1">This is a table-footnote.</p>
+        </fn>
+      </fn-group>
+    </table-wrap-foot>
+  </table-wrap>
+`
+
+test('ManuscriptEditor: removing a table figure', t => {
+  let { app } = setupTestApp(t, { archiveId: 'blank' })
+  let editor = openManuscriptEditor(app)
+  loadBodyFixture(editor, TABLE_WITH_FOOTNOTE)
+  selectNode(editor, 'table1')
+  doesNotThrowInNodejs(t, () => {
+    deleteSelection(editor)
+  }, 'table removing should not throw')
+  t.isNil(editor.find('[data-id=table1]'), 'There should be no table anymore')
   t.end()
 })
 
@@ -388,7 +595,7 @@ test('ManuscriptEditor: select all', t => {
   let { app } = setupTestApp(t, LOREM_IPSUM)
   let editor = openManuscriptEditor(app)
   setCursor(editor, 'p-1.content', 1)
-  editor._executeCommand('select-all')
+  executeCommand(editor, 'select-all')
   let sel = getSelection(editor)
   t.deepEqual({
     type: sel.type,
@@ -402,11 +609,218 @@ test('ManuscriptEditor: select all', t => {
   t.end()
 })
 
-function _canSwitchTo (editor, type) {
-  let tool = openMenuAndFindTool(editor, 'text-types', `.sm-switch-to-${type}`)
-  return tool && !tool.attr('disabled')
+const ENTITY_SPECS = {
+  'author': {
+    'type': 'author',
+    'itemSelector': '.sc-authors-list .se-contrib',
+    'editToolSelector': '.sm-edit-author',
+    'property': 'surname'
+  },
+  'reference': {
+    'type': 'reference',
+    'itemSelector': '.sc-reference-list .sc-reference',
+    'editToolSelector': '.sm-edit-reference',
+    'property': 'title'
+  }
 }
 
-function _switchTo (editor, type) {
-  return openMenuAndFindTool(editor, 'text-types', `.sm-switch-to-${type}`).el.click()
+test(`ManuscriptEditor: select author`, t => {
+  testEntitySelection(t, ENTITY_SPECS['author'])
+})
+
+test(`ManuscriptEditor: select reference`, t => {
+  testEntitySelection(t, ENTITY_SPECS['reference'])
+})
+
+function testEntitySelection (t, spec) {
+  // TODO: use a more minimal fixture
+  let { app } = setupTestApp(t, { archiveId: 'kitchen-sink' })
+  let editor = openManuscriptEditor(app)
+  const getFirstItem = () => editor.find(spec.itemSelector)
+
+  t.notNil(getFirstItem(), 'there should be at least one item')
+  getFirstItem().el.click()
+  t.ok(getFirstItem().hasClass('sm-selected'), 'first item must be visually selected')
+  t.equal(getSelection(editor).type, 'custom', 'selection must be of custom type')
+  setSelection(editor, 'p-2.content', 0)
+  t.notOk(getFirstItem().hasClass('sm-selected'), 'visual selection most be gone')
+  t.notEqual(getSelection(editor).type, 'custom', 'selection must be of different type')
+  t.end()
+}
+
+test(`ManuscriptEditor: edit author`, t => {
+  testEditEntity(t, ENTITY_SPECS['author'])
+})
+
+test(`ManuscriptEditor: edit reference`, t => {
+  testEditEntity(t, ENTITY_SPECS['reference'])
+})
+
+function testEditEntity (t, spec) {
+  // TODO: use a more minimal fixture
+  let { app } = setupTestApp(t, { archiveId: 'kitchen-sink' })
+  let editor = openManuscriptEditor(app)
+  const _getFirstItem = () => editor.find(spec.itemSelector)
+  const _canEdit = () => isToolEnabled(editor, 'context-tools', spec.editToolSelector)
+  const _edit = () => openMenuAndFindTool(editor, 'context-tools', spec.editToolSelector).click()
+
+  t.notOk(_canEdit(), 'editing should be disabled wihtout selection')
+  _getFirstItem().el.click()
+  t.ok(_canEdit(), 'edit author should be enabled')
+  _edit()
+
+  let modalEditorSession = getModalEditorSession(editor)
+  t.notNil(modalEditorSession, 'there should be a modal editor')
+  let selState = modalEditorSession.editorState.selectionState
+  t.equal(selState.property.name, spec.property, `the first property should be focused`)
+  t.end()
+}
+
+test('ManuscriptEditor: copy and pasting heading and paragraph', t => {
+  let { app } = setupTestApp(t, LOREM_IPSUM)
+  let editor = openManuscriptEditor(app)
+  selectRange(editor, 'sec-1.content', 0, 'p-1.content', 10)
+  let doc = getDocument(editor)
+  let body = doc.get('body')
+  let bodySurface = _getBodySurface(editor)
+  let pasteEvent = new DOMEvent({ clipboardData: new ClipboardEventData() })
+  bodySurface._onCopy(pasteEvent)
+  setCursor(editor, 'p-2.content', 0)
+  bodySurface._onPaste(pasteEvent)
+  let third = body.getNodeAt(2)
+  // TODO: the paste logic should be fixed. ATM the Heading is merged into the paragraph.
+  // IMO this should not happen if the node type is different.
+  t.equal(third.getText(), doc.get('sec-1').getText(), 'heading should have been pasted')
+  t.end()
+})
+
+const TINY_LIST = `
+<list list-type="bullet" id="list">
+  <list-item id="li1">
+    <p>Item 1</p>
+    <list list-type="bullet">
+      <list-item id="li1-1">
+        <p>AAA</p>
+      </list-item>
+      <list-item id="li1-2">
+        <p>BBB</p>
+      </list-item>
+    </list>
+  </list-item>
+  <list-item id="li2">
+    <p>Item 2</p>
+    <list list-type="bullet">
+      <list-item id="li2-1">
+        <p>XXX</p>
+      </list-item>
+      <list-item id="li2-2">
+        <p>YYY</p>
+      </list-item>
+      <list-item id="li2-3">
+        <p></p>
+      </list-item>
+    </list>
+  </list-item>
+</list>
+`
+
+test('ManuscriptEditor: copy and pasting list items', t => {
+  let { app } = setupTestApp(t, { archiveId: 'blank' })
+  let editor = openManuscriptEditor(app)
+  let doc = getDocument(editor)
+  let bodySurface = _getBodySurface(editor)
+  loadBodyFixture(editor, TINY_LIST)
+
+  selectRange(editor, 'li1-1.content', 0, 'li1-2.content', 3)
+  let pasteEvent = new DOMEvent({ clipboardData: new ClipboardEventData() })
+  bodySurface._onCopy(pasteEvent)
+  setCursor(editor, 'li2-3.content', 0)
+  bodySurface._onPaste(pasteEvent)
+  let list = doc.get('list')
+  t.equal(list.getLength(), 8, 'altogether there should be 8 items')
+  t.deepEqual(list.resolve('items').map(item => item.level), [1, 2, 2, 1, 2, 2, 2, 2], '.. with correct levels')
+  t.end()
+})
+
+const TWO_FIGURES = `
+<fig id="fig1">
+  <graphic />
+  <caption />
+</fig>
+<p id="p1">This is a reference to <xref id="fig1-ref" ref-type="fig" rid="fig1" />.</p>
+<fig id="fig2">
+  <graphic />
+  <caption />
+</fig>
+<p id="empty"></p>
+`
+
+test('ManuscriptEditor: cut and pasting a figure', t => {
+  let { app } = setupTestApp(t, { archiveId: 'blank' })
+  let editor = openManuscriptEditor(app)
+  let bodySurface = _getBodySurface(editor)
+  loadBodyFixture(editor, TWO_FIGURES)
+
+  // HACK: ATM, we are wrapping every fig into a fig-group internally, using a '_' as prefix for the id of the group
+  // TODO: we should rethink if this is really what we want. IMO there is no advantage in having an implicit conversion
+  // with respect to collaboration. Maybe it is better to treat FigureGroups as an extra thing.
+  selectNode(editor, '_fig-1')
+  let pasteEvent = new DOMEvent({ clipboardData: new ClipboardEventData() })
+  bodySurface._onCut(pasteEvent)
+  setCursor(editor, 'empty.content', 0)
+  bodySurface._onPaste(pasteEvent)
+
+  const expectedLabel = 'Figure 2'
+  let fig1Comp = bodySurface.find('[data-id="fig1"]')
+  let fig1Label = fig1Comp.find('.sc-label')
+  let refComp = bodySurface.find('[data-id="fig1-ref"]')
+  t.ok(Boolean(fig1Comp), 'figure 1 should be displayed')
+  t.equal(fig1Label.text(), expectedLabel, 'figure should have been labeled automatically')
+  t.equal(refComp.text(), expectedLabel, 'figure reference should have been relabeled automatically')
+
+  t.end()
+})
+
+const TABLE_AND_REF = `
+  <table-wrap id="table1">
+    <table>
+    </table>
+  </table-wrap>
+  <p id="p1">This is a reference to <xref id="table1-ref" ref-type="table" rid="table1" />.</p>
+  <table-wrap id="table2">
+    <table>
+    </table>
+  </table-wrap>
+  <p id="empty"></p>
+  `
+
+test('ManuscriptEditor: cut and pasting a table', t => {
+  let { app } = setupTestApp(t, { archiveId: 'blank' })
+  let editor = openManuscriptEditor(app)
+  let bodySurface = _getBodySurface(editor)
+  loadBodyFixture(editor, TABLE_AND_REF)
+
+  selectNode(editor, 'table1')
+  let pasteEvent = new DOMEvent({ clipboardData: new ClipboardEventData() })
+  bodySurface._onCut(pasteEvent)
+  setCursor(editor, 'empty.content', 0)
+  bodySurface._onPaste(pasteEvent)
+
+  const expectedLabel = 'Table 2'
+  let table1Comp = bodySurface.find('[data-id="table1"]')
+  let table1Label = table1Comp.find('.sc-label')
+  let refComp = bodySurface.find('[data-id="table1-ref"]')
+  t.ok(Boolean(table1Comp), 'table should be displayed')
+  t.equal(table1Label.text(), expectedLabel, 'table should have been labeled automatically')
+  t.equal(refComp.text(), expectedLabel, 'table reference should have been relabeled automatically')
+
+  t.end()
+})
+
+function _getLineCount (str) {
+  return str.split(/\r\n|\r|\n/).length
+}
+
+function _getBodySurface (editor) {
+  return editor.getContentPanel().find('.sc-surface[data-surface-id="body"]')
 }

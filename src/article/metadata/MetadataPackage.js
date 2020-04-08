@@ -1,272 +1,168 @@
-import { AnnotationCommand } from 'substance'
+/* eslint-disable no-template-curly-in-string */
+import { CustomAbstract } from '../nodes';
+import ArticleInformationSectionComponent from './ArticleInformationSectionComponent';
+import ArticleMetadataComponent from './ArticleMetadataComponent';
+import AbstractsSectionComponent from './AbstractsSectionComponent';
 import {
-  BasePackage, EditorBasePackage, ModelComponentPackage, FindAndReplacePackage
-} from '../../kit'
-
-import ArticleToolbarPackage from '../shared/ArticleToolbarPackage'
-import PersistencePackage from '../../PersistencePackage'
-import EntityLabelsPackage from '../shared/EntityLabelsPackage'
-import ManuscriptContentPackage from '../shared/ManuscriptContentPackage'
-
-import AddReferenceWorkflow from '../shared/AddReferenceWorkflow'
-import AddEntityCommand from '../shared/AddEntityCommand'
-import ArticleInformationSectionComponent from './ArticleInformationSectionComponent'
-import ArticleMetadataComponent from './ArticleMetadataComponent'
-import BibliographicEntryEditor from './BibliographicEntryEditor'
-import { MoveCollectionItemCommand, RemoveCollectionItemCommand } from './CollectionCommands'
-import {
-  AddFigurePanelCommand, MoveFigurePanelCommand,
-  ReplaceFigurePanelImageCommand, RemoveFigurePanelCommand, OpenFigurePanelImageCommand
-} from '../shared/FigurePanelCommands'
-import FiguresSectionComponent from './FiguresSectionComponent'
-import InsertFigurePanelTool from '../shared/InsertFigurePanelTool'
-import InsertFootnoteCommand from '../shared/InsertFootnoteCommand'
-import MetadataSection from './MetadataSection'
-import OpenFigurePanelImageTool from '../shared/OpenFigurePanelImageTool'
-import ReplaceFigurePanelTool from '../shared/ReplaceFigurePanelTool'
-import TableFigureComponent from '../shared/TableFigureComponent'
-import TranslatableEntryEditor from './TranslatableEntryEditor'
-import {
-  AddCustomMetadataFieldCommand, MoveCustomMetadataFieldCommand, RemoveCustomMetadataFieldCommand
-} from '../shared/CustomMetadataFieldCommands'
-import SwitchViewCommand from '../shared/SwitchViewCommand'
+  AddAffiliationCommand,
+  AddAuthorCommand,
+  AddCustomAbstractCommand,
+  RemoveEntityCommand,
+  MoveEntityUpCommand,
+  MoveEntityDownCommand,
+  AddEditorCommand,
+  AddGroupCommand,
+  AddFunderCommand,
+  AddKeywordCommand,
+  AddSubjectCommand,
+} from './MetadataEntityCommands';
+import CustomAbstractComponent from './CustomAbstractComponent';
+import AuthorsSectionComponent from './AuthorsSectionComponent';
 
 export default {
-  name: 'ArticleMetadata',
-  configure (config) {
-    config.import(BasePackage)
-    config.import(EditorBasePackage)
-    config.import(ArticleToolbarPackage)
-    config.import(PersistencePackage)
-    config.import(ManuscriptContentPackage)
-    config.import(ModelComponentPackage)
-    config.import(EntityLabelsPackage)
-    config.import(FindAndReplacePackage)
+  name: 'metadata',
+  configure(articleConfig) {
+    let config = articleConfig.createSubConfiguration('metadata');
 
-    config.addComponent('add-reference', AddReferenceWorkflow)
-    config.addComponent('article-metadata', ArticleMetadataComponent)
-    config.addComponent('article-information', ArticleInformationSectionComponent)
-    config.addComponent('bibr', BibliographicEntryEditor, true)
-    config.addComponent('table-figure', TableFigureComponent, true)
-    config.addComponent('subject', TranslatableEntryEditor)
-    config.addComponent('keyword', TranslatableEntryEditor)
-    // Note: @figures and @tables are (dynamic) collections derived from the article's content
-    config.addComponent('@figures', FiguresSectionComponent)
-    config.addComponent('@tables', MetadataSection)
+    // TODO: it would be greate to reuse config from the article toolbar.
+    // However, this is problematic, because at the time of this being called
+    // the article toolbar configuration might not have been finished.
+    // E.g. a plugin could change it.
+    let articleToolbarSpec = articleConfig._toolPanelRegistry.get('toolbar');
+    config.addToolPanel('toolbar', [
+      // only undo/redo, no save
+      {
+        name: 'document-tools',
+        type: 'group',
+        style: 'minimal',
+        items: [
+          { type: 'command', name: 'undo' },
+          { type: 'command', name: 'redo' },
+        ],
+      },
+      // inherit primary-annotations
+      articleToolbarSpec.find(spec => spec.name === 'primary-annotations'),
+      // only inline content and metadata content
+      {
+        name: 'insert',
+        type: 'dropdown',
+        style: 'descriptive',
+        hideDisabled: true,
+        alwaysVisible: true,
+        items: [
+          {
+            name: 'metadata',
+            type: 'group',
+            label: 'entities',
+            items: [
+              { type: 'command', name: 'add-author', label: 'author' },
+              { type: 'command', name: 'add-custom-abstract', label: 'custom-abstract' },
+              { type: 'command', name: 'add-editor', label: 'editor' },
+              { type: 'command', name: 'add-group', label: 'group' },
+              { type: 'command', name: 'add-affiliation', label: 'affiliation' },
+              { type: 'command', name: 'add-funder', label: 'funder' },
+              { type: 'command', name: 'add-keyword', label: 'keyword' },
+              { type: 'command', name: 'add-subject', label: 'subject' },
+            ],
+          },
+          {
+            name: 'inline-content',
+            type: 'group',
+            label: 'inline',
+            items: [
+              { type: 'command', name: 'insert-inline-formula', label: 'math' },
+              { type: 'command', name: 'insert-inline-graphic', label: 'inline-graphic' },
+              { type: 'command', name: 'create-external-link', label: 'link', icon: 'link' },
+              { type: 'command', name: 'insert-xref-bibr', label: 'citation' },
+              { type: 'command', name: 'insert-xref-figure', label: 'figure-reference' },
+              { type: 'command', name: 'insert-xref-table', label: 'table-reference' },
+              { type: 'command', name: 'insert-xref-footnote', label: 'footnote-reference' },
+              { type: 'command', name: 'insert-xref-formula', label: 'equation-reference' },
+              { type: 'command', name: 'insert-xref-file', label: 'file-reference' },
+            ],
+          },
+        ],
+      },
+      // inherit formatting
+      articleToolbarSpec.find(spec => spec.name === 'format'),
+      // inherit text type switcher
+      articleToolbarSpec.find(spec => spec.name === 'text-types'),
+      // inherit contextual tools, but exclude the 'Edit Metadata' tool
+      {
+        name: 'context-tools',
+        type: 'dropdown',
+        style: 'descriptive',
+        // hide disabled items but not the dropdown itself
+        hideDisabled: true,
+        alwaysVisible: true,
+        items: articleToolbarSpec
+          .find(spec => spec.name === 'context-tools')
+          .items.filter(s => s.name !== 'edit-metadata'),
+      },
+    ]);
 
-    // Commands
-    config.addCommand('add-metadata-field', AddCustomMetadataFieldCommand, {
-      commandGroup: 'custom-metadata-fields'
-    })
-    config.addCommand('add-figure-panel', AddFigurePanelCommand, {
-      commandGroup: 'figure-panel'
-    })
-    config.addCommand('move-down-col-item', MoveCollectionItemCommand, {
-      direction: 'down',
-      commandGroup: 'collection'
-    })
-    config.addCommand('move-down-metadata-field', MoveCustomMetadataFieldCommand, {
-      direction: 'down',
-      commandGroup: 'custom-metadata-fields'
-    })
-    config.addCommand('move-down-figure-panel', MoveFigurePanelCommand, {
-      direction: 'down',
-      commandGroup: 'figure-panel'
-    })
-    config.addCommand('move-up-col-item', MoveCollectionItemCommand, {
-      direction: 'up',
-      commandGroup: 'collection'
-    })
-    config.addCommand('move-up-metadata-field', MoveCustomMetadataFieldCommand, {
-      direction: 'up',
-      commandGroup: 'custom-metadata-fields'
-    })
-    config.addCommand('move-up-figure-panel', MoveFigurePanelCommand, {
-      direction: 'up',
-      commandGroup: 'figure-panel'
-    })
-    config.addCommand('open-figure-panel-image', OpenFigurePanelImageCommand, {
-      commandGroup: 'figure-panel'
-    })
-    config.addCommand('open-manuscript', SwitchViewCommand, {
-      viewName: 'manuscript',
-      commandGroup: 'switch-view'
-    })
-    config.addCommand('open-metadata', SwitchViewCommand, {
-      viewName: 'metadata',
-      commandGroup: 'switch-view'
-    })
-    config.addCommand('remove-col-item', RemoveCollectionItemCommand, {
-      commandGroup: 'collection'
-    })
-    config.addCommand('remove-metadata-field', RemoveCustomMetadataFieldCommand, {
-      commandGroup: 'custom-metadata-fields'
-    })
-    config.addCommand('remove-figure-panel', RemoveFigurePanelCommand, {
-      commandGroup: 'figure-panel'
-    })
-    config.addCommand('replace-figure-panel-image', ReplaceFigurePanelImageCommand, {
-      commandGroup: 'figure-panel'
-    })
-    config.addCommand('toggle-bold', AnnotationCommand, {
-      nodeType: 'bold',
-      accelerator: 'CommandOrControl+B',
-      commandGroup: 'formatting'
-    })
-    config.addCommand('toggle-italic', AnnotationCommand, {
-      nodeType: 'italic',
-      accelerator: 'CommandOrControl+I',
-      commandGroup: 'formatting'
-    })
-    config.addCommand('toggle-monospace', AnnotationCommand, {
-      nodeType: 'monospace',
-      commandGroup: 'formatting'
-    })
-    config.addCommand('toggle-overline', AnnotationCommand, {
-      nodeType: 'overline',
-      commandGroup: 'formatting'
-    })
-    config.addCommand('toggle-small-caps', AnnotationCommand, {
-      nodeType: 'small-caps',
-      commandGroup: 'formatting'
-    })
-    config.addCommand('toggle-strike-through', AnnotationCommand, {
-      nodeType: 'strike-through',
-      commandGroup: 'formatting'
-    })
-    config.addCommand('toggle-subscript', AnnotationCommand, {
-      nodeType: 'sub',
-      commandGroup: 'formatting'
-    })
-    config.addCommand('toggle-superscript', AnnotationCommand, {
-      nodeType: 'sup',
-      commandGroup: 'formatting'
-    })
-    config.addCommand('toggle-underline', AnnotationCommand, {
-      nodeType: 'underline',
-      commandGroup: 'formatting'
-    })
+    config.addToolPanel('context-menu', [
+      {
+        name: 'context-menu',
+        type: 'group',
+        style: 'descriptive',
+        hideDisabled: true,
+        items: [
+          { type: 'command-group', name: 'file' },
+          { type: 'command-group', name: 'author' },
+          { type: 'command-group', name: 'collection' },
+          { type: 'command-group', name: 'list' },
+          { type: 'command-group', name: 'metadata-fields' },
+        ],
+      },
+    ]);
 
-    // Tools
-    config.addComponent('add-figure-panel', InsertFigurePanelTool)
-    config.addComponent('open-figure-panel-image', OpenFigurePanelImageTool)
-    config.addComponent('replace-figure-panel-image', ReplaceFigurePanelTool)
+    config.addComponent('article-metadata', ArticleMetadataComponent);
+    config.addComponent('article-information', ArticleInformationSectionComponent);
+    config.addComponent('authors-section', AuthorsSectionComponent);
+    config.addComponent(CustomAbstract.type, CustomAbstractComponent);
+    config.addComponent('@abstracts', AbstractsSectionComponent);
 
-    // KeyboardShortcuts
-    config.addKeyboardShortcut('CommandOrControl+Alt+Up', { command: 'move-up-col-item' })
-    config.addKeyboardShortcut('CommandOrControl+Alt+Down', { command: 'move-down-col-item' })
-    config.addKeyboardShortcut('CommandOrControl+Alt+Delete', { command: 'remove-col-item' })
+    config.addCommand('add-author', AddAuthorCommand);
+    config.addCommand('add-affiliation', AddAffiliationCommand);
+    config.addCommand('add-custom-abstract', AddCustomAbstractCommand);
+    config.addCommand('add-editor', AddEditorCommand);
+    config.addCommand('add-group', AddGroupCommand);
+    config.addCommand('add-funder', AddFunderCommand);
+    config.addCommand('add-keyword', AddKeywordCommand);
+    config.addCommand('add-subject', AddSubjectCommand);
 
-    // Labels
-    config.addLabel('article', 'Article Information')
-    config.addLabel('article-information', 'Article Information')
-    config.addLabel('authors', 'Authors')
-    config.addLabel('figures', 'Figures')
-    config.addLabel('footnotes', 'Footnotes')
-    config.addLabel('groups', 'Groups')
-    config.addLabel('issueTitle', 'Issue Title')
-    config.addLabel('keywords', 'Keywords')
-    config.addLabel('subjects', 'Subjects')
-    config.addLabel('organisations', 'Affiliations')
-    config.addLabel('references', 'References')
-    config.addLabel('tables', 'Tables')
-    config.addLabel('translations', 'Translations')
-    config.addLabel('add-reference-title', 'Add Reference(s)')
-    config.addLabel('add-ref-manually', 'Or create manually')
-    config.addLabel('fetch-datacite', 'Fetch from DataCite')
-    config.addLabel('enter-doi-placeholder', 'Enter one or more DOIs')
-    config.addLabel('add-action', 'Add')
-    config.addLabel('enter-url-placeholder', 'Enter url')
-    config.addLabel('import-refs', 'Import')
-    config.addLabel('supported-ref-formats', 'Supported formats')
-    config.addLabel('original-translation', 'Original')
-    config.addLabel('add-translation', 'Add Translation')
-    config.addLabel('select-language', 'Select language')
-    config.addLabel('add', 'Add')
-    config.addLabel('edit', 'Edit')
-    config.addLabel('remove', 'Remove')
-    config.addLabel('workflows', 'Workflows')
-    config.addLabel('select-license', 'Select license')
-    config.addLabel('select-item', 'Choose')
-    config.addLabel('move-down-figure-panel', 'Move Down Sub-Figure')
-    config.addLabel('enter-custom-field-name', 'Enter name')
-    config.addLabel('enter-custom-field-value', 'Enter value')
-    config.addLabel('article-metadata', 'Article Metadata')
-    config.addLabel('subtitle', 'Subtitle')
-    config.addLabel('empty-figure-metadata', 'No fields specified')
-    // Icons
-    config.addIcon('move-down-figure-panel', { 'fontawesome': 'fa-caret-square-o-down' })
-    config.addIcon('input-loading', { 'fontawesome': 'fa-spinner fa-spin' })
-    config.addIcon('input-error', { 'fontawesome': 'fa-exclamation-circle' })
-
-    // TODO: need to rethink this a some point
-    registerCollectionCommand(config, 'author', ['metadata', 'authors'], { keyboardShortcut: 'CommandOrControl+Alt+A', nodeType: 'person' })
-    registerCollectionCommand(config, 'funder', ['metadata', 'funders'], { keyboardShortcut: 'CommandOrControl+Alt+Y' })
-    registerCollectionCommand(config, 'editor', ['metadata', 'editors'], { keyboardShortcut: 'CommandOrControl+Alt+E', nodeType: 'person' })
-    registerCollectionCommand(config, 'footnote', ['article', 'footnotes'], { automaticOrder: true, Command: InsertFootnoteCommand })
-    registerCollectionCommand(config, 'group', ['metadata', 'groups'], { keyboardShortcut: 'CommandOrControl+Alt+G' })
-    registerCollectionCommand(config, 'keyword', ['metadata', 'keywords'], { keyboardShortcut: 'CommandOrControl+Alt+K' })
-    registerCollectionCommand(config, 'organisation', ['metadata', 'organisations'], { keyboardShortcut: 'CommandOrControl+Alt+O' })
-    registerCollectionCommand(config, 'subject', ['metadata', 'subjects'])
-    config.addCommand('insert-reference', AddEntityCommand, {
-      workflow: 'add-reference',
-      commandGroup: 'add-entity',
-      type: 'bibr'
-    })
-  }
-}
-
-// TODO: this is like an overkill, registering one collection item command
-// for every collection type
-// it would be better to have just one set of commands
-// which is detecting the collection automagically
-// The challenge will then be how to control certain things,
-// such as disabling move up/down etc.
-function registerCollectionCommand (config, itemType, collectionPath, options = {}) {
-  let nodeType = options.nodeType || itemType
-  let xpathSelector = collectionPath.join('.')
-  let Command = options.Command || AddEntityCommand
-  config.addCommand(`insert-${itemType}`, Command, {
-    type: nodeType,
-    collection: collectionPath,
-    commandGroup: 'add-entity'
-  })
-  if (options.keyboardShortcut) {
-    config.addKeyboardShortcut(options.keyboardShortcut, { command: `add-${itemType}` })
-  }
-  if (!config.automaticOrder) {
-    config.addCommand(`move-up-${itemType}`, MoveCollectionItemCommand, {
-      direction: 'up',
+    config.addCommand('remove-entity', RemoveEntityCommand, {
       commandGroup: 'collection',
-      xpathSelector
-    })
-    config.addIcon(`move-up-${itemType}`, { 'fontawesome': 'fa-caret-square-o-up' })
-    config.addLabel(`move-up-${itemType}`, {
-      en: 'Move item up'
-    })
-    config.addKeyboardShortcut('CommandOrControl+Alt+Up', { command: `move-up-${itemType}` })
-    config.addCommand(`move-down-${itemType}`, MoveCollectionItemCommand, {
-      direction: 'down',
+    });
+    config.addCommand('move-entity-down', MoveEntityDownCommand, {
       commandGroup: 'collection',
-      xpathSelector
-    })
-    config.addIcon(`move-down-${itemType}`, { 'fontawesome': 'fa-caret-square-o-down' })
-    config.addLabel(`move-down-${itemType}`, {
-      en: 'Move item down'
-    })
-    config.addKeyboardShortcut('CommandOrControl+Alt+Down', { command: `move-down-${itemType}` })
-    config.addCommand(`remove-${itemType}`, RemoveCollectionItemCommand, {
+    });
+    config.addCommand('move-entity-up', MoveEntityUpCommand, {
       commandGroup: 'collection',
-      xpathSelector
-    })
+    });
 
-    config.addIcon('remove', { 'fontawesome': 'fa-trash' })
-    config.addIcon('checked-item', { 'fontawesome': 'fa-check-square-o' })
-    config.addIcon('unchecked-item', { 'fontawesome': 'fa-square-o' })
-  }
-  config.addIcon(`remove-${itemType}`, { 'fontawesome': 'fa-trash' })
-  config.addLabel(`remove-${itemType}`, {
-    en: 'Remove item'
-  })
-  config.addKeyboardShortcut('CommandOrControl+Alt+Delete', { command: `remove-${itemType}` })
-}
+    config.addLabel('abstracts', 'Abstracts');
+    config.addLabel('article-information', 'Article Information');
+    config.addLabel('article-metadata', 'Article Metadata');
+    config.addLabel('entities', 'Entities');
+    config.addLabel('groups', 'Groups');
+    config.addLabel('issueTitle', 'Issue Title');
+    config.addLabel('keywords', 'Keywords');
+    config.addLabel('affiliations', 'Affiliations');
+    config.addLabel('references', 'References');
+    // TODO: provide a means to override the label via commandState,
+    // i.e. the command itself stores the desired lable in commandState.label
+    config.addLabel('remove-entity', '${label}'); // NOTE: the command itself has to provide 'label' via commandState
+    config.addLabel('move-entity-down', '${label}'); // NOTE: the command itself has to provide 'label' via commandState
+    config.addLabel('move-entity-up', '${label}'); // NOTE: the command itself has to provide 'label' via commandState
+    config.addLabel('remove-something', 'Remove ${something}');
+    config.addLabel('move-something-down', 'Move ${something} down');
+    config.addLabel('move-something-up', 'Move ${something} up');
+    config.addLabel('subjects', 'Subjects');
+
+    config.addIcon('checked-item', { fontawesome: 'fa-check-square-o' });
+    config.addIcon('unchecked-item', { fontawesome: 'fa-square-o' });
+    config.addIcon('remove', { fontawesome: 'fa-trash' });
+  },
+};

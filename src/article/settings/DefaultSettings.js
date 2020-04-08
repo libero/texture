@@ -9,6 +9,8 @@ export default {
   'chapter-ref.title': { required: true },
   'conference-paper-ref.authors': { required: true },
   'conference-paper-ref.title': { required: true },
+  'custom-abstract.abstractType': { required: true },
+  'custom-abstract.content': { required: true },
   'data-publication-ref.authors': { required: true },
   'data-publication-ref.containerTitle': { required: true },
   'data-publication-ref.title': { required: true },
@@ -25,6 +27,7 @@ export default {
   'newspaper-article-ref.authors': { required: true },
   'newspaper-article-ref.containerTitle': { required: true },
   'newspaper-article-ref.title': { required: true },
+  'affiliation.institution': { required: true },
   'patent-ref.containerTitle': { required: true },
   'patent-ref.inventors': { required: true },
   'patent-ref.title': { required: true },
@@ -42,5 +45,5 @@ export default {
   'thesis-ref.year': { required: true },
   'webpage-ref.authors': { required: true },
   'webpage-ref.containerTitle': { required: true },
-  'webpage-ref.title': { required: true }
-}
+  'webpage-ref.title': { required: true },
+};

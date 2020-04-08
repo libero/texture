@@ -1,72 +1,74 @@
-import { Component, parseKeyCombo, parseKeyEvent } from 'substance'
+import { Component, parseKeyCombo, parseKeyEvent } from 'substance';
 
-const ESCAPE = parseKeyEvent(parseKeyCombo('Escape'))
+const ESCAPE = parseKeyEvent(parseKeyCombo('Escape'));
 
 export default class Input extends Component {
-  render ($$) {
-    let { path, type, placeholder } = this.props
-    let val = this._getDocumentValue()
+  render($$) {
+    let { path, type, placeholder } = this.props;
+    let val = this._getDocumentValue();
 
-    let el = $$('input').attr({
-      value: val,
-      type,
-      placeholder
-    }).addClass('sc-input')
-      .val(val)
-      .on('keydown', this._onKeydown)
-    if (path) {
-      el.on('change', this._onChange)
-    }
-    return el
-  }
-
-  submit () {
-    let editorSession = this.context.editorSession
-    let path = this.props.path
-    let newVal = this.el.val()
-    let oldVal = this._getDocumentValue()
-    if (newVal !== oldVal) {
-      editorSession.transaction(function (tx) {
-        tx.set(path, newVal)
+    let el = $$('input')
+      .attr({
+        value: val,
+        type,
+        placeholder,
       })
-      return true
+      .addClass('sc-input')
+      .val(val)
+      .on('keydown', this._onKeydown);
+    if (path) {
+      el.on('change', this._onChange);
+    }
+    return el;
+  }
+
+  submit() {
+    let editorSession = this.context.editorSession;
+    let path = this.props.path;
+    let newVal = this.el.val();
+    let oldVal = this._getDocumentValue();
+    if (newVal !== oldVal) {
+      editorSession.transaction(function(tx) {
+        tx.set(path, newVal);
+      });
+      return true;
     }
   }
 
-  focus () {
-    this.el.getNativeElement().focus()
+  focus() {
+    this.el.getNativeElement().focus();
   }
 
-  _onChange () {
+  _onChange() {
     if (this.submit() && this.props.retainFocus) {
       // ATTENTION: running the editor flow will rerender the model selection
       // which takes away the focus from this input
-      this.focus()
+      this.focus();
     }
   }
 
-  _getDocumentValue () {
+  _getDocumentValue() {
     if (this.props.val) {
-      return this.props.val
+      return this.props.val;
     } else {
-      let editorSession = this.context.editorSession
-      let path = this.props.path
-      return editorSession.getDocument().get(path)
+      let editorSession = this.context.editorSession;
+      let path = this.props.path;
+      return editorSession.getDocument().get(path);
     }
   }
 
-  _onKeydown (event) {
-    let combo = parseKeyEvent(event)
+  _onKeydown(event) {
+    let combo = parseKeyEvent(event);
     switch (combo) {
       // ESCAPE reverts the current pending change
       case ESCAPE: {
-        event.stopPropagation()
-        event.preventDefault()
-        this.el.val(this._getDocumentValue())
-        break
+        event.stopPropagation();
+        event.preventDefault();
+        this.el.val(this._getDocumentValue());
+        break;
       }
       default:
-        // nothing
+      // nothing
     }
   }
 }

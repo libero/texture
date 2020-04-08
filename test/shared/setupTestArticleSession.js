@@ -1,26 +1,24 @@
 /* global vfs */
 import {
   TextureConfigurator, ArticlePackage,
-  EditorSession,
+  ArticleEditorSession,
   ArticleAPI, createEditorContext,
   VfsStorageClient, TextureArchive, InMemoryDarBuffer
-} from '../../index'
+} from 'substance-texture'
 
 export default function setupTestArticleSession (opts = {}) {
-  let configurator = new TextureConfigurator()
-  configurator.import(ArticlePackage)
-  // TODO: this could be a little easier
-  let config = configurator.getConfiguration('article').getConfiguration('manuscript')
+  let config = new TextureConfigurator()
+  config.import(ArticlePackage)
+  let articleConfig = config.getConfiguration('article')
 
   // load the empty archive
   let storage = new VfsStorageClient(vfs, './data/')
-  let archive = new TextureArchive(storage, new InMemoryDarBuffer())
+  let archive = new TextureArchive(storage, new InMemoryDarBuffer(), {}, config)
   // ATTENTION: in case of the VFS loading is synchronous
   // TODO: make sure that this is always the case
   let archiveId = opts.archiveId || 'blank'
   archive.load(archiveId, () => {})
-  let documentSession = archive.getDocumentSession('manuscript')
-  let doc = documentSession.getDocument()
+  let doc = archive.getDocument('manuscript')
   if (opts.seed) {
     // clear the body
     let body = doc.get('body')
@@ -28,12 +26,11 @@ export default function setupTestArticleSession (opts = {}) {
     opts.seed(doc)
   }
   // NOTE: this indirection is necessary because we need to pass the context to parts of the context
-  let contextProvider = {}
-  let editorSession = new EditorSession('test-editor', documentSession, config, contextProvider)
-  let api = new ArticleAPI(editorSession, config, archive)
-  let context = Object.assign(createEditorContext(config, editorSession), { api })
-  // ... after the context is ready we can store it into the provider
-  contextProvider.context = context
+  let editorSession = new ArticleEditorSession('test-editor', doc, articleConfig)
+  let api = new ArticleAPI(editorSession, archive, articleConfig)
+  let context = Object.assign(createEditorContext(articleConfig, editorSession), { api })
+  editorSession.setContext(context)
+  editorSession.initialize()
 
   return { context, editorSession, doc, archive, api }
 }

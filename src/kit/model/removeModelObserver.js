@@ -1,3 +1,3 @@
-export default function removeModelObserver (comp) {
-  comp.context.appState.removeObserver(comp)
+export default function removeModelObserver(comp) {
+  comp.context.editorState.removeObserver(comp);
 }

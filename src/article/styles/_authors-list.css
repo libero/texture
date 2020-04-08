@@ -1,0 +1,62 @@
+.sc-authors-list.sm-hidden {
+  display: none;
+}
+
+.sc-authors-list-container {
+  display: flex;
+}
+
+.sc-authors-list-container > .se-add-author {
+  padding: 2px 0px;
+  color: var(--t-action-color);
+  white-space: nowrap;
+}
+
+.sc-authors-list-container > .se-add-author > .se-label {
+  margin-left: var(--t-button-padding);
+  white-space: nowrap;
+}
+
+.sc-authors-list-container > .se-edit-button {
+  font-size: var(--t-icon-font-size);
+}
+
+.sc-authors-list-container .spacer {
+  flex-grow: 1;
+  min-width: var(--t-default-spacing);
+}
+
+.sc-authors-list {
+  cursor: default;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.sc-authors-list .se-contrib {
+  padding: var(--t-input-padding);
+  margin: var(--t-negative-list-padding);
+  cursor: default;
+  margin-right: var(--t-text-spacing);
+  white-space: nowrap;
+}
+
+.sc-authors-list .se-contrib.sm-empty {
+  color: var(--t-light-text-color);
+}
+
+.sc-authors-list .se-contrib.sm-selected {
+  outline: var(--t-input-focus-border);
+}
+
+.sc-authors-list > .se-content {
+  font-size: var(--t-large-font-size);
+}
+
+.sc-authors-list > .se-content > .se-empty-list {
+  color: var(--t-light-text-color);
+}
+
+.sc-authors-list > .se-contrib > sup {
+  font-size: var(--t-superscript-font-size);
+  padding-left: var(--t-superscript-padding);
+}
