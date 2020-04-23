@@ -1,0 +1,40 @@
+name: CI
+
+# Trigger ONLY on push
+on:
+  push:
+
+jobs:
+  ci:
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 12
+          registry-url: https://registry.npmjs.org/
+      - name: Setup
+        run: |
+          npm install
+      - name: Build
+        run: |
+          npm run build-webpack
+      - name: Lint
+        if: always()
+        run: |
+          npm run lint
+      - name: Unit Tests
+        if: always()
+        run: |
+          npm run unit-tests
+      - name: Integration Tests
+        if: always()
+        run: |
+          npm run test-nodejs
+      # Only publish for a tagged release on the master branch
+      - name: Publish
+        if: contains(github.ref, 'refs/tags/v')
+        run: |
+          npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.npm_token}}
